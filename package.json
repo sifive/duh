@@ -6,6 +6,9 @@
   "scripts": {
     "test": "eslint lib"
   },
+  "bin": {
+    "duh": "./bin/duh.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sifive/duh.git"
