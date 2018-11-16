@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
+    "ajv": "^6.5.5",
     "fs-extra": "^7.0.1",
     "json-refs": "^3.0.12",
     "json5": "^2.1.0",

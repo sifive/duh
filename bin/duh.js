@@ -10,6 +10,11 @@ yargs
         default: false
     })
     .command({
+        command: 'validate',
+        desc: 'check specification',
+        handler: lib.validate
+    })
+    .command({
         command: 'generate',
         aliases: ['gen'],
         desc: 'generate wrapper',
