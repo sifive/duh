@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
+    "fs-extra": "^7.0.1",
+    "json-refs": "^3.0.12",
+    "json5": "^2.1.0",
     "yargs": "^12.0.2"
   },
   "devDependencies": {
@@ -27,6 +30,9 @@
     "@drom/eslint-config": "^0.7.0"
   },
   "eslintConfig": {
-    "extends": "@drom/eslint-config/eslint4/node4"
+    "extends": "@drom/eslint-config/eslint4/node4",
+    "parserOptions": {
+      "ecmaVersion": 2017
+    }
   }
 }

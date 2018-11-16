@@ -7,7 +7,7 @@ const lib = require('../lib/index.js');
 yargs
     .option('verbose', {
         alias: 'v',
-        default: true // FIXME later
+        default: false
     })
     .command({
         command: 'generate',
