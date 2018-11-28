@@ -11,6 +11,7 @@ yargs
     })
     .command({
         command: 'validate',
+        aliases: ['val'],
         desc: 'check specification',
         handler: lib.validate
     })
