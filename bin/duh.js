@@ -13,13 +13,35 @@ yargs
         command: 'validate',
         aliases: ['val'],
         desc: 'check specification',
-        handler: lib.validate
+        handler: lib.validate,
+        builder: (yargs) => {
+            yargs
+                .option('input', {
+                    alias: 'i',
+                    desc: 'input component json',
+                })
+        }
     })
     .command({
         command: 'generate',
         aliases: ['gen'],
         desc: 'generate wrapper',
-        handler: lib.generate
+        handler: lib.generate,
+        builder: (yargs) => {
+            yargs
+                .option('input', {
+                    alias: 'i',
+                    desc: 'input component json',
+                })
+                .option('dir', {
+                    alias: 'd',
+                    desc: 'output directory',
+                })
+                .option('scalaDir', {
+                    alias: 's',
+                    desc: 'output directory of scala wrapper',
+                })
+        }
     })
     .command({
         command: 'test',
