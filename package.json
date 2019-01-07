@@ -4,7 +4,7 @@
   "description": "Design Unit Hardware",
   "main": "lib/index.js",
   "scripts": {
-    "test": "eslint lib"
+    "test": "eslint lib bin"
   },
   "bin": {
     "duh": "./bin/duh.js"
