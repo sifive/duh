@@ -15,7 +15,11 @@ yargs
         desc: 'check specification',
         handler: lib.validate,
         builder: (yargs) => {
-            yargs.option('input', {alias: 'i', desc: 'input component json'});
+            yargs.option('input', {
+                alias: 'i',
+                desc: 'input component json',
+                demandOption: true
+            });
         }
     })
     .command({
@@ -25,9 +29,21 @@ yargs
         handler: lib.generate,
         builder: (yargs) => {
             yargs
-                .option('input', {alias: 'i', desc: 'input component json'})
-                .option('dir',   {alias: 'd', desc: 'output directory'})
-                .option('scalaDir', {alias: 's', desc: 'output directory of scala wrapper'});
+                .option('input', {
+                    alias: 'i',
+                    desc: 'input component json',
+                    demandOption: true
+                })
+                .option('dir', {
+                    alias: 'd',
+                    desc: 'output directory',
+                    demandOption: true
+                })
+                .option('scalaDir', {
+                    alias: 's',
+                    desc: 'output directory of scala wrapper',
+                    demandOption: true
+                });
         }
     })
     .command({
