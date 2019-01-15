@@ -38,11 +38,6 @@ yargs
                     alias: 'd',
                     desc: 'output directory',
                     demandOption: true
-                })
-                .option('scalaDir', {
-                    alias: 's',
-                    desc: 'output directory of scala wrapper',
-                    demandOption: true
                 });
         }
     })

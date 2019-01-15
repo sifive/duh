@@ -1,0 +1,24 @@
+publish path = "/scratch/albertc/nvm/versions/node/v11.4.0/bin"
+
+def npmInstall _ =
+  def cmdline = which "npm", "install", Nil
+  def inputs =
+    "{here}/package.json", (map (files _ '.*') ("{here}/lib", "{here}/bin", "{here}/assets", Nil)).flatten
+  def foutputs _ = Nil
+  cached_manual_job here "" environment cmdline inputs foutputs
+
+def duh = if (npmInstall 0).status == 0 then "{here}/bin/duh.js" else raise "npm install failed!"
+
+def npmValidate json =
+  def cmdline = which "node", duh, "validate", "-i", json, Nil
+  def inputs = json, Nil
+  def foutputs _ = Nil
+  cached_manual_job here "" environment cmdline inputs foutputs
+
+global def duhGenerate json outputDir =
+  def cmdline =
+    def relOutputDir = relative here outputDir
+    which "node", duh, "generate", "-i", json, "-d", relOutputDir, Nil
+  def inputs = json, Nil
+  def foutputs _ = files outputDir '.*'
+  (cached_manual_job here "" environment cmdline inputs foutputs).outputs
