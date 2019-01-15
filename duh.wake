@@ -10,7 +10,8 @@ def npmInstall _ =
 def duh = if (npmInstall 0).status == 0 then "bin/duh.js" else raise "npm install failed!"
 
 def npmValidate json =
-  def cmdline = which "node", duh, "validate", "-i", json, Nil
+  def relJson = relative here json
+  def cmdline = which "node", duh, "validate", "-i", relJson, Nil
   def inputs = json, Nil
   def foutputs _ = Nil
   cached_manual_job here "" environment cmdline inputs foutputs
@@ -22,4 +23,8 @@ global def duhGenerate json outputDir =
     which "node", duh, "generate", "-i", relJson, "-d", relOutputDir, Nil
   def inputs = json, Nil
   def foutputs _ = files outputDir '.*'
-  (cached_manual_job here "" environment cmdline inputs foutputs).outputs
+  if (npmValidate json).status == 0
+  then
+    (cached_manual_job here "" environment cmdline inputs foutputs).outputs
+  else
+    raise "Validate failed for {json}!"
