@@ -1,5 +1,3 @@
-publish path = "/scratch/albertc/nvm/versions/node/v11.4.0/bin"
-
 def npmInstall _ =
   def cmdline = which "npm", "install", Nil
   def inputs =
