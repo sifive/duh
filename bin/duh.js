@@ -10,6 +10,22 @@ yargs
         default: false
     })
     .command({
+        command: 'get value [filename]',
+        desc: 'get value from the document file',
+        handler: lib.get,
+        builder: yargs => {
+            yargs
+                .positional('value', {
+                    type: 'string',
+                    desc: 'value path'
+                })
+                .positional('filename', {
+                    type: 'string',
+                    desc: 'document file'
+                });
+        }
+    })
+    .command({
         command: 'init [filename]',
         desc: 'creates document file',
         handler: lib.scafolder,
@@ -30,25 +46,6 @@ yargs
                 type: 'string',
                 desc: 'document file'
             });
-        }
-    })
-    .command({
-        command: 'generate',
-        aliases: ['gen'],
-        desc: 'generate wrapper',
-        handler: lib.generate,
-        builder: (yargs) => {
-            yargs
-                .option('input', {
-                    alias: 'i',
-                    desc: 'input component json',
-                    demandOption: true
-                })
-                .option('dir', {
-                    alias: 'd',
-                    desc: 'output directory',
-                    demandOption: true
-                });
         }
     })
     .command({
