@@ -57,7 +57,7 @@ duh init [mycomp.json5]
 ## Document validation
 
 Every document has to adhere to specific JSON schema described here:
-[Schema](../lib/schema-component.js)
+[Schema](https://github.com/sifive/duh/blob/master/lib/schema-component.js)
 
 After making changes author should run the document validation process
 by the following command:
