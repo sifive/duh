@@ -21,15 +21,14 @@ yargs
         }
     })
     .command({
-        command: 'validate',
+        command: 'validate [filename]',
         aliases: ['val'],
-        desc: 'check specification',
+        desc: 'validate document',
         handler: lib.validate,
         builder: yargs => {
-            yargs.option('input', {
-                alias: 'i',
-                desc: 'input component json',
-                demandOption: true
+            yargs.positional('filename', {
+                type: 'string',
+                desc: 'document file'
             });
         }
     })
