@@ -143,3 +143,7 @@ duh infer [mycomp.json5]
 ## Parameter schema
 
 ## Clocks, Resets
+
+# Export from duh
+
+  * [Scala]('./doc/export-scala.md')
