@@ -94,7 +94,12 @@ The information about the component ports has to be captured here:
 {
   component: {
     model: {
-      ports: <...>
+      ports: {
+        clk: 1,     // <- input clk
+        wdata: 32,  // <- input [31:0] wdata
+        rdata: -64, // <- output [31:0] rdata
+        ...
+      }
     }
   }
 }
@@ -123,7 +128,23 @@ If component block has bus interfaces this mapping can be expressed here:
 ```js
 {
   component: {
-    busInterfaces: [<...>]
+    busInterfaces: [{
+      name: 'ctrl',
+      interfaceMode: 'slave',
+      busType: {vendor: 'sifive.com', library: 'AMBA', name: 'AXI4', version: 'r0p0_0'},
+      abstractionTypes: [{
+        viewRef: 'RTLview',
+        portMaps: {
+          AWREADY: 't_ctrl_awready', // +
+          AWVALID: 't_ctrl_awvalid', // +
+          AWADDR:  't_ctrl_awaddr', // + width
+          ...
+        },
+      }],
+
+    },
+    ...
+    ]
   }
 }
 ```
