@@ -66,6 +66,26 @@ by the following command:
 duh val [mycomp.json]
 ```
 
+## Include RTL
+
+Specify path to the RTL Verilog files in fileSets section:
+
+```js
+{
+  component: {
+    ...
+    fileSets: {
+      VerilogFiles: [
+        'rtl/mycomp.v',
+        ...
+      ]
+    }
+  }
+}
+```
+
+?? What about Includes ??
+
 ## Component ports
 
 The information about the component ports has to be captured here:
