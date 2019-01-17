@@ -146,4 +146,4 @@ duh infer [mycomp.json5]
 
 # Export from duh
 
-  * [Scala]('./doc/export-scala.md')
+  * [Scala]('doc/export-scala.md')
