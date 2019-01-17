@@ -88,6 +88,12 @@ from top level RTL Verilog file by running the following command:
 verilator -E -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 ```
 
+or
+
+```
+vppreproc -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
+```
+
 :warning: imported ports may require some manual fixes.
 
 ## Bus interfaces
