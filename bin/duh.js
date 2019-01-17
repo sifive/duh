@@ -10,11 +10,22 @@ yargs
         default: false
     })
     .command({
+        command: 'init [filename]',
+        desc: 'creates document file',
+        handler: lib.scafolder,
+        builder: yargs => {
+            yargs.positional('filename', {
+                type: 'string',
+                desc: 'document file'
+            });
+        }
+    })
+    .command({
         command: 'validate',
         aliases: ['val'],
         desc: 'check specification',
         handler: lib.validate,
-        builder: (yargs) => {
+        builder: yargs => {
             yargs.option('input', {
                 alias: 'i',
                 desc: 'input component json',
