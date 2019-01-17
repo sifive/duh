@@ -51,7 +51,7 @@ You can create new document manually or by running CLI questionnaire.
 Run the following command and answer the questions:
 
 ```
-duh init mycomp.json5
+duh init [mycomp.json5]
 ```
 
 ## Document validation
@@ -63,7 +63,7 @@ After making changes author should run the document validation process
 by the following command:
 
 ```
-duh val mycomp.json
+duh val [mycomp.json]
 ```
 
 ## Component ports
@@ -85,7 +85,7 @@ Information about ports can be entered manually or imported
 from top level RTL Verilog file by running the following command:
 
 ```
-duh import mycomp.v
+verilator -E -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 ```
 
 :warning: imported ports may require some manual fixes.
@@ -105,7 +105,7 @@ If component block has bus interfaces this mapping can be expressed here:
 Author can attempt to infer bus interface mapping by running:
 
 ```
-duh infer mycomp.json5
+duh infer [mycomp.json5]
 ```
 
 :warning: user may need manual fixes after running inference.

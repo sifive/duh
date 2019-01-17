@@ -7,7 +7,8 @@
     "test": "eslint lib bin"
   },
   "bin": {
-    "duh": "./bin/duh.js"
+    "duh": "./bin/duh.js",
+    "duh-import-verilog-ports": "./bin/duh-import-verilog-ports.js"
   },
   "repository": {
     "type": "git",
@@ -20,16 +21,17 @@
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
-    "ajv": "^6.5.5",
+    "ajv": "^6.7.0",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.1",
     "json-refs": "^3.0.12",
     "json5": "^2.1.0",
     "onml": "^0.4.5",
-    "yargs": "^12.0.2"
+    "pinlist": "^0.2.0",
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.12.0",
     "@drom/eslint-config": "^0.7.0"
   },
   "eslintConfig": {
