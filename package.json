@@ -8,7 +8,8 @@
   },
   "bin": {
     "duh": "./bin/duh.js",
-    "duh-import-verilog-ports": "./bin/duh-import-verilog-ports.js"
+    "duh-import-verilog-ports": "./bin/duh-import-verilog-ports.js",
+    "duh-export-scala": "./bin/duh-export-scala.js"
   },
   "repository": {
     "type": "git",
