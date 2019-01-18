@@ -16,7 +16,7 @@ async function main (argv) {
     const folderName = path.basename(cwd);
     const fileName = argv._[0] || (folderName + '.json5');
 
-    await lib.generate({
+    await lib.scala({
         filename: fileName
     });
 }
