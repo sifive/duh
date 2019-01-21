@@ -5,24 +5,25 @@ def npmInstall _ =
   def foutputs _ = Nil
   cached_manual_job here "" environment cmdline inputs foutputs
 
-def duh _ = if (npmInstall 0).status == 0 then "bin/duh.js" else raise "npm install failed!"
+def duh_export_scala_js = "{here}/bin/duh-export-scala.js"
+def duh_js = "{here}/bin/duh.js"
 
 def npmValidate json =
-  def relJson = relative here json
-  def cmdline = which "node", duh 0, "validate", "-i", relJson, Nil
+  def duh = if (npmInstall 0).status == 0 then duh_js else raise "npm install failed!"
+  def cmdline = which "node", duh, "validate", json, Nil
   def inputs = json, Nil
   def foutputs _ = Nil
-  cached_manual_job here "" environment cmdline inputs foutputs
+  manual_job cmdline inputs foutputs
 
-global def duhGenerate json outputDir =
-  def relJson = relative here json
-  def relOutputDir = relative here outputDir
-  def cmdline =
-    which "node", duh 0, "generate", "-i", relJson, "-d", relOutputDir, Nil
+global def duhGenerate json rawOutputDir =
+  def outputDir = mkdir 0x1fd rawOutputDir
+  def duh_scala = if (npmInstall 0).status == 0 then duh_export_scala_js else raise "npm install failed!"
+  def relJson = relative outputDir json
+  def cmdline = which "node", relative outputDir duh_scala, relJson, Nil
   def inputs = json, Nil
-  def foutputs _ = files outputDir '.*'
+  def foutputs _ = files outputDir "component/.*"
   if (npmValidate json).status == 0
   then
-    (cached_manual_job here "" environment cmdline inputs foutputs).outputs
+    (cached_manual_job outputDir "" environment cmdline inputs foutputs).outputs
   else
     raise "Validate failed for {json}!"
