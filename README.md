@@ -128,6 +128,7 @@ If component block has bus interfaces this mapping can be expressed here:
 ```js
 {
   component: {
+    ...
     busInterfaces: [{
       name: 'ctrl',
       interfaceMode: 'slave',
@@ -159,9 +160,38 @@ duh infer [mycomp.json5]
 
 ## Memory regions
 
+```js
+{
+  component: {
+    ...
+    memoryMaps: [{
+      ...
+    }]
+    ...      
+  }
+}
+
+```
+
 ## Registers
 
+```js
+{
+  component: {
+    ...
+    memoryMaps: [{
+      name: 'CSR' // <- name of the register block
+      ...
+    }]
+    ...
+  }
+}
+```
+
 ## Parameter schema
+
+```js
+```
 
 ## Clocks, Resets
 
