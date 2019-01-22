@@ -6,7 +6,9 @@ def npmInstall _ =
   def cmdline = which "npm", "install", Nil
   def inputs = "{here}/package.json", hereDependencies
   def foutputs _ = Nil
-  cached_manual_job here "" environment cmdline inputs foutputs
+  makeManualJob cmdline inputs foutputs
+  | setJobDirectory here
+  | runJob
 
 def getDuh _ = if (npmInstall 0).status == 0 then "{here}/bin/duh.js" else raise "npm install failed!"
 def getDuhScala _ = if (npmInstall 0).status == 0 then "{here}/bin/duh-export-scala.js" else raise "npm install failed!"
@@ -27,7 +29,10 @@ global def duhGenerate json rawOutputDir =
   def foutputs _ = files outputDir "component/.*-base.scala"
   if (npmValidate json).status == 0
   then
-    (cached_manual_job outputDir "" environment cmdline inputs foutputs).outputs
+    makeManualJob cmdline inputs foutputs
+    | setJobDirectory outputDir
+    | runJob
+    | outputs
   else
     raise "Validate failed for {json}!"
 
