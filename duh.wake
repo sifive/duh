@@ -1,10 +1,10 @@
 def hereDependencies =
-  def sourceDirs = "{here}/lib", "{here}/bin", "{here}/assets", Nil
+  def sourceDirs = "{here}/package.json", "{here}/lib", "{here}/bin", "{here}/assets", Nil
   (map (files _ '.*') sourceDirs).flatten
 
 def npmInstall _ =
   def cmdline = which "npm", "install", Nil
-  def inputs = "{here}/package.json", hereDependencies
+  def inputs = hereDependencies
   def foutputs _ = Nil
   makeManualJob cmdline inputs foutputs
   | setJobDirectory here
@@ -16,7 +16,7 @@ def getDuhScala _ = if (npmInstall 0).status == 0 then "{here}/bin/duh-export-sc
 def npmValidate json =
   def duh = getDuh 0
   def cmdline = which "node", duh, "validate", json, Nil
-  def inputs = json, Nil
+  def inputs = json, hereDependencies
   def foutputs _ = Nil
   manual_job cmdline inputs foutputs
 
@@ -25,7 +25,7 @@ global def duhGenerate json rawOutputDir =
   def duh_scala = getDuhScala 0
   def relJson = relative outputDir json
   def cmdline = which "node", relative outputDir duh_scala, relJson, Nil
-  def inputs = json, outputDir, Nil
+  def inputs = json, outputDir, hereDependencies
   def foutputs _ = files outputDir "component/.*-base.scala"
   if (npmValidate json).status == 0
   then
@@ -39,7 +39,7 @@ global def duhGenerate json rawOutputDir =
 global def duhGet json value =
   def duh = getDuh 0
   def cmdline = which "node", duh, "get", value, json, Nil
-  def inputs = json, Nil
+  def inputs = json, hereDependencies
   def foutputs _ = Nil
   def jobOut = (manual_job cmdline inputs foutputs).stdout
   if matches "undefined" jobOut
