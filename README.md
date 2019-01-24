@@ -190,7 +190,20 @@ duh infer [mycomp.json5]
 
 ## Parameter schema
 
+Component with parameters has to provide [JSON Schema](https://json-schema.org/)
+description for these parameters.
+
 ```js
+{
+  component: {
+    ...
+    pSchama: {
+      ...
+    },
+    ...
+  }
+}
+
 ```
 
 ## Clocks, Resets
