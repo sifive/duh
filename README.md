@@ -66,6 +66,8 @@ by the following command:
 duh val [mycomp.json]
 ```
 
+See more about Document validation here: [validation](doc/validation.md)
+
 ## Include RTL
 
 Specify path to the RTL Verilog files in fileSets section:
@@ -121,6 +123,8 @@ vppreproc -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 
 :warning: imported ports may require some manual fixes.
 
+See more about Document validation here: [validation](doc/import.md)
+
 ## Bus interfaces
 
 If component block has bus interfaces this mapping can be expressed here:
@@ -157,6 +161,8 @@ duh infer [mycomp.json5]
 ```
 
 :warning: user may need manual fixes after running inference.
+
+See more about Document validation here: [validation](doc/inference.md)
 
 ## Memory regions
 
@@ -208,6 +214,6 @@ description for these parameters.
 
 ## Clocks, Resets
 
-# Export from duh
+# Export from DUH
 
-  * [Scala](doc/export-scala.md)
+DUH document can be exported to several formats: [export](doc/export.md)
