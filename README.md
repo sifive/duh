@@ -24,6 +24,8 @@ Component document expressing following aspects:
   * block generation flow
   * references to implementation, documentation, tests
 
+See more: [component](doc/component.md)
+
 ## Design document
 
 Design document captures hierarchy of the block composed from one or more
@@ -35,6 +37,8 @@ Components or Designs; and contains following details:
   * parameter schema
   * connections
   * design generation flow
+
+See more: [design](doc/design.md)
 
 # Authoring the document
 
