@@ -123,7 +123,7 @@ vppreproc -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 
 :warning: imported ports may require some manual fixes.
 
-See more about Document validation here: [validation](doc/import.md)
+See more about import into DUH document here: [import](doc/import.md)
 
 ## Bus interfaces
 
@@ -162,7 +162,7 @@ duh infer [mycomp.json5]
 
 :warning: user may need manual fixes after running inference.
 
-See more about Document validation here: [validation](doc/inference.md)
+See more about Inference inside DUH document here: [inference](doc/inference.md)
 
 ## Memory regions
 
