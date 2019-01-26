@@ -80,18 +80,42 @@ If component block has bus interfaces this mapping can be expressed here:
 
 ## Registers
 
+
+
 ```js
 {
   component: {
     ...
     memoryMaps: [{
-      name: 'CSR' // <- name of the register block
+      name: 'CSR',
+      addressBlocks: [{
+        name: 'CSR0',
+        baseAddress: 0,
+        range: 1024, width: 32,
+        usage: 'register',
+        volatile: false, access: 'read-write',
+        registers: [{
+          name: 'ODATA',
+          addressOffset: 0, size: 32,
+          displayName: 'Output Data Register',
+          fields: [{
+            name: 'data', bitOffset: 0, bitWidth: 5
+          }, {
+            name: 'mask', bitOffset: 8, bitWidth: 8
+          }]
+        },
+        ...
+        ]
+      },
       ...
+      ]
     }]
     ...
   }
 }
 ```
+
+
 
 ## Parameter schema
 
