@@ -1,46 +1,53 @@
 # Design ∪ Hardware
 
 Library and CLI tool for packaging of reusable chip design components and designs.
-
 DUH operates with JSON5 documents describing Hardware Block.
-Documents using IP-XACT semantics where it is applicable.
+Inspired by IP-XACT and SytemRDL.
+
 Document collects information about some hardware block
 and can be used without access to the the implementation files.
-Document can describe **Component** or **Design**.
+Document can describe [Component](component.md) or [Design](design.md).
 
-## Component document
+## Install
 
-Component document collects information about a single hardware block
-without expressing internal structure or hierarchy.
-Component document expressing following aspects:
+DUH tools require [NodeJS](https://nodejs.org) of version 8+ to operate properly.
 
-  * name, version
-  * top level ports
-  * parameter schema
-  * bus interfaces
-  * memory regions
-  * registers
-  * clocks, resets
-  * block generation flow
-  * references to implementation, documentation, tests
+NodeJS of specific version can be installed using [Node Version Manager](https://github.com/creationix/nvm)
 
-See more: [component](doc/component.md)
+Install NVM:
 
-## Design document
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+source ~/.bashrc
+```
 
-Design document captures hierarchy of the block composed from one or more
-Components or Designs; and contains following details:
+Install NodeJS v10 using NVM
 
-  * name, version
-  * dependencies
-  * instances
-  * parameter schema
-  * connections
-  * design generation flow
+```
+nvm i 10
+```
 
-See more: [design](doc/design.md)
+Configure you PATH to find DUH tools
 
-# Authoring the document
+```
+export PATH=./node_modules/.bin:$PATH
+```
+
+Install DUH tools using NodeJS
+
+```sh
+cd <workspace>
+npm i github:sifive/duh
+```
+
+Getting DUH commands and options
+
+```sh
+cd <workspace>
+duh --help
+```
+
+## Authoring the document
 
 In order to be useful, the document has to capture a sufficient amount
 of details about the Hardware block and all information has to be correct.
@@ -55,73 +62,45 @@ You can create new document manually or by running CLI questionnaire.
 Run the following command and answer the questions:
 
 ```
+cd <workspace>
 duh init [mycomp.json5]
 ```
 
 ## Document validation
 
-Every document has to adhere to specific [JSON Schema](https://json-schema.org/) described here:
+Every document has to adhere to specific [JSON Schema](https://json-schema.org/)
+described here:
 [Schema](https://github.com/sifive/duh/blob/master/lib/schema-component.js)
 
 After making changes author should run the document validation process
 by the following command:
 
 ```
+cd <workspace>
 duh val [mycomp.json]
 ```
 
 See more about Document validation here: [validation](doc/validation.md)
 
-## Include RTL
+## Component document
 
-Specify path to the RTL Verilog files in fileSets section:
+[Component](component.md) document collects information about a single hardware
+block without expressing internal structure or hierarchy.
 
-```js
-{
-  component: {
-    ...
-    fileSets: {
-      VerilogFiles: [
-        'rtl/mycomp.v',
-        ...
-      ]
-    }
-  }
-}
-```
-
-?? What about Includes ??
-
-## Component ports
-
-The information about the component ports has to be captured here:
-
-```js
-{
-  component: {
-    model: {
-      ports: {
-        clk: 1,     // <- input clk
-        wdata: 32,  // <- input [31:0] wdata
-        rdata: -64, // <- output [31:0] rdata
-        ...
-      }
-    }
-  }
-}
-
-```
+### Port import
 
 Information about ports can be entered manually or imported
 from top level RTL Verilog file by running the following command:
 
 ```
+cd <workspace>
 verilator -E -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 ```
 
 or
 
 ```
+cd <workspace>
 vppreproc -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 ```
 
@@ -129,38 +108,12 @@ vppreproc -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 
 See more about import into DUH document here: [import](doc/import.md)
 
-## Bus interfaces
+## Bus interfaces inference
 
-If component block has bus interfaces this mapping can be expressed here:
-
-```js
-{
-  component: {
-    ...
-    busInterfaces: [{
-      name: 'ctrl',
-      interfaceMode: 'slave',
-      busType: {vendor: 'sifive.com', library: 'AMBA', name: 'AXI4', version: 'r0p0_0'},
-      abstractionTypes: [{
-        viewRef: 'RTLview',
-        portMaps: {
-          AWREADY: 't_ctrl_awready', // +
-          AWVALID: 't_ctrl_awvalid', // +
-          AWADDR:  't_ctrl_awaddr', // + width
-          ...
-        },
-      }],
-
-    },
-    ...
-    ]
-  }
-}
-```
-
-Author can attempt to infer bus interface mapping by running:
+Author can infer bus interface mapping by running:
 
 ```
+cd <workspace>
 duh infer [mycomp.json5]
 ```
 
@@ -168,56 +121,13 @@ duh infer [mycomp.json5]
 
 See more about Inference inside DUH document here: [inference](doc/inference.md)
 
-## Memory regions
+## Export
 
-```js
-{
-  component: {
-    ...
-    memoryMaps: [{
-      ...
-    }]
-    ...      
-  }
-}
+### Scala
+
+To export Scala from DUH document run the following command:
 
 ```
-
-## Registers
-
-```js
-{
-  component: {
-    ...
-    memoryMaps: [{
-      name: 'CSR' // <- name of the register block
-      ...
-    }]
-    ...
-  }
-}
+cd <workspace>
+duh-export-scala [mycomp.json5]
 ```
-
-## Parameter schema
-
-Component with parameters has to provide [JSON Schema](https://json-schema.org/)
-description for these parameters.
-
-```js
-{
-  component: {
-    ...
-    pSchama: {
-      ...
-    },
-    ...
-  }
-}
-
-```
-
-## Clocks, Resets
-
-# Export from DUH
-
-DUH document can be exported to several formats: [export](doc/export.md)
