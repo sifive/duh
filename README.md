@@ -12,6 +12,16 @@ Document can describe [Component](component.md) or [Design](design.md).
 
 DUH tools require [NodeJS](https://nodejs.org) of version 8+ to operate properly.
 
+you can check NodeJS version by running:
+
+```
+node --version
+```
+
+If you already have NodeJS installed you can skip next section.
+
+### Install NodeJS
+
 NodeJS of specific version can be installed using [Node Version Manager](https://github.com/creationix/nvm)
 
 Install NVM:
@@ -21,11 +31,13 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | b
 source ~/.bashrc
 ```
 
-Install NodeJS v10 using NVM
+Install NodeJS version 10.x.x using NVM
 
 ```
 nvm i 10
 ```
+
+### Install DUH tools
 
 Configure you PATH to find DUH tools
 
