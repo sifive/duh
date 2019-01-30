@@ -20,7 +20,7 @@ Component document expressing following aspects:
   * block generation flow
   * references to implementation, documentation, tests
 
-See more: [component](doc/component.md)
+See more: [component](component.md)
 
 ## Design document
 
@@ -34,4 +34,4 @@ Components or Designs; and contains following details:
   * connections
   * design generation flow
 
-See more: [design](doc/design.md)
+See more: [design](design.md)
