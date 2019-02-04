@@ -25,7 +25,7 @@ async function gotInput(source) {
   const duhNew = duh;
   duhNew.definitions = duhNew.definitions || {};
   duhNew.definitions.ports = duhNew.definitions.ports || {};
-  duhNew.definitions.ports = pins;
+  duhNew.definitions.ports = pins[duhNew.component.name];
   duhNew.component = duhNew.component || {};
   duhNew.component.model = duhNew.component.model || {};
   duhNew.component.model.ports = { $ref: '#/definitions/ports' };
