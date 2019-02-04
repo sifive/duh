@@ -35,7 +35,7 @@ async function infer (duh) {
   const keys = Object.keys(ports);
 
   const res = ['vld', 'rdy', 'dat'].reduce((prev, sfx) => {
-    prev[sfx] = keys.reduce(nameReducer(sfx), {});
+    prev[sfx.toUpperCase()] = keys.reduce(nameReducer(sfx), {});
     return prev;
   }, {});
 
@@ -43,13 +43,13 @@ async function infer (duh) {
 
   const busInterfaces = Object.keys(res1).map(name => {
     const portMaps = res1[name];
-    const interfaceMode = (ports[portMaps.vld] > 0) ? 'slave' : 'master';
+    const interfaceMode = (ports[portMaps.VLD] > 0) ? 'slave' : 'master';
     return {
       name: name,
       interfaceMode: interfaceMode,
       busType: {
         vendor: 'sifive.com',
-        library: 'bus',
+        library: 'free',
         name: 'channel',
         version: '0.1.0'
       },
