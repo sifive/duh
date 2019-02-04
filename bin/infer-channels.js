@@ -61,6 +61,7 @@ async function infer (duh) {
   });
 
   duh.definitions.busInterfaces = busInterfaces;
+  duh.component.busInterfaces = { $ref: '#/definitions/busInterfaces' };
   // console.log(busInterfaces);
 }
 
