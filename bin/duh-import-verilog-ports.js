@@ -12,28 +12,25 @@ const pinlist = require('pinlist');
 const readFile = util.promisify(fs.readFile);
 const outputFile = util.promisify(fs.outputFile);
 
-const argv = yargs
-    .version()
-    .help()
-    .argv;
+const argv = yargs.version().help().argv;
 
 const pinlister = pinlist();
 
-async function gotInput (source) {
-    const folderName = path.basename(process.cwd());
-    const fileName = argv._[0] || (folderName + '.json5');
-    const duhRaw = await readFile(fileName, 'utf-8');
-    const duh = JSON5.parse(duhRaw);
-    const pins = pinlister(source);
-    const duhNew = duh;
-    duhNew.definitions = duhNew.definitions || {};
-    duhNew.definitions.ports = duhNew.definitions.ports || {};
-    duhNew.definitions.ports = pins;
-    duhNew.component = duhNew.component || {};
-    duhNew.component.model = duhNew.component.model || {};
-    duhNew.component.model.ports = {$ref: '#/definitions/ports'};
-    await outputFile(fileName, JSON5.stringify(duhNew, null, 2));
-    // console.log(JSON5.stringify(pins, null, 2));
+async function gotInput(source) {
+  const folderName = path.basename(process.cwd());
+  const fileName = argv._[0] || folderName + '.json5';
+  const duhRaw = await readFile(fileName, 'utf-8');
+  const duh = JSON5.parse(duhRaw);
+  const pins = pinlister(source);
+  const duhNew = duh;
+  duhNew.definitions = duhNew.definitions || {};
+  duhNew.definitions.ports = duhNew.definitions.ports || {};
+  duhNew.definitions.ports = pins;
+  duhNew.component = duhNew.component || {};
+  duhNew.component.model = duhNew.component.model || {};
+  duhNew.component.model.ports = { $ref: '#/definitions/ports' };
+  await outputFile(fileName, JSON5.stringify(duhNew, null, 2));
+  // console.log(JSON5.stringify(pins, null, 2));
 }
 
 const concatStream = concat(gotInput);
@@ -45,7 +42,7 @@ source = process.stdin.setEncoding('ascii');
 // }
 
 if (source) {
-    source.pipe(concatStream);
+  source.pipe(concatStream);
 } else {
-    yargs.showHelp();
+  yargs.showHelp();
 }

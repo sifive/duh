@@ -6,19 +6,16 @@ const path = require('path');
 
 const lib = require('../lib/index.js');
 
-yargs
-    .version()
-    .help()
-    .argv;
+const argv = yargs.version().help().argv;
 
-async function main (argv) {
-    const cwd = process.cwd();
-    const folderName = path.basename(cwd);
-    const fileName = argv._[0] || (folderName + '.json5');
+async function main(argv) {
+  const cwd = process.cwd();
+  const folderName = path.basename(cwd);
+  const fileName = argv._[0] || folderName + '.json5';
 
-    await lib.scala({
-        filename: fileName
-    });
+  await lib.scala({
+    filename: fileName
+  });
 }
 
-main(yargs.argv);
+main(argv);
