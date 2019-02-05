@@ -122,16 +122,15 @@ See more about import into DUH document here: [import](doc/import.md)
 
 ## Bus interfaces inference
 
-Author can infer bus interface mapping by running:
+Author can infer bus interface mappings by running:
 
 ```
 cd <workspace>
-duh infer [mycomp.json5]
+duh-portinf -o mycomp-busprop.json mycomp.json5
 ```
 
-:warning: user may need manual fixes after running inference.
-
-See more about Inference inside DUH document here: [inference](doc/inference.md)
+This will generate candidate bus interface mappings for select groups of
+ports with high quality matches.
 
 ## Export
 
