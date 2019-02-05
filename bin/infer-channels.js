@@ -48,7 +48,7 @@ async function infer (duh) {
 
   const busInterfaces = Object.keys(res1).map(name => {
     const portMaps = res1[name];
-    const interfaceMode = (ports[portMaps.VLD] > 0) ? 'slave' : 'master';
+    const interfaceMode = (ports[portMaps.VALID] > 0) ? 'slave' : 'master';
     return {
       name: name,
       interfaceMode: interfaceMode,
