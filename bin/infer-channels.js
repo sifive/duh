@@ -34,8 +34,13 @@ async function infer (duh) {
   const ports = duh.definitions.ports;
   const keys = Object.keys(ports);
 
+  const map = {
+    vld: 'VALID',
+    rdy: 'READY',
+    dat: 'BITS'
+  };
   const res = ['vld', 'rdy', 'dat'].reduce((prev, sfx) => {
-    prev[sfx.toUpperCase()] = keys.reduce(nameReducer(sfx), {});
+    prev[map[sfx]] = keys.reduce(nameReducer(sfx), {});
     return prev;
   }, {});
 
