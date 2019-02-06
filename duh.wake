@@ -4,7 +4,7 @@ tuple NodeModules =
   Path  String
 
 global def npmInstall _ =
-  def cmdline = which "npm", "i", "github:sifive/duh", Nil
+  def cmdline = which "npm", "i", "github:sifive/duh#duh-wake", Nil
   def inputs = Nil
   def foutputs _ = files "node_modules/.bin" '.*' ++ files "node_modules/duh" '.*'
   def job =
