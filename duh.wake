@@ -14,34 +14,18 @@ global def npmInstall _ =
   def dir = if job.status == 0 then "node_modules" else raise "\"npm i github:sifive/duh\" failed!"
   NodeModules dir job.outputs path
 
-def getNPMEnvironment nodeModules runDir =
-  def addNodeModulesPath env =
-    def regex = 'PATH=(.*)'
-    def oldPathOpt =
-      match (filter (matches regex) env)
-        Nil  = None
-        h, t = Some (extract regex h).head
-    def relNodePath = relative runDir nodeModules.getNodeModulesPath
-    def newPath = match oldPathOpt
-      None   = "PATH={relNodePath}"
-      Some p = "PATH={relNodePath}:{p}"
-    def oldEnv = filter (\e !(matches regex e)) env
-    newPath, oldEnv
-  addNodeModulesPath environment
-
 def whichNPMCommand nodeModules runDir cmd =
-  def nodeModulesPath = relative runDir nodeModules.getNodeModulesPath
+  def nodeModulesPath = nodeModules.getNodeModulesPath
   whichIn nodeModulesPath cmd | relative runDir
 
 global def npmValidate json =
   def nodeModules = npmInstall 0
   def cmdline = nodeModules.whichNPMCommand "." "duh", "validate", json, Nil
   def inputs = json, nodeModules.getNodeModulesFiles
-  def env = nodeModules.getNPMEnvironment "."
-  def foutputs _ = json, Nil
+  def foutputs _ = Nil
   def validateJob =
     makeManualJob cmdline inputs foutputs
-    | setJobEnvironment env
+    | setJobCache False
     | runJob
   validateJob.status == 0
 
@@ -53,13 +37,12 @@ global def duhGenerate json rawOutputDir =
     def relJson = relative outputDir json
     duh_scala, relJson, Nil
   def inputs = json, outputDir, nodeModules.getNodeModulesFiles
-  def foutputs _ = json, Nil
+  def foutputs _ = json, files "{outputDir}/component/src" '.*-base\.scala'
   if npmValidate json
   then
-    def env = nodeModules.getNPMEnvironment outputDir
     makeManualJob cmdline inputs foutputs
     | setJobDirectory outputDir
-    | setJobEnvironment env
+    | setJobCache False
     | runJob
     | outputs
   else
@@ -74,9 +57,7 @@ global def duhGet json value =
   def inputs = json, nodeModules.getNodeModulesFiles
   def foutputs _ = Nil
   def jobOut =
-    def env = nodeModules.getNPMEnvironment "."
     makeManualJob cmdline inputs foutputs
-    | setJobEnvironment env
     | runJob
     | stdout
   if matches "undefined" jobOut
@@ -90,11 +71,10 @@ global def duhImportVerilogPorts json file =
   def nodeModules = npmInstall 0
   def cmdline = nodeModules.whichNPMCommand "." "duh-import-verilog-ports", json, Nil
   def stdin = file
-  def env = nodeModules.getNPMEnvironment "."
   def foutputs _ = json, Nil
   makeManualJob cmdline inputs foutputs
-  | setJobEnvironment env
   | setJobStandardInput stdin
+  | setJobCache False
   | runJob
   | output
 
@@ -102,9 +82,8 @@ global def duhInferChannels json =
   def nodeModules = npmInstall 0
   def inputs = json, nodeModules.getNodeModulesFiles
   def cmdline = nodeModules.whichNPMCommand "." "duh-infer-channels", json, Nil
-  def env = nodeModules.getNPMEnvironment "."
   def foutputs _ = json, Nil
   makeManualJob cmdline inputs foutputs
-  | setJobEnvironment env
+  | setJobCache False
   | runJob
   | output
