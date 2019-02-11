@@ -25,7 +25,7 @@ async function gotInput(source) {
   const comp = pins[duh.component.name];
   if (comp === undefined) {
     throw new Error(`module "${duh.component.name}" not found in the provided Verilog source.
-Existing candidates are: ${Object.keys(pins)}` )
+Existing candidates are: ${Object.keys(pins)}` );
   }
   duh.definitions = duh.definitions || {};
   duh.definitions.ports = duh.definitions.ports || {};
