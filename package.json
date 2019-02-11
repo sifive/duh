@@ -25,6 +25,8 @@
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
     "ajv": "^6.7.0",
+    "concat-stream": "^2.0.0",
+    "duhportinf": "sifive/duhportinf",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.1",
     "json-refs": "^3.0.12",
@@ -32,8 +34,7 @@
     "lodash.get": "^4.4.2",
     "onml": "^0.4.5",
     "pinlist": "^0.10.0",
-    "yargs": "^12.0.5",
-    "duhportinf": "sifive/duhportinf"
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
