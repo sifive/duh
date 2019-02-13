@@ -6,7 +6,15 @@ const path = require('path');
 
 const lib = require('../lib/index.js');
 
-const argv = yargs.version().help().argv;
+const argv = yargs
+  .option('output', {
+    alias: 'o',
+    describe: 'output path for exported files',
+    default: 'component'
+  })
+  .version()
+  .help()
+  .argv;
 
 async function main(argv) {
   const cwd = process.cwd();
@@ -14,7 +22,8 @@ async function main(argv) {
   const fileName = argv._[0] || folderName + '.json5';
 
   await lib.scala({
-    filename: fileName
+    filename: fileName,
+    output: argv.output
   });
 }
 
