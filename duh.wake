@@ -18,31 +18,27 @@ def whichNPMCommand nodeModules runDir cmd =
   def nodeModulesPath = nodeModules.getNodeModulesPath
   whichIn nodeModulesPath cmd | relative runDir
 
-global def npmValidate json =
+global def duhValidate json =
   def nodeModules = npmInstall 0
   def cmdline = nodeModules.whichNPMCommand "." "duh", "validate", json, Nil
   def inputs = json, nodeModules.getNodeModulesFiles
   def foutputs _ = Nil
   def validateJob =
     makeManualJob cmdline inputs foutputs
-    | setJobCache False
+    #| setJobCache False
     | runJob
   validateJob.status == 0
 
-global def duhGenerate json rawOutputDir =
+global def duhGenerate json outputDir =
   def nodeModules = npmInstall 0
-  def outputDir = mkdir 0775 rawOutputDir
   def cmdline =
-    def duh_scala = nodeModules.whichNPMCommand outputDir "duh-export-scala"
-    def relJson = relative outputDir json
-    duh_scala, relJson, Nil
+    def duh_scala = nodeModules.whichNPMCommand "." "duh-export-scala"
+    duh_scala, json, "-o", outputDir, Nil
   def inputs = json, outputDir, nodeModules.getNodeModulesFiles
-  def foutputs _ = json, files "{outputDir}/component/src" '.*-base\.scala'
-  if npmValidate json
+  def foutputs _ = json, files outputDir '.*-base\.scala'
+  if duhValidate json
   then
     makeManualJob cmdline inputs foutputs
-    | setJobDirectory outputDir
-    | setJobCache False
     | runJob
     | outputs
   else
