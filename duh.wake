@@ -1,6 +1,6 @@
 tuple NodeModules =
   Dir   String
-  Files List String
+  Files List Path
   Path  String
 
 global def npmInstall _ =
@@ -8,11 +8,11 @@ global def npmInstall _ =
   def inputs = Nil
   def foutputs _ = files "node_modules/.bin" '.*' ++ files "node_modules/duh" '.*'
   def job =
-    makeManualJob cmdline inputs foutputs
+    makeManualPlan cmdline inputs foutputs
     | runJob
-  def path = if job.status == 0 then "node_modules/.bin" else raise "\"npm i github:sifive/duh\" failed!"
-  def dir = if job.status == 0 then "node_modules" else raise "\"npm i github:sifive/duh\" failed!"
-  NodeModules dir job.outputs path
+  def path = if job.getJobStatus == 0 then "node_modules/.bin" else raise "\"npm i github:sifive/duh\" failed!"
+  def dir = if job.getJobStatus == 0 then "node_modules" else raise "\"npm i github:sifive/duh\" failed!"
+  NodeModules dir job.getJobOutputs path
 
 def whichNPMCommand nodeModules runDir cmd =
   def nodeModulesPath = nodeModules.getNodeModulesPath
@@ -20,66 +20,66 @@ def whichNPMCommand nodeModules runDir cmd =
 
 global def duhValidate json =
   def nodeModules = npmInstall 0
-  def cmdline = nodeModules.whichNPMCommand "." "duh", "validate", json, Nil
+  def cmdline = nodeModules.whichNPMCommand "." "duh", "validate", json.getPathName, Nil
   def inputs = json, nodeModules.getNodeModulesFiles
   def foutputs _ = Nil
   def validateJob =
-    makeManualJob cmdline inputs foutputs
+    makeManualPlan cmdline inputs foutputs
     #| setJobCache False
     | runJob
-  validateJob.status == 0
+  validateJob.getJobStatus == 0
 
 global def duhGenerate json outputDir =
   def nodeModules = npmInstall 0
   def cmdline =
     def duh_scala = nodeModules.whichNPMCommand "." "duh-export-scala"
-    duh_scala, json, "-o", outputDir, Nil
+    duh_scala, json.getPathName, "-o", outputDir.getPathName, Nil
   def inputs = json, outputDir, nodeModules.getNodeModulesFiles
-  def foutputs _ = json, files outputDir '.*-base\.scala'
+  def foutputs _ = json.getPathName, files outputDir.getPathName '.*-base\.scala'
   if duhValidate json
   then
-    makeManualJob cmdline inputs foutputs
+    makeManualPlan cmdline inputs foutputs
     | runJob
-    | outputs
+    | getJobOutputs
   else
-    raise "Validate failed for {json}!"
+    raise "Validate failed for {json.getPathName}!"
 
 
 global def duhGet json value =
   def nodeModules = npmInstall 0
   def cmdline =
     def duh = nodeModules.whichNPMCommand "." "duh"
-    duh, "get", value, json, Nil
+    duh, "get", value, json.getPathName, Nil
   def inputs = json, nodeModules.getNodeModulesFiles
   def foutputs _ = Nil
   def jobOut =
-    makeManualJob cmdline inputs foutputs
+    makeManualPlan cmdline inputs foutputs
     | runJob
-    | stdout
+    | getJobStdout
   if matches "undefined" jobOut
   then
-    raise "Value {value} is undefined in {json}"
+    raise "Value {value} is undefined in {json.getPathName}"
   else
     jobOut
 
 global def duhImportVerilogPorts json file =
   def inputs = file, json, nodeModules.getNodeModulesFiles
   def nodeModules = npmInstall 0
-  def cmdline = nodeModules.whichNPMCommand "." "duh-import-verilog-ports", json, Nil
-  def stdin = file
-  def foutputs _ = json, Nil
-  makeManualJob cmdline inputs foutputs
-  | setJobStandardInput stdin
-  | setJobCache False
+  def cmdline = nodeModules.whichNPMCommand "." "duh-import-verilog-ports", json.getPathName, "-o", "port_{json.getPathName}", Nil
+  def stdin = file.getPathName
+  def foutputs _ = json.getPathName, Nil
+  makeManualPlan cmdline inputs foutputs
+  | setPlanStandardInput stdin
+  | setPlanKeep False
   | runJob
-  | output
+  | getJobOutput
 
 global def duhInferChannels json =
   def nodeModules = npmInstall 0
   def inputs = json, nodeModules.getNodeModulesFiles
-  def cmdline = nodeModules.whichNPMCommand "." "duh-infer-channels", json, Nil
-  def foutputs _ = json, Nil
-  makeManualJob cmdline inputs foutputs
-  | setJobCache False
+  def cmdline = nodeModules.whichNPMCommand "." "duh-infer-channels", json.getPathName, "-o", "channels_{json.getPathName}", Nil
+  def foutputs _ = json.getPathName, Nil
+  makeManualPlan cmdline inputs foutputs
+  | setPlanKeep False
   | runJob
-  | output
+  | getJobOutput
