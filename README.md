@@ -116,6 +116,15 @@ cd <workspace>
 vppreproc -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
 ```
 
+```sh
+duh-import-verilog-ports --help
+
+Options:
+  --output, -o  result file
+  --version     Show version number                                    [boolean]
+  --help        Show help                                              [boolean]
+```
+
 :warning: imported ports may require some manual fixes.
 
 See more about import into DUH document here: [import](doc/import.md)
