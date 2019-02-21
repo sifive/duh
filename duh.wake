@@ -35,7 +35,7 @@ global def duhGenerate json outputDir =
     def duh_scala = nodeModules.whichNPMCommand "." "duh-export-scala"
     duh_scala, json.getPathName, "-o", outputDir.getPathName, Nil
   def inputs = json, outputDir, nodeModules.getNodeModulesFiles
-  def foutputs _ = json.getPathName, files outputDir.getPathName '.*-base\.scala'
+  def foutputs _ = files outputDir.getPathName '.*-base\.scala'
   if duhValidate json
   then
     makeManualPlan cmdline inputs foutputs
@@ -65,21 +65,23 @@ global def duhGet json value =
 global def duhImportVerilogPorts json file =
   def inputs = file, json, nodeModules.getNodeModulesFiles
   def nodeModules = npmInstall 0
-  def cmdline = nodeModules.whichNPMCommand "." "duh-import-verilog-ports", json.getPathName, "-o", "port_{json.getPathName}", Nil
+  def output = prefix "ports" json.getPathName
+  def cmdline = nodeModules.whichNPMCommand "." "duh-import-verilog-ports", json.getPathName, "-o", output, Nil
   def stdin = file.getPathName
-  def foutputs _ = json.getPathName, Nil
+  def foutputs _ = output, Nil
   makeManualPlan cmdline inputs foutputs
   | setPlanStandardInput stdin
-  | setPlanKeep False
   | runJob
   | getJobOutput
+
+def prefix pre = replace '.*/' "\\0{pre}_"
 
 global def duhInferChannels json =
   def nodeModules = npmInstall 0
   def inputs = json, nodeModules.getNodeModulesFiles
-  def cmdline = nodeModules.whichNPMCommand "." "duh-infer-channels", json.getPathName, "-o", "channels_{json.getPathName}", Nil
-  def foutputs _ = json.getPathName, Nil
+  def output = prefix "channels" json.getPathName
+  def cmdline = nodeModules.whichNPMCommand "." "duh-infer-channels", json.getPathName, "-o", output, Nil
+  def foutputs _ = output, Nil
   makeManualPlan cmdline inputs foutputs
-  | setPlanKeep False
   | runJob
   | getJobOutput
