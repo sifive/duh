@@ -7,6 +7,10 @@ const fs = require('fs-extra');
 const JSON5 = require('json5');
 
 const argv = yargs
+  .option('output', {
+    alias: 'o',
+    describe: 'result file'
+  })
   .version()
   .help()
   .argv;
@@ -93,7 +97,9 @@ async function main (argv) {
   const duh = JSON5.parse(duhRaw);
   await fix(duh);
   await infer(duh);
-  await fs.outputFile(fileName, JSON5.stringify(duh, null, 2));
+
+  const outputFileName = argv.output || fileName;
+  await fs.outputFile(outputFileName, JSON5.stringify(duh, null, 2));
 }
 
 main(argv);

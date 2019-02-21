@@ -3,32 +3,37 @@
 
 const yargs = require('yargs');
 const path = require('path');
-const util = require('util');
 const JSON5 = require('json5');
 const concat = require('concat-stream');
 const fs = require('fs-extra');
 
 const pinlister = require('pinlist/lib/pinlister-simple.js');
 
-const readFile = util.promisify(fs.readFile);
-const outputFile = util.promisify(fs.outputFile);
-
-const argv = yargs.version().help().argv;
+const argv = yargs
+  .option('output', {
+    alias: 'o',
+    describe: 'result file'
+  })
+  .version()
+  .help()
+  .argv;
 
 async function gotInput(source) {
   const folderName = path.basename(process.cwd());
   const fileName = argv._[0] || folderName + '.json5';
-  const duhRaw = await readFile(fileName, 'utf-8');
+  const duhRaw = await fs.readFile(fileName, 'utf-8');
   const duh = JSON5.parse(duhRaw);
   const pins = pinlister(source);
-  const duhNew = duh;
-  duhNew.definitions = duhNew.definitions || {};
-  duhNew.definitions.ports = duhNew.definitions.ports || {};
-  duhNew.definitions.ports = pins;
-  duhNew.component = duhNew.component || {};
-  duhNew.component.model = duhNew.component.model || {};
-  duhNew.component.model.ports = { $ref: '#/definitions/ports' };
-  await outputFile(fileName, JSON5.stringify(duhNew, null, 2));
+  duh.definitions = duh.definitions || {};
+  duh.definitions.ports = duh.definitions.ports || {};
+  duh.definitions.ports = pins;
+  duh.component = duh.component || {};
+  duh.component.model = duh.component.model || {};
+  duh.component.model.ports = { $ref: '#/definitions/ports' };
+
+  const outputFileName = argv.output || fileName;
+  await fs.outputFile(outputFileName, JSON5.stringify(duh, null, 2));
+
   // console.log(JSON5.stringify(pins, null, 2));
 }
 
