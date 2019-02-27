@@ -27,8 +27,8 @@
   "dependencies": {
     "ajv": "^6.9.2",
     "concat-stream": "^2.0.0",
-    "duhportinf": "sifive/duhportinf",
     "duh-bus": "sifive/duh-bus",
+    "duhportinf": "sifive/duhportinf",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.1",
     "json-refs": "^3.0.12",
@@ -36,7 +36,7 @@
     "lodash.get": "^4.4.2",
     "onml": "^0.4.5",
     "pinlist": "^0.12.0",
-    "yargs": "^12.0.5"
+    "yargs": "^13.2.1"
   },
   "devDependencies": {
     "eslint": "^5.14.1",
