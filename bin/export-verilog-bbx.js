@@ -10,7 +10,7 @@ const argv = yargs
   .option('output', {
     alias: 'o',
     describe: 'output path for exported files',
-    default: 'component/src'
+    default: '.'
   })
   .version()
   .help()
@@ -21,7 +21,7 @@ async function main(argv) {
   const folderName = path.basename(cwd);
   const fileName = argv._[0] || folderName + '.json5';
 
-  await lib.scala({
+  await lib.verilogBBX({
     filename: fileName,
     output: argv.output
   });
