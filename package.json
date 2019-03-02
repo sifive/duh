@@ -27,8 +27,9 @@
   "dependencies": {
     "ajv": "^6.9.2",
     "concat-stream": "^2.0.0",
-    "duh-bus": "sifive/duh-bus",
-    "duhportinf": "sifive/duhportinf",
+    "duh-bus": "github:sifive/duh-bus",
+    "duh-schema": "github:sifive/duh-schema",
+    "duhportinf": "github:sifive/duhportinf",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.1",
     "json-refs": "^3.0.12",
