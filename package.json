@@ -12,8 +12,7 @@
     "duh-import-verilog-ports-simple": "./bin/duh-import-verilog-ports-simple.js",
     "duh-infer-channels": "./bin/infer-channels.js",
     "duh-export-scala": "./bin/duh-export-scala.js",
-    "duh-export-verilog-bbx": "./bin/export-verilog-bbx.js",
-    "duh-export-pa": "./bin/duh-export-pa.js"
+    "duh-export-verilog-bbx": "./bin/export-verilog-bbx.js"
   },
   "repository": {
     "type": "git",
