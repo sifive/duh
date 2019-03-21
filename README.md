@@ -97,4 +97,4 @@ Further information:
   interfaces.
 -->
 
-[ddoc]: doc/readme.md
+[ddoc]: doc/
