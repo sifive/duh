@@ -1,14 +1,14 @@
-DUH operates with JSON5 documents describing Hardware Block.
-Documents using IP-XACT semantics where it is applicable.
-Document collects information about some hardware block
-and can be used without access to the the implementation files.
-Document can describe [Component](component.md) or [Design](design.md).
+## duh-documents
 
-## Component document
+DUH operates with JSON5 "duh-documents" that descibe hardware blocks.  The
+format of duh-documents is inspired by IP-XACT semantics.  Duh-documents
+can describe [Components](component.md) or [Designs](design.md).
 
-Component document collects information about a single hardware block
-without expressing internal structure or hierarchy.
-[Component](component.md) document expressing following aspects:
+### For components
+
+Component duh-documents collects information about a single hardware block
+without expressing internal structure or hierarchy and contains the
+following:
 
   * name, version
   * top level [ports](component.md#ports)
@@ -20,12 +20,12 @@ without expressing internal structure or hierarchy.
   * block generation flow
   * references to implementation, documentation, tests
 
-See more: [component](component.md)
+See more: [components](component.md)
 
-## Design document
+## For designs
 
-Design document captures hierarchy of the block composed from one or more
-Components or Designs; and contains following details:
+Design duh-documents captures hierarchy of the block composed from one or
+more Components or Designs, and contains following:
 
   * name, version
   * dependencies
@@ -34,4 +34,4 @@ Components or Designs; and contains following details:
   * connections
   * design generation flow
 
-See more: [design](design.md)
+See more: [designs](design.md)

@@ -1,153 +1,100 @@
 # Design ∪ Hardware
 
-Library and CLI tool for packaging of reusable chip design components and designs.
-DUH operates with JSON5 documents describing Hardware Block.
-Inspired by IP-XACT and SytemRDL.
+DUH is a suite of tools for packaging reusable hardware components and
+designs. DUH enables the generation of JSON5 [duh-documents][ddoc] for
+describing these components, and also enables export from these documents
+to output deliverables.
 
-Document collects information about some hardware block
-and can be used without access to the the implementation files.
-Document can describe [Component](component.md) or [Design](design.md).
+<!-- FIXME table of contents -->
+<!-- FIXME link to duh-document repo -->
 
 ## Install
 
-DUH tools require [NodeJS](https://nodejs.org) of version 8+ to operate properly.
+First ensure Node Package Manager (`npm`) version 10 is installed or
+[get npm](https://www.npmjs.com/get-npm).
 
-you can check NodeJS version by running:
+#### Globally install 
 
-```
-node --version
-```
+Install globally with `-g`
 
-If you already have NodeJS installed you can skip next section.
-
-### Install NodeJS
-
-NodeJS of specific version can be installed using [Node Version Manager](https://github.com/creationix/nvm)
-
-Install NVM:
-
-```
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
-source ~/.bashrc
+```console
+npm i -g github:sifive/duh
 ```
 
-Install NodeJS version 10.x.x using NVM
+And test installation with `duh --help`
 
-```
-nvm i 10
-```
+#### Locally install to a project
 
-### Install DUH tools
+Install locally with
 
-Configure you PATH to find DUH tools
-
-```
-export PATH=./node_modules/.bin:$PATH
-```
-
-Install DUH tools using NodeJS
-
-```sh
-cd <workspace>
+```console
 npm i github:sifive/duh
 ```
 
-Getting DUH commands and options
+Then configure your shell to search for local installs of `npm` packages by
+adding the following to your `.profile`,`.bashrc`, etc:
 
 ```sh
-cd <workspace>
-duh --help
+alias npm-exec='PATH=$(npm bin):$PATH'
 ```
 
-## Authoring the document
+Test installation with `npm-exec duh --help`
 
-In order to be useful, the document has to capture a sufficient amount
-of details about the Hardware block and all information has to be correct.
+## Quick start
 
-Document stored in [JSON5](https://json5.org/) file format and can be edited
-in any text editor at any time.
+The following base set of DUH tools can be used to generate a
+[duh-document][ddoc] for hardware components and designs:
 
-## Creating new document
+* Run `duh init` to create a base [duh-document][ddoc].
 
-You can create new document manually or by running CLI questionnaire.
+* Run `duh-import-verilog-ports` to import a port list from a
+  ([pre-preprocessed](#preprocess-verilog)) verilog top-level module.
 
-Run the following command and answer the questions:
+* Run `duh-portinf` to infer mappings of portgroups to standard bus
+  definitions (AXI, AHB, TileLink, etc).
 
-```
-cd <workspace>
-duh init [mycomp.json5]
-```
+* Run `duh-portbundler` to group ports, which are unassigned to a bus
+  mapping, into structured bundles.
 
-## Document validation
+* Run `duh validate` to test whether a given document conforms to the
+  [duh-document][ddoc] standard.
 
-Every document has to adhere to specific [JSON Schema](https://json-schema.org/)
-described here:
-[Schema](https://github.com/sifive/duh/blob/master/lib/schema-component.js)
+The following base set of DUH tools can be used to generate outputs from a
+valid [duh-document][ddoc]:
 
-After making changes author should run the document validation process
-by the following command:
+* Run `duh-export-scala` to generate scala black box wrappers for the
+  component.
 
-```
-cd <workspace>
-duh val [mycomp.json]
-```
+<a name="preprocess-verilog"></a>
+#### Preprocess verilog top-level module
 
-See more about Document validation here: [validation](doc/validation.md)
+To run a verilog preprocessor on the top-level module, use:
 
-## Component document
-
-[Component](component.md) document collects information about a single hardware
-block without expressing internal structure or hierarchy.
-
-### Port import
-
-Information about ports can be entered manually or imported
-from top level RTL Verilog file by running the following command:
-
-```
-cd <workspace>
-verilator -E -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
+```console
+verilator -E -Irtl mytop.v > mytop.preproc.v
 ```
 
 or
 
-```
-cd <workspace>
-vppreproc -Irtl rtl/mycomp.v | duh-import-verilog-ports [mycomp.json5]
-```
-
-```sh
-duh-import-verilog-ports --help
-
-Options:
-  --output, -o  result file
-  --version     Show version number                                    [boolean]
-  --help        Show help                                              [boolean]
+```console
+vppreproc -Irtl mytop.v > mytop.preproc.v
 ```
 
-:warning: imported ports may require some manual fixes.
+## Further help
 
-See more about import into DUH document here: [import](doc/import.md)
+Further information:
 
-## Bus interfaces inference
+* the [duh-document][ddoc] standard.
 
-Author can infer bus interface mappings by running:
+* https://github.com/sifive/duhportinf for the port inference DUH package
+  that contains usage details of the `duh-portinf` and `duh-portbundler`
+  tools.
 
-```
-cd <workspace>
-duh-portinf -o mycomp-busprop.json mycomp.json5
-```
+<!--
+* XXX for a walk-through example that starts with a standalone top-level
+  verilog module and uses the DUH suite to produce a valid
+  [duh-document][ddoc] that fully describes mapping of ports to known bus
+  interfaces.
+-->
 
-This will generate candidate bus interface mappings for select groups of
-ports with high quality matches.
-
-## Export
-
-### Scala
-
-To export Scala from DUH document run the following command:
-
-```
-cd <workspace>
-duh-export-scala [mycomp.json5]
-```
+[ddoc]: doc/readme.md
