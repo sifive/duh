@@ -84,17 +84,15 @@ vppreproc -Irtl mytop.v > mytop.preproc.v
 
 Further information:
 
+* [block-ark](https://github.com/sifive/block-ark) for a walk-through
+  example using the DUH suite on a standalone module to produce a valid
+  [duh-document][ddoc] that fully describes the mapping of ports to known
+  bus definitions.
+
 * the [duh-document][ddoc] standard.
 
-* https://github.com/sifive/duhportinf for the port inference DUH package
-  that contains usage details of the `duh-portinf` and `duh-portbundler`
-  tools.
-
-<!--
-* XXX for a walk-through example that starts with a standalone top-level
-  verilog module and uses the DUH suite to produce a valid
-  [duh-document][ddoc] that fully describes mapping of ports to known bus
-  interfaces.
--->
+* [duhportinf](https://github.com/sifive/duhportinf) for the port
+  inference DUH package that contains usage details of the `duh-portinf`
+  and `duh-portbundler` tools.
 
 [ddoc]: doc/
