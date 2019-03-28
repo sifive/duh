@@ -5,6 +5,7 @@ const yargs = require('yargs');
 const path = require('path');
 const fs = require('fs-extra');
 const JSON5 = require('json5');
+const jsonRefs = require('json-refs');
 
 const argv = yargs
   .option('output', {
@@ -35,7 +36,8 @@ const nameReducer = sfx => (prev, e) => {
 };
 
 async function infer (duh) {
-  const ports = duh.definitions.ports;
+  const duh1 = (await jsonRefs.resolveRefs(duh)).resolved;
+  const ports = duh1.component.model.ports;
   const keys = Object.keys(ports);
 
   const map = {
@@ -58,7 +60,7 @@ async function infer (duh) {
       interfaceMode: interfaceMode,
       busType: {
         vendor: 'sifive.com',
-        library: 'free',
+        library: 'basic',
         name: 'channel',
         version: '0.1.0'
       },
@@ -69,8 +71,8 @@ async function infer (duh) {
     };
   });
 
-  duh.definitions.busInterfaces = busInterfaces;
-  duh.component.busInterfaces = { $ref: '#/definitions/busInterfaces' };
+  // duh.definitions.busInterfaces = busInterfaces;
+  duh.component.busInterfaces = busInterfaces; // { $ref: '#/definitions/busInterfaces' };
   // console.log(busInterfaces);
 }
 
