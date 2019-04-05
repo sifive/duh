@@ -1,6 +1,6 @@
 {
   "name": "duh",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "Design Unit Hardware",
   "main": "lib/index.js",
   "scripts": {
