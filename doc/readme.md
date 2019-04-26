@@ -4,7 +4,7 @@ DUH operates with JSON5 "duh-documents" that descibe hardware blocks.  The
 format of duh-documents is inspired by IP-XACT semantics.  Duh-documents
 can describe [Components](component.md) or [Designs](design.md).
 
-### For components
+## component
 
 Component duh-documents collects information about a single hardware block
 without expressing internal structure or hierarchy and contains the
@@ -22,7 +22,7 @@ following:
 
 See more: [components](component.md)
 
-## For designs
+## designs
 
 Design duh-documents captures hierarchy of the block composed from one or
 more Components or Designs, and contains following:
@@ -30,7 +30,7 @@ more Components or Designs, and contains following:
   * name, version
   * dependencies
   * instances
-  * parameter schema
+  * parameter values
   * connections
   * design generation flow
 
