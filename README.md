@@ -16,8 +16,8 @@ to output deliverables.
 First ensure Node Package Manager (`npm`) is installed or
 [get npm](https://www.npmjs.com/get-npm).  Then install
 
-```console
-npm i github:sifive/duh
+```bash
+npm i duh
 ```
 
 And test installation with `duh --help`
