@@ -1,3 +1,6 @@
+[![NPM version](https://img.shields.io/npm/v/duh.svg)](https://www.npmjs.org/package/duh)
+[![Travis build Status](https://travis-ci.org/sifive/duh.svg?branch=master)](https://travis-ci.org/sifive/duh)
+
 # Design ∪ Hardware
 
 DUH is a suite of tools for packaging reusable hardware components and
