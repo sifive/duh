@@ -4,14 +4,13 @@
   "description": "Design Unit Hardware",
   "main": "lib/index.js",
   "scripts": {
-    "test": "eslint lib bin"
+    "test": "eslint lib bin && nyc -r=text -r=lcov mocha"
   },
   "bin": {
     "duh": "./bin/duh.js",
     "duh-import-verilog-ports": "./bin/duh-import-verilog-ports.js",
     "duh-import-verilog-ports-simple": "./bin/duh-import-verilog-ports-simple.js",
     "duh-infer-channels": "./bin/infer-channels.js",
-    "duh-export-scala": "./bin/duh-export-scala.js",
     "duh-export-verilog-bbx": "./bin/export-verilog-bbx.js"
   },
   "repository": {
@@ -29,6 +28,7 @@
     "concat-stream": "^2.0.0",
     "duh-bus": "^0.1.0",
     "duh-schema": "^0.3.1",
+    "duh-scala": "^0.2.0",
     "duhportinf": "^0.3.0",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.1",
@@ -40,8 +40,11 @@
     "yargs": "^13.2.1"
   },
   "devDependencies": {
+    "@drom/eslint-config": "^0.9.0",
+    "chai": "^4.2.0",
     "eslint": "^5.14.1",
-    "@drom/eslint-config": "^0.9.0"
+    "mocha": "^6.1.4",
+    "nyc": "^14.0.0"
   },
   "eslintConfig": {
     "extends": "@drom/eslint-config/eslint4/node8"
