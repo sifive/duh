@@ -1,14 +1,17 @@
 tuple NodeModules =
-  Dir   String
-  Files List Path
-  Path  String
+  Dir:   String
+  Files: List Path
+  Path:  String
 
-global def npmInstall _ =
+global def npmInstall Unit =
+  #def cmdline = which "npm", "i", "duh@1.7.1", Nil
   def cmdline = which "npm", "i", "github:sifive/duh#duh-wake", Nil
   def inputs = Nil
   def foutputs _ = files "node_modules/.bin" '.*' ++ files "node_modules/duh" '.*'
   def job =
+    def env = makeEnvKey "python3" "any" | getDefaultEnv
     makeManualPlan cmdline inputs foutputs
+    | setPlanEnvironment env
     | runJob
   def path = if job.getJobStatus == 0 then "node_modules/.bin" else raise "\"npm i github:sifive/duh\" failed!"
   def dir = if job.getJobStatus == 0 then "node_modules" else raise "\"npm i github:sifive/duh\" failed!"
@@ -19,7 +22,7 @@ def whichNPMCommand nodeModules runDir cmd =
   whichIn nodeModulesPath cmd | relative runDir
 
 global def duhValidate json =
-  def nodeModules = npmInstall 0
+  def nodeModules = Unit.npmInstall
   def cmdline = nodeModules.whichNPMCommand "." "duh", "validate", json.getPathName, Nil
   def inputs = json, nodeModules.getNodeModulesFiles
   def foutputs _ = Nil
@@ -29,13 +32,14 @@ global def duhValidate json =
     | runJob
   validateJob.getJobStatus == 0
 
-global def duhGenerate json outputDir =
-  def nodeModules = npmInstall 0
+global def duhExportScala json outputDir =
+  def outputDirPath = mkdir outputDir
+  def nodeModules = Unit.npmInstall
   def cmdline =
     def duh_scala = nodeModules.whichNPMCommand "." "duh-export-scala"
-    duh_scala, json.getPathName, "-o", outputDir.getPathName, Nil
-  def inputs = json, outputDir, nodeModules.getNodeModulesFiles
-  def foutputs _ = files outputDir.getPathName '.*-base\.scala'
+    duh_scala, json.getPathName, "-o", outputDir, Nil
+  def inputs = json, outputDirPath, nodeModules.getNodeModulesFiles
+  def foutputs _ = files outputDir '.*-base\.scala'
   if duhValidate json
   then
     makeManualPlan cmdline inputs foutputs
@@ -46,7 +50,7 @@ global def duhGenerate json outputDir =
 
 
 global def duhGet json value =
-  def nodeModules = npmInstall 0
+  def nodeModules = Unit.npmInstall
   def cmdline =
     def duh = nodeModules.whichNPMCommand "." "duh"
     duh, "get", value, json.getPathName, Nil
@@ -64,7 +68,7 @@ global def duhGet json value =
 
 global def duhImportVerilogPorts json file =
   def inputs = file, json, nodeModules.getNodeModulesFiles
-  def nodeModules = npmInstall 0
+  def nodeModules = Unit.npmInstall
   def output = prefix "ports" json.getPathName
   def cmdline = nodeModules.whichNPMCommand "." "duh-import-verilog-ports", json.getPathName, "-o", output, Nil
   def stdin = file.getPathName
@@ -74,10 +78,8 @@ global def duhImportVerilogPorts json file =
   | runJob
   | getJobOutput
 
-def prefix pre = replace '.*/' "\\0{pre}_"
-
 global def duhInferChannels json =
-  def nodeModules = npmInstall 0
+  def nodeModules = npmInstall Unit
   def inputs = json, nodeModules.getNodeModulesFiles
   def output = prefix "channels" json.getPathName
   def cmdline = nodeModules.whichNPMCommand "." "duh-infer-channels", json.getPathName, "-o", output, Nil
@@ -85,3 +87,14 @@ global def duhInferChannels json =
   makeManualPlan cmdline inputs foutputs
   | runJob
   | getJobOutput
+
+def prefix pre = replace '.*/' "\\0{pre}_"
+
+global def duhExportScalaModule name fnJson outputDir =
+  def generatedSources Unit =
+    duhExportScala Unit.fnJson outputDir
+    | filter (matches '.*\.scala' _.getPathName)
+
+  makeScalaModule name outputDir "2.12.8".makeScalaVersion
+  | setScalaModuleSourceDirs Nil
+  | setScalaModuleFnGeneratedSources generatedSources
