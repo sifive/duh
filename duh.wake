@@ -1,49 +1,87 @@
-def hereDependencies =
-  def sourceDirs = "{here}/package.json", "{here}/lib", "{here}/bin", "{here}/assets", Nil
-  (map (files _ '.*') sourceDirs).flatten
+tuple NodeModules =
+  Dir   String
+  Files List Path
+  Path  String
 
-def npmInstall _ =
-  def cmdline = which "npm", "install", Nil
-  def inputs = hereDependencies
-  def foutputs _ = Nil
-  makeManualJob cmdline inputs foutputs
-  | setJobDirectory here
-  | runJob
-
-def getDuh _ = if (npmInstall 0).status == 0 then "{here}/bin/duh.js" else raise "npm install failed!"
-def getDuhScala _ = if (npmInstall 0).status == 0 then "{here}/bin/duh-export-scala.js" else raise "npm install failed!"
-
-def npmValidate json =
-  def duh = getDuh 0
-  def cmdline = which "node", duh, "validate", json, Nil
-  def inputs = json, hereDependencies
-  def foutputs _ = Nil
-  manual_job cmdline inputs foutputs
-
-global def duhGenerate json rawOutputDir =
-  def outputDir = mkdir 0775 rawOutputDir
-  def duh_scala = getDuhScala 0
-  def relJson = relative outputDir json
-  def cmdline = which "node", relative outputDir duh_scala, relJson, Nil
-  def inputs = json, outputDir, hereDependencies
-  def foutputs _ = files outputDir "component/.*-base.scala"
-  if (npmValidate json).status == 0
-  then
-    makeManualJob cmdline inputs foutputs
-    | setJobDirectory outputDir
+global def npmInstall _ =
+  def cmdline = which "npm", "i", "github:sifive/duh#duh-wake", Nil
+  def inputs = Nil
+  def foutputs _ = files "node_modules/.bin" '.*' ++ files "node_modules/duh" '.*'
+  def job =
+    makeManualPlan cmdline inputs foutputs
     | runJob
-    | outputs
+  def path = if job.getJobStatus == 0 then "node_modules/.bin" else raise "\"npm i github:sifive/duh\" failed!"
+  def dir = if job.getJobStatus == 0 then "node_modules" else raise "\"npm i github:sifive/duh\" failed!"
+  NodeModules dir job.getJobOutputs path
+
+def whichNPMCommand nodeModules runDir cmd =
+  def nodeModulesPath = nodeModules.getNodeModulesPath
+  whichIn nodeModulesPath cmd | relative runDir
+
+global def duhValidate json =
+  def nodeModules = npmInstall 0
+  def cmdline = nodeModules.whichNPMCommand "." "duh", "validate", json.getPathName, Nil
+  def inputs = json, nodeModules.getNodeModulesFiles
+  def foutputs _ = Nil
+  def validateJob =
+    makeManualPlan cmdline inputs foutputs
+    #| setJobCache False
+    | runJob
+  validateJob.getJobStatus == 0
+
+global def duhGenerate json outputDir =
+  def nodeModules = npmInstall 0
+  def cmdline =
+    def duh_scala = nodeModules.whichNPMCommand "." "duh-export-scala"
+    duh_scala, json.getPathName, "-o", outputDir.getPathName, Nil
+  def inputs = json, outputDir, nodeModules.getNodeModulesFiles
+  def foutputs _ = files outputDir.getPathName '.*-base\.scala'
+  if duhValidate json
+  then
+    makeManualPlan cmdline inputs foutputs
+    | runJob
+    | getJobOutputs
   else
-    raise "Validate failed for {json}!"
+    raise "Validate failed for {json.getPathName}!"
+
 
 global def duhGet json value =
-  def duh = getDuh 0
-  def cmdline = which "node", duh, "get", value, json, Nil
-  def inputs = json, hereDependencies
+  def nodeModules = npmInstall 0
+  def cmdline =
+    def duh = nodeModules.whichNPMCommand "." "duh"
+    duh, "get", value, json.getPathName, Nil
+  def inputs = json, nodeModules.getNodeModulesFiles
   def foutputs _ = Nil
-  def jobOut = (manual_job cmdline inputs foutputs).stdout
+  def jobOut =
+    makeManualPlan cmdline inputs foutputs
+    | runJob
+    | getJobStdout
   if matches "undefined" jobOut
   then
-    raise "Value {value} is undefined in {json}"
+    raise "Value {value} is undefined in {json.getPathName}"
   else
     jobOut
+
+global def duhImportVerilogPorts json file =
+  def inputs = file, json, nodeModules.getNodeModulesFiles
+  def nodeModules = npmInstall 0
+  def output = prefix "ports" json.getPathName
+  def cmdline = nodeModules.whichNPMCommand "." "duh-import-verilog-ports", json.getPathName, "-o", output, Nil
+  def stdin = file.getPathName
+  def foutputs _ = output, Nil
+  makeManualPlan cmdline inputs foutputs
+  | setPlanStandardInput stdin
+  | runJob
+  | getJobOutput
+
+def prefix pre = replace '.*/' "\\0{pre}_"
+
+global def duhInferChannels json =
+  def nodeModules = npmInstall 0
+  def inputs = json, nodeModules.getNodeModulesFiles
+  def output = prefix "channels" json.getPathName
+  def cmdline = nodeModules.whichNPMCommand "." "duh-infer-channels", json.getPathName, "-o", output, Nil
+  def foutputs _ = output, Nil
+  makeManualPlan cmdline inputs foutputs
+  | runJob
+  | getJobOutput
