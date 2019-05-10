@@ -9,9 +9,8 @@ global def npmInstall Unit =
   def inputs = Nil
   def foutputs _ = files "node_modules/.bin" '.*' ++ files "node_modules/duh" '.*'
   def job =
-    def env = makeEnvKey "python3" "any" | getDefaultEnv
     makeManualPlan cmdline inputs foutputs
-    | setPlanEnvironment env
+    | setPlanResources ("python/python/3.7.1", Nil)
     | runJob
   def path = if job.getJobStatus == 0 then "node_modules/.bin" else raise "\"npm i github:sifive/duh\" failed!"
   def dir = if job.getJobStatus == 0 then "node_modules" else raise "\"npm i github:sifive/duh\" failed!"
