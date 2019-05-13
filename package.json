@@ -28,7 +28,7 @@
     "concat-stream": "^2.0.0",
     "duh-bus": "^0.1.0",
     "duh-schema": "^0.3.1",
-    "duh-scala": "^0.2.0",
+    "duh-scala": "^0.2.5",
     "duhportinf": "^0.3.0",
     "fs-extra": "^8.0.1",
     "inquirer": "^6.2.1",
