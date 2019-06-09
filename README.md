@@ -3,7 +3,7 @@
 
 # Design ∪ Hardware
 
-DUH is a suite of tools for packaging reusable hardware components and
+DUH (pronounced [**[dux]**](https://en.wiktionary.org/wiki/%D0%B4%D1%83%D1%85)) is a suite of tools for packaging reusable hardware components and
 designs. DUH enables the generation of JSON5 [duh-documents][ddoc] for
 describing these components, and also enables export from these documents
 to output deliverables.
