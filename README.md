@@ -29,8 +29,7 @@ The following base set of DUH tools can be used to generate a
 
 * Run `duh init` to create a base [duh-document][ddoc].
 
-* Run `duh-import-verilog-ports` to import a port list from a
-  ([pre-preprocessed](#preprocess-verilog)) verilog top-level module.
+* Run `duh-import-verilog-ports` to import a port list from Verilog RTL of the component -> [import verilog](https://github.com/sifive/duh/blob/master/doc/import-verilog.md)
 
 * Run `duh-portinf` to infer mappings of portgroups to standard bus
   definitions AXI, AHB, TileLink, etc. (From the [duhportinf][dinf]
