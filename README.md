@@ -48,7 +48,6 @@ valid [duh-document][ddoc]:
 * Run `duh-export-scala` to generate scala black box wrappers for the
   component.
 
-<a name="preprocess-verilog"></a>
 #### Preprocess verilog top-level module
 
 To run a verilog preprocessor on the top-level module, use:
@@ -77,6 +76,16 @@ Further information:
 * [duhportinf][dinf] for the port
   inference DUH package that contains usage details of the `duh-portinf`
   and `duh-portbundler` tools.
+
+
+## Other DUH packages:
+
+* [duh-scala](https://github.com/sifive/duh-scala) -- Scala/Chisel export
+* [duh-ipxact](https://github.com/sifive/duh-ipxact) -- IP-XACT import / export
+* [duhportinf](https://github.com/sifive/duhportinf) -- Bus interfaces inference
+* [duh-bus](https://github.com/sifive/duh-bus) -- DUH Bus Definitions
+* [duh-schema](https://github.com/sifive/duh-schema) -- DUH document JSON schema
+* [duh-core](https://github.com/sifive/duh-core) -- DUH core library
 
 [ddoc]: doc/
 [dinf]: https://github.com/sifive/duhportinf
