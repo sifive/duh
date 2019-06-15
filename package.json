@@ -22,13 +22,16 @@
   "bugs": {
     "url": "https://github.com/sifive/duh/issues"
   },
+  "engines": {
+    "node": ">=6"
+  },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
     "ajv": "^6.9.2",
     "concat-stream": "^2.0.0",
     "duh-bus": "^0.1.0",
     "duh-schema": "^0.3.1",
-    "duh-scala": "^0.4.0",
+    "duh-scala": "^0.5.0",
     "duhportinf": "^0.3.0",
     "fs-extra": "^8.0.1",
     "inquirer": "^6.2.1",
@@ -36,7 +39,7 @@
     "json5": "^2.1.0",
     "lodash.get": "^4.4.2",
     "onml": "^1.0.0",
-    "pinlist": "^0.12.2",
+    "pinlist": "^0.12.4",
     "yargs": "^13.2.1"
   },
   "devDependencies": {
