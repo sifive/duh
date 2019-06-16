@@ -13,8 +13,15 @@ to output deliverables.
 
 ## Install
 
-First ensure Node Package Manager (`npm`) is installed or
-[get npm](https://www.npmjs.com/get-npm).  Then install
+Make sure that you have `Node.js` v6..v11 installed by running:
+
+```
+node --version
+```
+
+On [[Installing Node.js via package manager](https://nodejs.org/en/download/package-manager/)]
+
+Install `duh` tool suite.
 
 ```bash
 npm i duh
