@@ -1,9 +1,9 @@
 ## Table of Contents
 
-- [Verilog RTL import](#verilogrtlimport)
-  * [Verilog Preprocessor](#verilogpreprocessor)
-- [IP-XACT import](#ip-xactimport)
-- [SystemRDL import](#systemrdlimport)
+- [Verilog RTL import](#verilog-rtl-import)
+  * [Verilog Preprocessor](#verilog-preprocessor)
+- [IP-XACT import](#ip-xact-import)
+- [SystemRDL import](#systemrdl-import)
 
 ## Verilog RTL import
 
