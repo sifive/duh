@@ -42,11 +42,11 @@ Base set of DUH tools to author [duh documents](doc/):
   - Run `duh-portbundler` to group ports, which are unassigned to a bus
   mapping, into structured bundles.
 
-* Validate
+* [Validate](doc/validation.md)
   - Run `duh validate` to test whether a given document conforms to the
   DUH document structure.
 
-* Export
+* [Export](docs/export.md)
   - Run `duh-export-scala` to generate scala black box wrappers for the
   component.
 
