@@ -4,22 +4,19 @@
 # Design ∪ Hardware
 
 DUH (pronounced [**[dûx]**](https://upload.wikimedia.org/wikipedia/commons/0/08/Ru-%D0%B4%D1%83%D1%85.ogg)) is a suite of tools for packaging reusable hardware components and
-designs. DUH enables the generation of JSON5 [duh-documents][/doc] for
+designs. DUH enables the generation of JSON5 ([duh documents](doc/)) for
 describing these components, and also enables export from these documents
 to output deliverables.
 
-<!-- FIXME table of contents -->
-<!-- FIXME link to duh-document repo -->
-
 ## Install
 
-Make sure that you have `Node.js` v6..v11 installed by running:
+Check that you have `Node.js` version (6 - 11) installed by running:
 
 ```
 node --version
 ```
 
-On [[Installing Node.js via package manager](https://nodejs.org/en/download/package-manager/)]
+On [Installing Node.js via package manager](https://nodejs.org/en/download/package-manager/)
 
 Install `duh` tool suite.
 
@@ -31,13 +28,13 @@ And test installation with `duh --help`
 
 ## Quick start
 
-Base set of DUH tools to author [duh documents]([doc/):
+Base set of DUH tools to author [duh documents](doc/):
 
 * Create
-  - Run `duh init` to create a base [duh-document][doc/].
+  - Run `duh init` to create a base document.
 
 * [Import](doc/import.md)
-  - Run `duh-import-verilog-ports` to import an interface from Verilog RTL of the component -> [import](doc/import.md)
+  - Run `duh-import-verilog-ports` to import an interface from Verilog RTL of the component
 
 * Infer
   - Run `duh-portinf` to infer mappings of portgroups to standard bus
@@ -47,7 +44,7 @@ Base set of DUH tools to author [duh documents]([doc/):
 
 * Validate
   - Run `duh validate` to test whether a given document conforms to the
-  [duh-document](doc/) structure.
+  DUH document structure.
 
 * Export
   - Run `duh-export-scala` to generate scala black box wrappers for the
