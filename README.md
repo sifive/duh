@@ -31,43 +31,27 @@ And test installation with `duh --help`
 
 ## Quick start
 
-The following base set of DUH tools can be used to generate a
-[duh-document][ddoc] for hardware components and designs:
+Base set of DUH tools to author [duh documents]([doc/):
 
-* Run `duh init` to create a base [duh-document][doc/].
+* Create
+  - Run `duh init` to create a base [duh-document][doc/].
 
-* Run `duh-import-verilog-ports` to import an interface from Verilog RTL of the component -> [import](doc/import.md)
+* [Import](doc/import.md)
+  - Run `duh-import-verilog-ports` to import an interface from Verilog RTL of the component -> [import](doc/import.md)
 
-* Run `duh-portinf` to infer mappings of portgroups to standard bus
+* Infer
+  - Run `duh-portinf` to infer mappings of portgroups to standard bus
   definitions AXI, AHB, TileLink, etc.
-
-* Run `duh-portbundler` to group ports, which are unassigned to a bus
+  - Run `duh-portbundler` to group ports, which are unassigned to a bus
   mapping, into structured bundles.
 
-* Run `duh validate` to test whether a given document conforms to the
-  [duh-document][doc/] structure.
+* Validate
+  - Run `duh validate` to test whether a given document conforms to the
+  [duh-document](doc/) structure.
 
-The following base set of DUH tools can be used to generate outputs from a
-valid [duh-document][doc/]:
-
-* Run `duh-export-scala` to generate scala black box wrappers for the
+* Export
+  - Run `duh-export-scala` to generate scala black box wrappers for the
   component.
-
-## Further help
-
-Further information:
-
-* [block-ark](https://github.com/sifive/block-ark) for a walk-through
-  example using the DUH suite on a standalone module to produce a valid
-  [duh-document][doc/] that fully describes the mapping of ports to known
-  bus definitions.
-
-* the [duh-document][doc/] standard.
-
-* [duhportinf][https://github.com/sifive/duhportinf] for the port
-  inference DUH package that contains usage details of the `duh-portinf`
-  and `duh-portbundler` tools.
-
 
 ## Other DUH packages:
 
@@ -77,3 +61,10 @@ Further information:
 * [duh-bus](https://github.com/sifive/duh-bus) -- DUH Bus Definitions
 * [duh-schema](https://github.com/sifive/duh-schema) -- DUH document JSON schema
 * [duh-core](https://github.com/sifive/duh-core) -- DUH core library
+
+## Example of DUH documents
+
+* [block-ark](https://github.com/sifive/block-ark) for a walk-through
+  example using the DUH suite on a standalone module to produce a valid
+  [duh-document](doc/) that fully describes the mapping of ports to known
+  bus definitions.
