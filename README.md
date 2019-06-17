@@ -1,3 +1,5 @@
+<img src="assets/logo.svg" align="middle">
+
 [![NPM version](https://img.shields.io/npm/v/duh.svg)](https://www.npmjs.org/package/duh)
 [![Travis build Status](https://travis-ci.org/sifive/duh.svg?branch=master)](https://travis-ci.org/sifive/duh)
 
@@ -46,7 +48,7 @@ Base set of DUH tools to author [duh documents](doc/):
   - Run `duh validate` to test whether a given document conforms to the
   DUH document structure.
 
-* [Export](docs/export.md)
+* [Export](doc/export.md)
   - Run `duh-export-scala` to generate scala black box wrappers for the
   component.
 
