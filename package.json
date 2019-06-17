@@ -29,9 +29,9 @@
   "dependencies": {
     "ajv": "^6.9.2",
     "concat-stream": "^2.0.0",
-    "duh-bus": "^0.1.0",
+    "duh-bus": "^0.2.2",
+    "duh-scala": "^0.5.1",
     "duh-schema": "^0.3.1",
-    "duh-scala": "^0.5.0",
     "duhportinf": "^0.3.0",
     "fs-extra": "^8.0.1",
     "inquirer": "^6.2.1",
@@ -40,6 +40,7 @@
     "lodash.get": "^4.4.2",
     "onml": "^1.0.0",
     "pinlist": "^0.12.4",
+    "winston": "^3.2.1",
     "yargs": "^13.2.1"
   },
   "devDependencies": {
