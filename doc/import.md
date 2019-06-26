@@ -24,7 +24,7 @@ The path to all include files and all defines should be provided.
 Verilator (with option `-E`) can be used to preprocess Verilog.
 
 ```sh
-verilator -E <OPTIONS> mytop.v | duh-import-verilog-ports mytop.json5
+verilator -P -E <OPTIONS> mytop.v | duh-import-verilog-ports mytop.json5
 ```
 
 Verilator options to include and define:
