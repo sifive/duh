@@ -2,3 +2,4 @@
 .travis.yml
 coverage
 test
+*.tgz
