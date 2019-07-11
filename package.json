@@ -29,9 +29,9 @@
   "dependencies": {
     "ajv": "^6.10.1",
     "concat-stream": "^2.0.0",
-    "duh-bus": "^0.3.1",
+    "duh-bus": "^0.4.0",
     "duh-scala": "^0.9.0",
-    "duh-schema": "^0.3.2",
+    "duh-schema": "^0.4.0",
     "duhportinf": "^0.3.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^6.5.0",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
     "chai": "^4.2.0",
-    "eslint": "^5.14.1",
+    "eslint": "^5.16.0",
     "mocha": "^6.1.4",
     "nyc": "^14.0.0"
   },
