@@ -5,6 +5,9 @@
 - [IP-XACT import](#ip-xact-import)
 - [SystemRDL import](#systemrdl-import)
 
+Before running import tools, please make sure that you have created initial
+DUH component document by running `duh init` command.
+
 ## Verilog RTL import
 
 Information about component interface can be imported from Verilog RTL source
