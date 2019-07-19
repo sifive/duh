@@ -22,7 +22,7 @@ following:
 
 See more: [components](component.md)
 
-## designs
+## design
 
 Design duh-documents captures hierarchy of the block composed from one or
 more Components or Designs, and contains following:
@@ -35,3 +35,9 @@ more Components or Designs, and contains following:
   * design generation flow
 
 See more: [designs](design.md)
+
+## bus definition
+
+
+
+See [duh-bus](https://github.com/sifive/duh-bus) collection of Bus definitions in DUH format.
