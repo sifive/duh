@@ -37,8 +37,7 @@ Base set of DUH tools to author [duh documents](doc/):
 
 * [Import](doc/import.md)
   - SystemVerilog: Run `duh duh-import-verilog-ports` to import an interface from Verilog RTL of the component
-  - IPXACT: [duh-ipxact](https://github.com/sifive/duh-ipxact#ipxact---duh)
-  
+  - IPXACT: [duh-ipxact](https://github.com/sifive/duh-ipxact)
 
 * Infer
   - Run `duh-portinf` to infer mappings of portgroups to standard bus
@@ -53,6 +52,7 @@ Base set of DUH tools to author [duh documents](doc/):
 * [Export](doc/export.md)
   - Run `duh-export-scala` to generate scala black box wrappers for the
   component.
+  - IPXACT: [duh-ipxact](https://github.com/sifive/duh-ipxact)
 
 ## Other DUH packages:
 
