@@ -36,7 +36,9 @@ Base set of DUH tools to author [duh documents](doc/):
   - Run `duh init` to create a base document.
 
 * [Import](doc/import.md)
-  - Run `duh-import-verilog-ports` to import an interface from Verilog RTL of the component
+  - SystemVerilog: Run `duh duh-import-verilog-ports` to import an interface from Verilog RTL of the component
+  - IPXACT: [duh-ipxact](https://github.com/sifive/duh-ipxact#ipxact---duh)
+  
 
 * Infer
   - Run `duh-portinf` to infer mappings of portgroups to standard bus
