@@ -31,17 +31,17 @@
     "concat-stream": "^2.0.0",
     "duh-bus": "^0.5.0",
     "duh-scala": "^0.11.0",
-    "duh-schema": "^0.4.1",
-    "duhportinf": "^0.3.0",
+    "duh-schema": "^0.7.0",
+    "duhportinf": "^0.4.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^6.5.0",
     "json-refs": "^3.0.12",
     "json5": "^2.1.0",
     "lodash.get": "^4.4.2",
-    "onml": "^1.0.0",
+    "onml": "^1.1.0",
     "pinlist": "^0.12.5",
     "winston": "^3.2.1",
-    "yargs": "^13.3.0"
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
