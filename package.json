@@ -34,20 +34,20 @@
     "duh-schema": "^0.7.3",
     "duhportinf": "^0.4.0",
     "fs-extra": "^8.1.0",
-    "inquirer": "^6.5.0",
+    "inquirer": "^6.5.2",
     "json-refs": "^3.0.12",
-    "json5": "^2.1.0",
+    "json5": "^2.1.1",
     "lodash.get": "^4.4.2",
     "onml": "^1.1.0",
     "pinlist": "^0.12.5",
     "winston": "^3.2.1",
-    "yargs": "^14.0.0"
+    "yargs": "^14.2.0"
   },
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.2",
     "nyc": "^14.0.0"
   },
   "eslintConfig": {
