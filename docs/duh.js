@@ -297,12 +297,12 @@ let renderPortType = port => ['text', {
   class: 'litera-text', x: 8, y: 9
 }, ({
   SPRAM: 'R',
-  JTAG: 'J',
   APB4: 'P',
+  APB: 'P',
   AXI4: 'X',
   'AXI4-Lite': 'L',
   interrupts: 'i'
-})[port.busType.name] || '?'];
+})[port.busType.name] || port.busType.name.slice(0, 1).toLowerCase()];
 
 let noder = n => {
   // console.log(n);
@@ -738,6 +738,9 @@ const getWidth = portValue => {
   if (typeof portValue === 'string') {
     return (portValue[0] === '-') ? portValue.slice(1) : portValue;
   }
+  if (typeof portValue === 'object') {
+    return portValue.width;
+  }
   throw new Error(typeof portValue);
 };
 
@@ -747,6 +750,9 @@ const getDirection = portValue => {
   }
   if (typeof portValue === 'string') {
     return (portValue[0] === '-') ? 'Output' : 'Input';
+  }
+  if (typeof portValue === 'object') {
+    return portValue.direction;
   }
   throw new Error(typeof portValue);
 };
