@@ -66,6 +66,18 @@ let fw = roboto.Roboto()(16).getWidth;
 
 let ceil = n => Math.ceil(n / 16) * 16;
 
+let lutvlnv = (lut, ref) => {
+  let res = {};
+  try {
+    res = lut[ref.vendor][ref.library][ref.name][ref.version];
+  } catch (err) {
+    console.error(ref);
+    console.error(lut);
+  }
+  return res;
+};
+
+
 let measureInstanceBuses = design =>
   (design.connections || [])
     .reduce((res, e) => {
@@ -86,10 +98,10 @@ let measureInstanceBuses = design =>
       return res;
     }, {imports: {}, exports: {}, sources: {}, targets: {}});
 
-let makePorts = design => {
+let makePorts = (design, lut) => {
   let res = {};
   (design.instances || []).forEach(n => {
-    let comp = n.ref.component;
+    let comp = lutvlnv(lut, n.ref).component;
     (comp.busInterfaces || []).forEach(bi => {
       res['port_' + n.name + '_' + bi.name] = true;
     });
@@ -97,11 +109,11 @@ let makePorts = design => {
   return res;
 };
 
-let makeInstances = (design, metrics) =>
+let makeInstances = (design, lut, metrics) =>
   (design.instances || [])
     .map(n => {
       let iname = n.name;
-      let comp = n.ref.component;
+      let comp = lutvlnv(lut, n.ref).component;
       let cname = comp.name;
 
       // console.log(comp.busInterfaces);
@@ -137,12 +149,12 @@ let makeInstances = (design, metrics) =>
 
       return {
         id: n.name,
-        cname: n.ref.component.name,
+        cname: comp.name,
         vlnv: {
-          vendor: n.ref.component.vendor,
-          library: n.ref.component.library,
-          name: n.ref.component.name,
-          version: n.ref.component.version
+          vendor: comp.vendor,
+          library: comp.library,
+          name: comp.name,
+          version: comp.version
         },
         width,
         height,
@@ -218,9 +230,9 @@ let connectExports = design =>
       source: e.source
     }));
 
-let makeGraph = design => {
+let makeGraph = (design, lut) => {
   let metrics = measureInstanceBuses(design);
-  let ports = makePorts(design);
+  let ports = makePorts(design, lut);
   let res = {
     id: 'root',
     vlnv: {
@@ -241,7 +253,7 @@ let makeGraph = design => {
       // 'nodePlacement.strategy': 'NETWORK_SIMPLEX',
       feedbackEdges: true
     },
-    children: makeInstances(design, metrics)
+    children: makeInstances(design, lut, metrics)
       .concat(makeImports(metrics))
       .concat(makeExports(metrics)),
     edges: connectInstances(design, ports)
@@ -413,10 +425,10 @@ let draw = require('./elk-svg.js');
 let makeGraph = require('./design-elk.js');
 let renderH1 = require('./render-h1.js');
 
-module.exports = design => new Promise((resolve, reject) => {
+module.exports = (design, lut) => new Promise((resolve, reject) => {
   let elk = new ELK();
 
-  elk.layout(makeGraph(design))
+  elk.layout(makeGraph(design, lut))
     .then(res => {
       // console.log(res);
       resolve(['div',
@@ -521,12 +533,12 @@ module.exports = body => duh => {
 let renderBlockDiagram = require('./render-block-diagram-elk.js');
 let fetchDesignTree = require('./fetch-design-tree.js');
 
-module.exports = body => duh => {
+module.exports = (body, lut) => duh => {
   let design = duh.design;
   if (typeof design === 'object') {
     // fetch all dependencies
     fetchDesignTree(design).then(designTree => {
-      renderBlockDiagram(designTree)
+      renderBlockDiagram(designTree, lut)
         .then(svg => {
           body(['div', {class: 'container'},
             ['div', {class: 'blockDiagram'},
@@ -902,7 +914,9 @@ module.exports = render;
 },{"./Roboto.js":1,"bit-field":56}],13:[function(require,module,exports){
 'use strict';
 
-module.exports = () => ['style', `
+module.exports = () => ['span',
+['link', {href: 'https://fonts.googleapis.com/css?family=IBM+Plex+Sans|Roboto&display=swap', rel: 'stylesheet'}],
+['style', `
 body {
   font-family: "Roboto", "IBM Plex Sans", sans-serif;
   font-size: 16px;
@@ -1004,10 +1018,8 @@ a {
   }
 
 }
-`], ['link', {
-  href: 'https://fonts.googleapis.com/css?family=IBM+Plex+Sans|Roboto&display=swap',
-  rel: 'stylesheet'
-}];
+`]
+];
 
 },{}],14:[function(require,module,exports){
 'use strict';
@@ -49038,9 +49050,9 @@ function main () {
   function renderAny (body) {
     return function (duh) {
       // let duh = root;
-      renderCatalog(body)(duh);
-      renderComp(body)(duh);
-      renderDesign(body)(duh);
+      renderCatalog(body, lut)(duh);
+      renderComp(body, lut)(duh);
+      renderDesign(body, lut)(duh);
     };
   }
 
@@ -49076,7 +49088,9 @@ function main () {
         jsonRefs.resolveRefs(data, {
           loaderOptions: {
             processContent: function (res, cb) {
-              cb(undefined, JSON5.parse(res.text));
+              console.log(res.location);
+              let ml = JSON5.parse(res.text);
+              cb(undefined, ml);
             }
           }
         })
