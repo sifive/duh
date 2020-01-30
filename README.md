@@ -1,7 +1,7 @@
 <p align="center"><img src="assets/logo.svg"/></p>
 
 [![NPM version](https://img.shields.io/npm/v/duh.svg)](https://www.npmjs.org/package/duh)
-[![Travis build Status](https://travis-ci.org/sifive/duh.svg?branch=master)](https://travis-ci.org/sifive/duh)
+[![Actions Status](https://github.com/sifive/duh/workflows/Tests/badge.svg)](https://github.com/sifive/duh/actions)
 
 # Design ∪ Hardware
 
