@@ -6,10 +6,14 @@ const lib = require('../lib/index.js');
 const expect = chai.expect;
 
 describe('basic', () => {
-  it('validate', done => {
-    expect(lib.validate).to.be.a('function');
-    done();
+
+  'header verilogBBX validate scafolder get'.split(' ').map(name => {
+    it(name + ' is function', done => {
+      expect(lib[name]).to.be.a('function');
+      done();
+    });
   });
+
 });
 
 /* eslint-env mocha */
