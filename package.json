@@ -29,9 +29,9 @@
   "dependencies": {
     "ajv": "^6.10.2",
     "concat-stream": "^2.0.0",
-    "duh-bus": "^0.5.2",
+    "duh-bus": "^0.7.0",
     "duh-core": "^0.8.0",
-    "duh-scala": "^0.14.1",
+    "duh-scala": "^0.15.0",
     "duhportinf": "^0.4.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.4",
@@ -41,7 +41,7 @@
     "onml": "^1.1.0",
     "pinlist": "^0.12.5",
     "winston": "^3.2.1",
-    "yargs": "^14.2.2"
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
