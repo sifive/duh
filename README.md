@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/logo.svg"/></p>
+<p align="center"><img src="docs/assets/logo.svg"/></p>
 
 [![NPM version](https://img.shields.io/npm/v/duh.svg)](https://www.npmjs.org/package/duh)
 [![Actions Status](https://github.com/sifive/duh/workflows/Tests/badge.svg)](https://github.com/sifive/duh/actions)
