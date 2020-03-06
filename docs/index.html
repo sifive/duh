@@ -1,1 +1,39 @@
-test
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>DUH</title>
+<style>
+html, body {
+  background: #888;
+  height: 100%;
+  margin: 0;
+}
+.content {
+  display: block;
+  margin: auto;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.logo {
+  text-align: center;
+}
+@media (prefers-color-scheme: dark) {
+  body { background: #333; }
+}
+@media (prefers-color-scheme: light) {
+  body { background: #ccc; }
+}
+</style>
+</head>
+<body>
+<div class="content">
+  <div class="logo"><img src="assets/logo.svg"/></div>
+  <div class="logo"><a href="https://github.com/sifive/duh">on GitHub</a></div>
+</p>
+</body>
+</html>
