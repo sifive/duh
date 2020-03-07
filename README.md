@@ -6,7 +6,7 @@
 # Design ∪ Hardware
 
 DUH ("Spirit" in most slavic languages. pronounced [**/dûx/**](https://upload.wikimedia.org/wikipedia/commons/0/08/Ru-%D0%B4%D1%83%D1%85.ogg), with the final consonant of *loch* or *Bach*) is a suite of tools for packaging reusable hardware components and
-designs. DUH enables the generation of JSON5 ([duh documents](doc/)) for
+designs. DUH enables the generation of JSON5 ([duh documents](docs/)) for
 describing these components, and also enables export from these documents
 to output deliverables.
 
@@ -30,12 +30,12 @@ And test installation with `duh --help`
 
 ## Quick start
 
-Base set of DUH tools to author [duh documents](doc/):
+Base set of DUH tools to author [duh documents](docs/):
 
 * Create
   - Run `duh init` to create a base document.
 
-* [Import](doc/import.md)
+* [Import](docs/import.md)
   - SystemVerilog: Run `duh duh-import-verilog-ports` to import an interface from Verilog RTL of the component
   - IPXACT: [duh-ipxact](https://github.com/sifive/duh-ipxact)
 
@@ -45,11 +45,11 @@ Base set of DUH tools to author [duh documents](doc/):
   - Run `duh-portbundler` to group ports, which are unassigned to a bus
   mapping, into structured bundles.
 
-* [Validate](doc/validation.md)
+* [Validate](docs/validation.md)
   - Run `duh validate` to test whether a given document conforms to the
   DUH document structure.
 
-* [Export](doc/export.md)
+* [Export](docs/export.md)
   - Run `duh-export-scala` to generate scala black box wrappers for the
   component.
   - IPXACT: [duh-ipxact](https://github.com/sifive/duh-ipxact)
@@ -67,5 +67,5 @@ Base set of DUH tools to author [duh documents](doc/):
 
 * [block-ark](https://github.com/sifive/block-ark) for a walk-through
   example using the DUH suite on a standalone module to produce a valid
-  [duh-document](doc/) that fully describes the mapping of ports to known
+  [duh-document](docs/) that fully describes the mapping of ports to known
   bus definitions.
