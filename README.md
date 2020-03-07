@@ -5,7 +5,7 @@
 
 # Design ∪ Hardware
 
-DUH ("Spirit" in most slavic languages. pronounced [**[dûx]**](https://upload.wikimedia.org/wikipedia/commons/0/08/Ru-%D0%B4%D1%83%D1%85.ogg)) is a suite of tools for packaging reusable hardware components and
+DUH ("Spirit" in most slavic languages. pronounced [**/dûx/**](https://upload.wikimedia.org/wikipedia/commons/0/08/Ru-%D0%B4%D1%83%D1%85.ogg), with the final consonant of *loch* or *Bach*) is a suite of tools for packaging reusable hardware components and
 designs. DUH enables the generation of JSON5 ([duh documents](doc/)) for
 describing these components, and also enables export from these documents
 to output deliverables.
