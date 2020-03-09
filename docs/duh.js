@@ -49985,7 +49985,7 @@ function main () {
   }
 
   let rerender = () => {
-    console.log(lut);
+    console.log('renderer', lut);
     let loc = window.location;
     let n = loc.hash.slice(1).split('/');
     let n2 = lut[n[0]][n[1]][n[2]][n[3]];
@@ -49993,7 +49993,7 @@ function main () {
     // console.log('rerender:', event, n2);
   };
 
-  function onLoad () {
+  async function onLoad () {
     console.log('onLoad');
     jsonRefs.clearCache();
 
@@ -50018,39 +50018,49 @@ function main () {
         }
 
         const t0 = Date.now();
-        jsonRefs.resolveRefs(data, {
+        // console.log(window.location);
+        const res = await jsonRefs.resolveRefs(data, {
+          location: window.location.origin + window.location.pathname + 'foo',
           loaderOptions: {
+            // prepareRequest: function (req, cb) {
+            //   // console.log(window.location.href);
+            //   console.log(req);
+            //   // console.log(cb);
+            //   cb(req);
+            // },
             processContent: function (res, cb) {
+              // console.log(res.text);
               const t1 = Date.now();
               let ml = JSON5.parse(res.text);
               console.log('parse', res.location, Date.now() - t1);
               cb(undefined, ml);
             }
           }
-        })
-          .then(res => {
-            let duh = res.resolved;
-            console.log('resolved', Date.now() - t0);
-            if (Array.isArray(duh)) {
-              body(['pre', JSON.stringify(duh, null, 4)]);
-            } else {
-              const t0 = Date.now();
-              const isValid = validate(duh);
-              console.log('validate', Date.now() - t0);
-              if (isValid) {
-                // root = duh;
-                scanner(lut)(duh);
-                gotoRoot(duh);
-                // renderAny(body);
-              } else {
-                // console.log(duh);
-                body(['pre', JSON.stringify(validate.errors, null, 4)]);
-                throw validate.errors;
-              }
-            }
-          });
+        });
+
+        console.log('resolved in', Date.now() - t0, 'ms');
+        let duh = res.resolved;
+        if (Array.isArray(duh)) {
+          body(['pre', JSON.stringify(duh, null, 4)]);
+        } else {
+          const t0 = Date.now();
+          const isValid = validate(duh);
+          console.log('validated in', Date.now() - t0, 'ms');
+          if (isValid) {
+            // root = duh;
+            scanner(lut)(duh);
+            gotoRoot(duh);
+            // renderAny(body);
+          } else {
+            // console.log(duh);
+            body(['pre', JSON.stringify(validate.errors, null, 4)]);
+            throw validate.errors;
+          }
+        }
       }
     }
+
+    rerender();
   }
 
   document.addEventListener('DOMContentLoaded', onLoad);
