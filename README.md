@@ -54,7 +54,7 @@ Base set of DUH tools to author [duh documents](docs/):
   component.
   - IPXACT: [duh-ipxact](https://github.com/sifive/duh-ipxact)
 
-## Other DUH packages:
+## DUH toolbox
 
 * [duh-scala](https://github.com/sifive/duh-scala) -- Scala / Chisel export
 * [duh-ipxact](https://github.com/sifive/duh-ipxact) -- IP-XACT import / export
@@ -62,6 +62,8 @@ Base set of DUH tools to author [duh documents](docs/):
 * [duh-bus](https://github.com/sifive/duh-bus) -- DUH Bus Definitions
 * [duh-schema](https://github.com/sifive/duh-schema) -- DUH document JSON schema
 * [duh-core](https://github.com/sifive/duh-core) -- DUH core library
+* [duh-verilog](https://github.com/sifive/duh-verilog) -- Verilog generator from DUH document
+* [duh-svd](https://github.com/sifive/duh-svd) -- DUH to SVD converter
 
 ## Example of DUH documents
 
