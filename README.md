@@ -2,6 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/duh.svg)](https://www.npmjs.org/package/duh)
 [![Actions Status](https://github.com/sifive/duh/workflows/Tests/badge.svg)](https://github.com/sifive/duh/actions)
+[![Coverage Status](https://coveralls.io/repos/github/sifive/duh/badge.svg?branch=master)](https://coveralls.io/github/sifive/duh?branch=master)
 
 # Design ∪ Hardware
 
