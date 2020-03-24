@@ -1,0 +1,33 @@
+{
+  component: {
+    vendor: 'sifive',
+    library: 'blocks',
+    name: 'comp1',
+    version: '0.1.0',
+    busInterfaces: [{
+      name: 'sys',
+      interfaceMode: 'master',
+      busType: {vendor: 'sifive.com', library: 'MEM', name: 'RO', version: '0.1.0'},
+      abstractionTypes: [{
+        viewRef: 'RTLview',
+        portMaps: {
+          CLK: 'clock',
+          RDEN: 'i_rd_en',
+          ADDR: 'i_address',
+          RDDATA: 'i_data'
+        },
+      }],
+    }],
+    model: {
+      views: [],
+      ports: {
+        clock: 1,
+        i_rd_en: -1,
+        i_address: -16,
+        i_data: 32
+      },
+    },
+    fileSets: {},
+    pSchema: {},
+  },
+}
