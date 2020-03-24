@@ -42,4 +42,32 @@ describe('validate', () => {
 
 });
 
+describe('verilogBBX', () => {
+
+  it('component', async () => {
+    const p = lib.verilogBBX({
+      output: '.',
+      filename: 'test/comp1.json5'
+    });
+    expect(p).to.be.a('Promise');
+    const res = await p;
+    expect(res).to.be.a('undefined');
+  });
+
+});
+
+describe('header', () => {
+
+  it('component', async () => {
+    const p = lib.header({
+      output: '.',
+      filename: 'test/comp1.json5'
+    });
+    expect(p).to.be.a('Promise');
+    const res = await p;
+    expect(res).to.be.a('undefined');
+  });
+
+});
+
 /* eslint-env mocha */
