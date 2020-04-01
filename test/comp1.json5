@@ -13,7 +13,7 @@
         portMaps: {
           CLK: 'clock',
           RDEN: 'i_rd_en',
-          ADDR: 'i_address',
+          ADDR: ['i_page', 'i_address'],
           RDDATA: 'i_data'
         },
       }],
@@ -24,6 +24,7 @@
         clock: 1,
         i_rd_en: -1,
         i_address: -16,
+        i_page: -5,
         i_data: 32
       },
     },
