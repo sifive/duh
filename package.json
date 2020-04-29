@@ -27,16 +27,16 @@
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.2",
     "concat-stream": "^2.0.0",
-    "duh-bus": "^0.7.0",
-    "duh-core": "^0.8.1",
+    "duh-bus": "^0.8.1",
+    "duh-core": "^0.8.2",
     "duh-scala": "^0.15.0",
     "duhportinf": "^0.4.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.4",
     "json-refs": "^3.0.12",
-    "json5": "^2.1.1",
+    "json5": "^2.1.3",
     "lodash.get": "^4.4.2",
     "onml": "^1.1.0",
     "pinlist": "^0.12.5",
@@ -46,11 +46,11 @@
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.11",
+    "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
-    "mocha": "^7.0.1",
+    "mocha": "^7.1.2",
     "mocha-lcov-reporter": "^1.3.0",
-    "nyc": "^15.0.0"
+    "nyc": "^15.0.1"
   },
   "eslintConfig": {
     "extends": "@drom/eslint-config/eslint4/node8"
