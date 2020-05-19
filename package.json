@@ -29,7 +29,7 @@
   "dependencies": {
     "ajv": "^6.12.2",
     "concat-stream": "^2.0.0",
-    "duh-bus": "^0.8.1",
+    "duh-bus": "^0.8.2",
     "duh-core": "^0.8.2",
     "duh-scala": "^0.15.0",
     "duhportinf": "^0.4.0",
