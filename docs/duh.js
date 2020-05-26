@@ -455,9 +455,10 @@ module.exports = (design, lut) => new Promise((resolve, reject) => {
 
 const renderH1 = require('./render-h1.js');
 
-const t = (x, y) => ({
-  transform: 'translate(' + (x || 0) + ',' + (y || 0) + ')'
-});
+const tt = (x, y, obj) => Object.assign(
+  {transform: 'translate(' + x + (y ? (',' + y) : '') + ')'},
+  (typeof obj === 'object') ? obj : {}
+);
 
 const getSvg = cfg => {
   cfg = cfg || {};
@@ -484,7 +485,9 @@ const wt = (width, x) => {
   return ['text', {class: 'label', x}, width];
 };
 
-const wires = obj => {
+const wires = (obj, cfg) => {
+  const width = cfg.width || 400;
+  const halfWidth = width >> 1;
   const ports = obj.abstractionDefinition.ports;
   const a = Object.keys(ports).map((e, i) => {
     const wire = ports[e].wire;
@@ -502,21 +505,21 @@ const wires = obj => {
       wx(onSlave.width),
       onSlave.direction
     ].join(' ');
-    return ['g', t(160, (i + 1) * 20),
-      ['line', {class: masterWire, x2: -128}],
-      ['line', {class: slaveWire, x2: 128}],
-      ['g', t(0, 5),
+    return ['g', tt(0, (i + 1) * 20),
+      ['line', {class: masterWire, x2: -(halfWidth - 32)}],
+      ['line', {class: slaveWire, x2: halfWidth - 32}],
+      ['g', tt(0, 5),
         ['text', {class: [
           'label',
           wire.isData ? 'isData' : '',
           wire.isAddress ? 'isAddress' : ''
         ].join(' ')}, e],
-        wt(onMaster.width, -64),
-        wt(onSlave.width, 64)
+        wt(onMaster.width, -(halfWidth - 128)),
+        wt(onSlave.width, halfWidth - 128)
       ]
     ];
   });
-  const res = ['g', {w: 32 + 256 + 32, h: (a.length + 1) * 20}];
+  const res = ['g', tt(halfWidth, 0, {w: width, h: (a.length + 1) * 20})];
   return res.concat(a);
 };
 
@@ -560,16 +563,16 @@ const defs = ['defs',
 ];
 
 const renderBusDefinitionDiagram = obj => {
-  const wiring = wires(obj);
+  const wiring = wires(obj, {width: 800});
   const w = wiring[1].w;
   const h = wiring[1].h;
   return getSvg({w, h})
     .concat([style, defs,
-      ['g', t(.5, .5)]
+      ['g', tt(.5, .5)]
         .concat([
           wiring,
-          ['text', {class: 'mslabel', x: -h>>1, y: 8 + 16}, 'Master'],
-          ['text', {class: 'mslabel', x: -h>>1, y: 8 + 32 + 256 + 16}, 'Slave']
+          ['text', {class: 'mslabel', x: -h >> 1, y: 8 + 16}, 'Master'],
+          ['text', {class: 'mslabel', x: -h >> 1, y: 8 + w - 16}, 'Slave']
         ])
     ]);
 };
@@ -577,9 +580,9 @@ const renderBusDefinitionDiagram = obj => {
 module.exports = body => duh => {
   let ad = duh.abstractionDefinition;
   if (typeof ad === 'object') {
-    body(['div', {class: 'container'}, ['div',
+    body(['div', {class: 'container'}, ['div', {class: 'blockDiagram'},
       renderH1(ad, 'busDefinition'),
-      renderBusDefinitionDiagram(ad)
+      renderBusDefinitionDiagram(duh)
     ]]);
   }
 };
