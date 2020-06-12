@@ -30,7 +30,7 @@
     "ajv": "^6.12.2",
     "concat-stream": "^2.0.0",
     "duh-bus": "^0.8.3",
-    "duh-core": "^0.8.3",
+    "duh-core": "^0.9.0",
     "duh-scala": "^0.15.0",
     "duhportinf": "^0.4.0",
     "fs-extra": "^8.1.0",
