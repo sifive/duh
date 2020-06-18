@@ -46,4 +46,6 @@ For more Verilator options look here: https://www.veripool.org/projects/verilato
 
 ## IP-XACT import
 
+https://github.com/sifive/duh-ipxact
+
 ## SystemRDL import
