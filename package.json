@@ -6,6 +6,9 @@
   "scripts": {
     "test": "eslint lib bin && nyc -r=text -r=lcov mocha"
   },
+  "files": [
+    "lib"
+  ],
   "bin": {
     "duh": "./bin/duh.js",
     "duh-import-verilog-ports": "./bin/duh-import-verilog-ports.js",
