@@ -743,7 +743,9 @@ module.exports = (obj, kind) => ['table',
 
 const arrVLNV = t => [t.vendor, t.library, t.name, t.version];
 
-const {isInitiator, isTarget, onInitiator} = require('./interface-mode.js');
+const {
+  isInitiator, isTarget, onInitiator, onTarget
+} = require('./interface-mode.js');
 
 const checkCompatibility = (onRole, ports, portName) => {
   const portWidth = ports[portName];
@@ -779,7 +781,7 @@ const portMapper = (comp, ports, bi, portMaps, role) => {
   // }
 
   if (isInitiator(bi)) {
-    const onRole = onInitiator(ports[role]);
+    const onRole = onInitiator(ports[role].wire);
 
     const isIncompatible = checkCompatibility(onRole, comp.model.ports, c2);
     if (isIncompatible) {
@@ -795,7 +797,7 @@ const portMapper = (comp, ports, bi, portMaps, role) => {
   }
 
   if (isTarget(bi)) {
-    const onRole = ports[role].wire.onSlave;
+    const onRole = onTarget(ports[role]).wire;
 
     const isIncompatible = checkCompatibility(onRole, comp.model.ports, c2);
     if (isIncompatible) {
