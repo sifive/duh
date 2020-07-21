@@ -472,6 +472,8 @@ module.exports = (design, lut) => new Promise((resolve, reject) => {
 
 const renderH1 = require('./render-h1.js');
 
+const {onInitiator, onTarget} = require('./interface-mode.js');
+
 const tt = (x, y, obj) => Object.assign(
   {transform: 'translate(' + x + (y ? (',' + y) : '') + ')'},
   (typeof obj === 'object') ? obj : {}
@@ -508,19 +510,19 @@ const wires = (obj, cfg) => {
   const ports = obj.abstractionDefinition.ports;
   const a = Object.keys(ports).map((e, i) => {
     const wire = ports[e].wire;
-    const onInitiator = onInitiator(wire);
+    const onI = onInitiator(wire);
     const initiatorWire = [
-      onInitiator.presence || 'optional',
+      onI.presence || 'optional',
       wire.isData ? 'isData' : '',
-      wx(onInitiator.width),
-      onInitiator.direction
+      wx(onI.width),
+      onI.direction
     ].join(' ');
-    const onTarget = onTarget(wire);
+    const onT = onTarget(wire);
     const targetWire = [
-      onTarget.presence || 'optional',
+      onT.presence || 'optional',
       wire.isData ? 'isData' : '',
-      wx(onTarget.width),
-      onTarget.direction
+      wx(onT.width),
+      onT.direction
     ].join(' ');
     return ['g', tt(0, (i + 1) * 20),
       ['line', {class: initiatorWire, x2: -(halfWidth - 32)}],
@@ -531,8 +533,8 @@ const wires = (obj, cfg) => {
           wire.isData ? 'isData' : '',
           wire.isAddress ? 'isAddress' : ''
         ].join(' ')}, e],
-        wt(onInitiator.width, -(halfWidth - 128)),
-        wt(onTarget.width, halfWidth - 128)
+        wt(onI.width, -(halfWidth - 128)),
+        wt(onT.width, halfWidth - 128)
       ]
     ];
   });
@@ -604,7 +606,7 @@ module.exports = body => duh => {
   }
 };
 
-},{"./render-h1.js":11}],8:[function(require,module,exports){
+},{"./interface-mode.js":5,"./render-h1.js":11}],8:[function(require,module,exports){
 'use strict';
 
 let fetchDesignTree = require('./fetch-design-tree.js');
