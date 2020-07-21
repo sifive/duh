@@ -1077,7 +1077,7 @@ const render = comp => {
 
 module.exports = render;
 
-},{"./Roboto.js":1,"bit-field":59}],14:[function(require,module,exports){
+},{"./Roboto.js":1,"bit-field":58}],14:[function(require,module,exports){
 'use strict';
 
 module.exports = () => ['span',
@@ -1700,7 +1700,7 @@ function setLogger(self) {
 
 function noop() {}
 
-},{"./cache":17,"./compile":21,"./compile/async":18,"./compile/error_classes":19,"./compile/formats":20,"./compile/resolve":22,"./compile/rules":23,"./compile/schema_obj":24,"./compile/util":26,"./data":27,"./keyword":55,"./refs/data.json":56,"./refs/json-schema-draft-07.json":58,"fast-json-stable-stringify":82}],17:[function(require,module,exports){
+},{"./cache":17,"./compile":21,"./compile/async":18,"./compile/error_classes":19,"./compile/formats":20,"./compile/resolve":22,"./compile/rules":23,"./compile/schema_obj":24,"./compile/util":26,"./data":27,"./keyword":55,"./refs/data.json":56,"./refs/json-schema-draft-07.json":57,"fast-json-stable-stringify":82}],17:[function(require,module,exports){
 'use strict';
 
 
@@ -2116,7 +2116,7 @@ function compile(schema, root, localRefs, baseId) {
                    + vars(defaults, defaultCode) + vars(customRules, customRuleCode)
                    + sourceCode;
 
-    if (opts.processCode) sourceCode = opts.processCode(sourceCode);
+    if (opts.processCode) sourceCode = opts.processCode(sourceCode, _schema);
     // console.log('\n\n\n *** \n', JSON.stringify(sourceCode));
     var validate;
     try {
@@ -2778,8 +2778,6 @@ module.exports = {
   ucs2length: require('./ucs2length'),
   varOccurences: varOccurences,
   varReplace: varReplace,
-  cleanUpCode: cleanUpCode,
-  finalCleanUpCode: finalCleanUpCode,
   schemaHasRules: schemaHasRules,
   schemaHasRulesExcept: schemaHasRulesExcept,
   schemaUnknownRules: schemaUnknownRules,
@@ -2801,7 +2799,7 @@ function copy(o, to) {
 }
 
 
-function checkDataType(dataType, data, negate) {
+function checkDataType(dataType, data, strictNumbers, negate) {
   var EQUAL = negate ? ' !== ' : ' === '
     , AND = negate ? ' || ' : ' && '
     , OK = negate ? '!' : ''
@@ -2814,15 +2812,18 @@ function checkDataType(dataType, data, negate) {
                           NOT + 'Array.isArray(' + data + '))';
     case 'integer': return '(typeof ' + data + EQUAL + '"number"' + AND +
                            NOT + '(' + data + ' % 1)' +
-                           AND + data + EQUAL + data + ')';
+                           AND + data + EQUAL + data +
+                           (strictNumbers ? (AND + OK + 'isFinite(' + data + ')') : '') + ')';
+    case 'number': return '(typeof ' + data + EQUAL + '"' + dataType + '"' +
+                          (strictNumbers ? (AND + OK + 'isFinite(' + data + ')') : '') + ')';
     default: return 'typeof ' + data + EQUAL + '"' + dataType + '"';
   }
 }
 
 
-function checkDataTypes(dataTypes, data) {
+function checkDataTypes(dataTypes, data, strictNumbers) {
   switch (dataTypes.length) {
-    case 1: return checkDataType(dataTypes[0], data, true);
+    case 1: return checkDataType(dataTypes[0], data, strictNumbers, true);
     default:
       var code = '';
       var types = toHash(dataTypes);
@@ -2835,7 +2836,7 @@ function checkDataTypes(dataTypes, data) {
       }
       if (types.number) delete types.integer;
       for (var t in types)
-        code += (code ? ' && ' : '' ) + checkDataType(t, data, true);
+        code += (code ? ' && ' : '' ) + checkDataType(t, data, strictNumbers, true);
 
       return code;
   }
@@ -2898,42 +2899,6 @@ function varReplace(str, dataVar, expr) {
   dataVar += '([^0-9])';
   expr = expr.replace(/\$/g, '$$$$');
   return str.replace(new RegExp(dataVar, 'g'), expr + '$1');
-}
-
-
-var EMPTY_ELSE = /else\s*{\s*}/g
-  , EMPTY_IF_NO_ELSE = /if\s*\([^)]+\)\s*\{\s*\}(?!\s*else)/g
-  , EMPTY_IF_WITH_ELSE = /if\s*\(([^)]+)\)\s*\{\s*\}\s*else(?!\s*if)/g;
-function cleanUpCode(out) {
-  return out.replace(EMPTY_ELSE, '')
-            .replace(EMPTY_IF_NO_ELSE, '')
-            .replace(EMPTY_IF_WITH_ELSE, 'if (!($1))');
-}
-
-
-var ERRORS_REGEXP = /[^v.]errors/g
-  , REMOVE_ERRORS = /var errors = 0;|var vErrors = null;|validate.errors = vErrors;/g
-  , REMOVE_ERRORS_ASYNC = /var errors = 0;|var vErrors = null;/g
-  , RETURN_VALID = 'return errors === 0;'
-  , RETURN_TRUE = 'validate.errors = null; return true;'
-  , RETURN_ASYNC = /if \(errors === 0\) return data;\s*else throw new ValidationError\(vErrors\);/
-  , RETURN_DATA_ASYNC = 'return data;'
-  , ROOTDATA_REGEXP = /[^A-Za-z_$]rootData[^A-Za-z0-9_$]/g
-  , REMOVE_ROOTDATA = /if \(rootData === undefined\) rootData = data;/;
-
-function finalCleanUpCode(out, async) {
-  var matches = out.match(ERRORS_REGEXP);
-  if (matches && matches.length == 2) {
-    out = async
-          ? out.replace(REMOVE_ERRORS_ASYNC, '')
-               .replace(RETURN_ASYNC, RETURN_DATA_ASYNC)
-          : out.replace(REMOVE_ERRORS, '')
-               .replace(RETURN_VALID, RETURN_TRUE);
-  }
-
-  matches = out.match(ROOTDATA_REGEXP);
-  if (!matches || matches.length !== 3) return out;
-  return out.replace(REMOVE_ROOTDATA, '');
 }
 
 
@@ -3015,7 +2980,7 @@ function getData($data, lvl, paths) {
 
 function joinPaths (a, b) {
   if (a == '""') return b;
-  return (a + ' + ' + b).replace(/' \+ '/g, '');
+  return (a + ' + ' + b).replace(/([^\\])' \+ '/g, '$1');
 }
 
 
@@ -3079,7 +3044,7 @@ module.exports = function (metaSchema, keywordsJsonPointers) {
         keywords[key] = {
           anyOf: [
             schema,
-            { $ref: 'https://raw.githubusercontent.com/epoberezkin/ajv/master/lib/refs/data.json#' }
+            { $ref: 'https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#' }
           ]
         };
       }
@@ -3095,7 +3060,7 @@ module.exports = function (metaSchema, keywordsJsonPointers) {
 var metaSchema = require('./refs/json-schema-draft-07.json');
 
 module.exports = {
-  $id: 'https://github.com/epoberezkin/ajv/blob/master/lib/definition_schema.js',
+  $id: 'https://github.com/ajv-validator/ajv/blob/master/lib/definition_schema.js',
   definitions: {
     simpleTypes: metaSchema.definitions.simpleTypes
   },
@@ -3128,7 +3093,7 @@ module.exports = {
   }
 };
 
-},{"./refs/json-schema-draft-07.json":58}],29:[function(require,module,exports){
+},{"./refs/json-schema-draft-07.json":57}],29:[function(require,module,exports){
 'use strict';
 module.exports = function generate__limit(it, $keyword, $ruleType) {
   var out = ' ';
@@ -3155,6 +3120,12 @@ module.exports = function generate__limit(it, $keyword, $ruleType) {
     $op = $isMax ? '<' : '>',
     $notOp = $isMax ? '>' : '<',
     $errorKeyword = undefined;
+  if (!($isData || typeof $schema == 'number' || $schema === undefined)) {
+    throw new Error($keyword + ' must be number');
+  }
+  if (!($isDataExcl || $schemaExcl === undefined || typeof $schemaExcl == 'number' || typeof $schemaExcl == 'boolean')) {
+    throw new Error($exclusiveKeyword + ' must be number or boolean');
+  }
   if ($isDataExcl) {
     var $schemaValueExcl = it.util.getData($schemaExcl.$data, $dataLvl, it.dataPathArr),
       $exclusive = 'exclusive' + $lvl,
@@ -3307,6 +3278,9 @@ module.exports = function generate__limitItems(it, $keyword, $ruleType) {
   } else {
     $schemaValue = $schema;
   }
+  if (!($isData || typeof $schema == 'number')) {
+    throw new Error($keyword + ' must be number');
+  }
   var $op = $keyword == 'maxItems' ? '>' : '<';
   out += 'if ( ';
   if ($isData) {
@@ -3385,6 +3359,9 @@ module.exports = function generate__limitLength(it, $keyword, $ruleType) {
     $schemaValue = 'schema' + $lvl;
   } else {
     $schemaValue = $schema;
+  }
+  if (!($isData || typeof $schema == 'number')) {
+    throw new Error($keyword + ' must be number');
   }
   var $op = $keyword == 'maxLength' ? '>' : '<';
   out += 'if ( ';
@@ -3469,6 +3446,9 @@ module.exports = function generate__limitProperties(it, $keyword, $ruleType) {
     $schemaValue = 'schema' + $lvl;
   } else {
     $schemaValue = $schema;
+  }
+  if (!($isData || typeof $schema == 'number')) {
+    throw new Error($keyword + ' must be number');
   }
   var $op = $keyword == 'maxProperties' ? '>' : '<';
   out += 'if ( ';
@@ -3570,7 +3550,6 @@ module.exports = function generate_allOf(it, $keyword, $ruleType) {
       out += ' ' + ($closingBraces.slice(0, -1)) + ' ';
     }
   }
-  out = it.util.cleanUpCode(out);
   return out;
 }
 
@@ -3641,7 +3620,6 @@ module.exports = function generate_anyOf(it, $keyword, $ruleType) {
     if (it.opts.allErrors) {
       out += ' } ';
     }
-    out = it.util.cleanUpCode(out);
   } else {
     if ($breakOnError) {
       out += ' if (true) { ';
@@ -3804,7 +3782,6 @@ module.exports = function generate_contains(it, $keyword, $ruleType) {
   if (it.opts.allErrors) {
     out += ' } ';
   }
-  out = it.util.cleanUpCode(out);
   return out;
 }
 
@@ -4058,6 +4035,7 @@ module.exports = function generate_dependencies(it, $keyword, $ruleType) {
     $propertyDeps = {},
     $ownProperties = it.opts.ownProperties;
   for ($property in $schema) {
+    if ($property == '__proto__') continue;
     var $sch = $schema[$property];
     var $deps = Array.isArray($sch) ? $propertyDeps : $schemaDeps;
     $deps[$property] = $sch;
@@ -4204,7 +4182,6 @@ module.exports = function generate_dependencies(it, $keyword, $ruleType) {
   if ($breakOnError) {
     out += '   ' + ($closingBraces) + ' if (' + ($errs) + ' == errors) {';
   }
-  out = it.util.cleanUpCode(out);
   return out;
 }
 
@@ -4525,7 +4502,6 @@ module.exports = function generate_if(it, $keyword, $ruleType) {
     if ($breakOnError) {
       out += ' else { ';
     }
-    out = it.util.cleanUpCode(out);
   } else {
     if ($breakOnError) {
       out += ' if (true) { ';
@@ -4708,7 +4684,6 @@ module.exports = function generate_items(it, $keyword, $ruleType) {
   if ($breakOnError) {
     out += ' ' + ($closingBraces) + ' if (' + ($errs) + ' == errors) {';
   }
-  out = it.util.cleanUpCode(out);
   return out;
 }
 
@@ -4730,6 +4705,9 @@ module.exports = function generate_multipleOf(it, $keyword, $ruleType) {
     $schemaValue = 'schema' + $lvl;
   } else {
     $schemaValue = $schema;
+  }
+  if (!($isData || typeof $schema == 'number')) {
+    throw new Error($keyword + ' must be number');
   }
   out += 'var division' + ($lvl) + ';if (';
   if ($isData) {
@@ -5050,9 +5028,9 @@ module.exports = function generate_properties(it, $keyword, $ruleType) {
     $dataNxt = $it.dataLevel = it.dataLevel + 1,
     $nextData = 'data' + $dataNxt,
     $dataProperties = 'dataProperties' + $lvl;
-  var $schemaKeys = Object.keys($schema || {}),
+  var $schemaKeys = Object.keys($schema || {}).filter(notProto),
     $pProperties = it.schema.patternProperties || {},
-    $pPropertyKeys = Object.keys($pProperties),
+    $pPropertyKeys = Object.keys($pProperties).filter(notProto),
     $aProperties = it.schema.additionalProperties,
     $someProperties = $schemaKeys.length || $pPropertyKeys.length,
     $noAdditional = $aProperties === false,
@@ -5062,7 +5040,13 @@ module.exports = function generate_properties(it, $keyword, $ruleType) {
     $ownProperties = it.opts.ownProperties,
     $currentBaseId = it.baseId;
   var $required = it.schema.required;
-  if ($required && !(it.opts.$data && $required.$data) && $required.length < it.opts.loopRequired) var $requiredHash = it.util.toHash($required);
+  if ($required && !(it.opts.$data && $required.$data) && $required.length < it.opts.loopRequired) {
+    var $requiredHash = it.util.toHash($required);
+  }
+
+  function notProto(p) {
+    return p !== '__proto__';
+  }
   out += 'var ' + ($errs) + ' = errors;var ' + ($nextValid) + ' = true;';
   if ($ownProperties) {
     out += ' var ' + ($dataProperties) + ' = undefined;';
@@ -5357,7 +5341,6 @@ module.exports = function generate_properties(it, $keyword, $ruleType) {
   if ($breakOnError) {
     out += ' ' + ($closingBraces) + ' if (' + ($errs) + ' == errors) {';
   }
-  out = it.util.cleanUpCode(out);
   return out;
 }
 
@@ -5441,7 +5424,6 @@ module.exports = function generate_propertyNames(it, $keyword, $ruleType) {
   if ($breakOnError) {
     out += ' ' + ($closingBraces) + ' if (' + ($errs) + ' == errors) {';
   }
-  out = it.util.cleanUpCode(out);
   return out;
 }
 
@@ -5875,7 +5857,7 @@ module.exports = function generate_uniqueItems(it, $keyword, $ruleType) {
     } else {
       out += ' var itemIndices = {}, item; for (;i--;) { var item = ' + ($data) + '[i]; ';
       var $method = 'checkDataType' + ($typeIsArray ? 's' : '');
-      out += ' if (' + (it.util[$method]($itemType, 'item', true)) + ') continue; ';
+      out += ' if (' + (it.util[$method]($itemType, 'item', it.opts.strictNumbers, true)) + ') continue; ';
       if ($typeIsArray) {
         out += ' if (typeof item == \'string\') item = \'"\' + item; ';
       }
@@ -6083,7 +6065,7 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
       var $schemaPath = it.schemaPath + '.type',
         $errSchemaPath = it.errSchemaPath + '/type',
         $method = $typeIsArray ? 'checkDataTypes' : 'checkDataType';
-      out += ' if (' + (it.util[$method]($typeSchema, $data, true)) + ') { ';
+      out += ' if (' + (it.util[$method]($typeSchema, $data, it.opts.strictNumbers, true)) + ') { ';
       if ($coerceToTypes) {
         var $dataType = 'dataType' + $lvl,
           $coerced = 'coerced' + $lvl;
@@ -6236,7 +6218,7 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
         $rulesGroup = arr2[i2 += 1];
         if ($shouldUseGroup($rulesGroup)) {
           if ($rulesGroup.type) {
-            out += ' if (' + (it.util.checkDataType($rulesGroup.type, $data)) + ') { ';
+            out += ' if (' + (it.util.checkDataType($rulesGroup.type, $data, it.opts.strictNumbers)) + ') { ';
           }
           if (it.opts.useDefaults) {
             if ($rulesGroup.type == 'object' && it.schema.properties) {
@@ -6404,10 +6386,6 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
   } else {
     out += ' var ' + ($valid) + ' = errors === errs_' + ($lvl) + ';';
   }
-  out = it.util.cleanUpCode(out);
-  if ($top) {
-    out = it.util.finalCleanUpCode(out, $async);
-  }
 
   function $shouldUseGroup($rulesGroup) {
     var rules = $rulesGroup.rules;
@@ -6476,7 +6454,7 @@ function addKeyword(keyword, definition) {
         metaSchema = {
           anyOf: [
             metaSchema,
-            { '$ref': 'https://raw.githubusercontent.com/epoberezkin/ajv/master/lib/refs/data.json#' }
+            { '$ref': 'https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#' }
           ]
         };
       }
@@ -6578,7 +6556,7 @@ function validateKeyword(definition, throwError) {
 },{"./definition_schema":28,"./dotjs/custom":38}],56:[function(require,module,exports){
 module.exports={
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://raw.githubusercontent.com/epoberezkin/ajv/master/lib/refs/data.json#",
+    "$id": "https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#",
     "description": "Meta-schema for $data reference (JSON Schema extension proposal)",
     "type": "object",
     "required": [ "$data" ],
@@ -6595,162 +6573,6 @@ module.exports={
 }
 
 },{}],57:[function(require,module,exports){
-module.exports={
-    "$schema": "http://json-schema.org/draft-06/schema#",
-    "$id": "http://json-schema.org/draft-06/schema#",
-    "title": "Core schema meta-schema",
-    "definitions": {
-        "schemaArray": {
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "#" }
-        },
-        "nonNegativeInteger": {
-            "type": "integer",
-            "minimum": 0
-        },
-        "nonNegativeIntegerDefault0": {
-            "allOf": [
-                { "$ref": "#/definitions/nonNegativeInteger" },
-                { "default": 0 }
-            ]
-        },
-        "simpleTypes": {
-            "enum": [
-                "array",
-                "boolean",
-                "integer",
-                "null",
-                "number",
-                "object",
-                "string"
-            ]
-        },
-        "stringArray": {
-            "type": "array",
-            "items": { "type": "string" },
-            "uniqueItems": true,
-            "default": []
-        }
-    },
-    "type": ["object", "boolean"],
-    "properties": {
-        "$id": {
-            "type": "string",
-            "format": "uri-reference"
-        },
-        "$schema": {
-            "type": "string",
-            "format": "uri"
-        },
-        "$ref": {
-            "type": "string",
-            "format": "uri-reference"
-        },
-        "title": {
-            "type": "string"
-        },
-        "description": {
-            "type": "string"
-        },
-        "default": {},
-        "examples": {
-            "type": "array",
-            "items": {}
-        },
-        "multipleOf": {
-            "type": "number",
-            "exclusiveMinimum": 0
-        },
-        "maximum": {
-            "type": "number"
-        },
-        "exclusiveMaximum": {
-            "type": "number"
-        },
-        "minimum": {
-            "type": "number"
-        },
-        "exclusiveMinimum": {
-            "type": "number"
-        },
-        "maxLength": { "$ref": "#/definitions/nonNegativeInteger" },
-        "minLength": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
-        "pattern": {
-            "type": "string",
-            "format": "regex"
-        },
-        "additionalItems": { "$ref": "#" },
-        "items": {
-            "anyOf": [
-                { "$ref": "#" },
-                { "$ref": "#/definitions/schemaArray" }
-            ],
-            "default": {}
-        },
-        "maxItems": { "$ref": "#/definitions/nonNegativeInteger" },
-        "minItems": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
-        "uniqueItems": {
-            "type": "boolean",
-            "default": false
-        },
-        "contains": { "$ref": "#" },
-        "maxProperties": { "$ref": "#/definitions/nonNegativeInteger" },
-        "minProperties": { "$ref": "#/definitions/nonNegativeIntegerDefault0" },
-        "required": { "$ref": "#/definitions/stringArray" },
-        "additionalProperties": { "$ref": "#" },
-        "definitions": {
-            "type": "object",
-            "additionalProperties": { "$ref": "#" },
-            "default": {}
-        },
-        "properties": {
-            "type": "object",
-            "additionalProperties": { "$ref": "#" },
-            "default": {}
-        },
-        "patternProperties": {
-            "type": "object",
-            "additionalProperties": { "$ref": "#" },
-            "default": {}
-        },
-        "dependencies": {
-            "type": "object",
-            "additionalProperties": {
-                "anyOf": [
-                    { "$ref": "#" },
-                    { "$ref": "#/definitions/stringArray" }
-                ]
-            }
-        },
-        "propertyNames": { "$ref": "#" },
-        "const": {},
-        "enum": {
-            "type": "array",
-            "minItems": 1,
-            "uniqueItems": true
-        },
-        "type": {
-            "anyOf": [
-                { "$ref": "#/definitions/simpleTypes" },
-                {
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/simpleTypes" },
-                    "minItems": 1,
-                    "uniqueItems": true
-                }
-            ]
-        },
-        "format": { "type": "string" },
-        "allOf": { "$ref": "#/definitions/schemaArray" },
-        "anyOf": { "$ref": "#/definitions/schemaArray" },
-        "oneOf": { "$ref": "#/definitions/schemaArray" },
-        "not": { "$ref": "#" }
-    },
-    "default": {}
-}
-
-},{}],58:[function(require,module,exports){
 module.exports={
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://json-schema.org/draft-07/schema#",
@@ -6920,14 +6742,14 @@ module.exports={
     "default": true
 }
 
-},{}],59:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 var render = require('./render');
 
 exports.render = render;
 
-},{"./render":60}],60:[function(require,module,exports){
+},{"./render":59}],59:[function(require,module,exports){
 'use strict';
 
 const tspan = require('tspan');
@@ -6972,15 +6794,20 @@ const norm = (obj, other) => Object.assign(
   other
 );
 
-const text = (body, x, y) => ['text', norm({x: x, y: y})]
-  .concat(tspan.parse(body));
+const text = (body, x, y, rotate) => {
+  const props = {y: 6};
+  if (rotate !== undefined) {
+    props.transform = 'rotate(' + rotate + ')';
+  }
+  return ['g', tt(round(x), round(y)), ['text', props].concat(tspan.parse(body))];
+};
 
 const hline = (len, x, y) => ['line', norm({x1: x, x2: x + len, y1: y, y2: y})];
 const vline = (len, x, y) => ['line', norm({x1: x, x2: x, y1: y, y2: y + len})];
 
-const getLabel = (val, x, y, step, len) => {
+const getLabel = (val, x, y, step, len, rotate) => {
   if (typeof val !== 'number') {
-    return text(val, x, y);
+    return text(val, x, y, rotate);
   }
   const res = ['g', {}];
   for (let i = 0; i < len; i++) {
@@ -7014,9 +6841,9 @@ const labelArr = (desc, opt) => {
   const height = vspace - margin.top - margin.bottom;
   const step = width / mod;
   const blanks = ['g'];
-  const bits = ['g', tt(round(step / 2), -3)];
-  const names = ['g', tt(round(step / 2), round(height / 2 + fontsize / 3))]; // alignment-baseline: middle
-  const attrs = ['g', tt(round(step / 2), round(height + fontsize - 1))]; // middle: hanging
+  const bits = ['g', tt(round(step / 2), -round(0.65 * fontsize))];
+  const names = ['g', tt(round(step / 2), round(0.5 * height))]; // alignment-baseline: middle
+  const attrs = ['g', tt(round(step / 2), round(height + 0.5 * fontsize))]; // middle: hanging
   desc.map(e => {
     let lsbm = 0;
     let msbm = mod - 1;
@@ -7052,7 +6879,8 @@ const labelArr = (desc, opt) => {
         ),
         0,
         step,
-        e.bits
+        e.bits,
+        e.rotate
       ));
     }
 
@@ -7243,7 +7071,7 @@ const render = (desc, opt) => {
 
 module.exports = render;
 
-},{"tspan":320}],61:[function(require,module,exports){
+},{"tspan":320}],60:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -7420,7 +7248,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],62:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 
 exports['amba.com'] = {
@@ -8248,7 +8076,7 @@ exports['amba.com'] = {
                   presence: 'required',
                   direction: 'in',
                 },
-                defaultValue: '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF',
+                defaultValue: 4294967295,
               },
             },
             WLAST: {
@@ -8909,7 +8737,7 @@ exports['amba.com'] = {
                   presence: 'required',
                   direction: 'in',
                 },
-                defaultValue: '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF',
+                defaultValue: 4294967295,
               },
             },
             WVALID: {
@@ -10289,176 +10117,6 @@ exports['intel.com'] = {
 
 exports['sifive.com'] = {
   MEM: {
-    DPRAM: {
-      '0.1.0': {
-        abstractionDefinition: {
-          vendor: 'sifive.com',
-          library: 'MEM',
-          name: 'DPRAM_rtl',
-          version: '0.1.0',
-          busType: {
-            vendor: 'sifive.com',
-            library: 'MEM',
-            name: 'DPRAM',
-            version: '0.1.0',
-          },
-          ports: {
-            WRCLK: {
-              description: 'Write clock',
-              requiresDriver: true,
-              isClock: true,
-              wire: {
-                onMaster: {
-                  width: 1,
-                  direction: 'in',
-                  presence: 'optional',
-                },
-                onSlave: {
-                  width: 1,
-                  direction: 'in',
-                  presence: 'optional',
-                },
-              },
-            },
-            RDCLK: {
-              description: 'Read clock',
-              requiresDriver: true,
-              isClock: true,
-              wire: {
-                onMaster: {
-                  width: 1,
-                  direction: 'in',
-                  presence: 'optional',
-                },
-                onSlave: {
-                  width: 1,
-                  direction: 'in',
-                  presence: 'optional',
-                },
-              },
-            },
-            WREN: {
-              description: 'Write enable',
-              wire: {
-                onMaster: {
-                  width: 1,
-                  direction: 'out',
-                  presence: 'required',
-                },
-                onSlave: {
-                  width: 1,
-                  direction: 'in',
-                  presence: 'required',
-                },
-              },
-            },
-            RDEN: {
-              description: 'Read enable',
-              wire: {
-                onMaster: {
-                  width: 1,
-                  direction: 'out',
-                  presence: 'required',
-                },
-                onSlave: {
-                  width: 1,
-                  direction: 'in',
-                  presence: 'required',
-                },
-              },
-            },
-            BEN: {
-              description: 'Byte enable',
-              wire: {
-                onMaster: {
-                  width: 'BEN_WIDTH',
-                  direction: 'out',
-                  presence: 'optional',
-                },
-                onSlave: {
-                  width: 'BEN_WIDTH',
-                  direction: 'in',
-                  presence: 'optional',
-                },
-              },
-            },
-            WRADDR: {
-              description: 'Write port address',
-              wire: {
-                onMaster: {
-                  width: 'ADDR_WIDTH',
-                  direction: 'out',
-                  presence: 'required',
-                },
-                onSlave: {
-                  width: 'ADDR_WIDTH',
-                  direction: 'in',
-                  presence: 'required',
-                },
-              },
-            },
-            WRDATA: {
-              description: 'Write port data',
-              wire: {
-                onMaster: {
-                  width: 'DATA_WIDTH',
-                  direction: 'out',
-                  presence: 'required',
-                },
-                onSlave: {
-                  width: 'DATA_WIDTH',
-                  direction: 'in',
-                  presence: 'required',
-                },
-              },
-            },
-            RDADDR: {
-              description: 'Read port address',
-              wire: {
-                onMaster: {
-                  width: 'ADDR_WIDTH',
-                  direction: 'out',
-                  presence: 'required',
-                },
-                onSlave: {
-                  width: 'ADDR_WIDTH',
-                  direction: 'in',
-                  presence: 'required',
-                },
-              },
-            },
-            RDDATA: {
-              description: 'Read port data',
-              wire: {
-                onMaster: {
-                  width: 'DATA_WIDTH',
-                  direction: 'in',
-                  presence: 'required',
-                },
-                onSlave: {
-                  width: 'DATA_WIDTH',
-                  direction: 'out',
-                  presence: 'required',
-                },
-              },
-            },
-            RDERR: {
-              description: 'If ECC feature is present, this signals that an undorrectable error was detected on the read data',
-              wire: {
-                onMaster: {
-                  direction: 'in',
-                  presence: 'optional',
-                },
-                onSlave: {
-                  direction: 'out',
-                  presence: 'optional',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
     RO: {
       '0.1.0': {
         abstractionDefinition: {
@@ -10475,9 +10133,9 @@ exports['sifive.com'] = {
           ports: {
             CLK: {
               description: 'Memory clock',
-              requiresDriver: true,
-              isClock: true,
               wire: {
+                isClock: true,
+                requiresDriver: true,
                 onMaster: {
                   width: 1,
                   direction: 'in',
@@ -10575,9 +10233,9 @@ exports['sifive.com'] = {
           ports: {
             CLK: {
               description: 'Memory clock',
-              requiresDriver: true,
-              isClock: true,
               wire: {
+                isClock: true,
+                requiresDriver: true,
                 onMaster: {
                   width: 1,
                   direction: 'in',
@@ -10713,9 +10371,9 @@ exports['sifive.com'] = {
           ports: {
             CLK: {
               description: 'Memory clock',
-              requiresDriver: true,
-              isClock: true,
               wire: {
+                isClock: true,
+                requiresDriver: true,
                 onMaster: {
                   width: 1,
                   direction: 'in',
@@ -10807,6 +10465,43 @@ exports['sifive.com'] = {
     },
   },
   PRCI: {
+    CLOCK: {
+      '0.1.0': {
+        abstractionDefinition: {
+          vendor: 'sifive.com',
+          library: 'PRCI',
+          name: 'CLOCK_rtl',
+          version: '0.1.0',
+          busType: {
+            vendor: 'sifive.com',
+            library: 'PRCI',
+            name: 'CLOCK',
+            version: '0.1.0',
+          },
+          ports: {
+            CLOCK: {
+              description: 'clock signals',
+              wire: {
+                isClock: true,
+                onMaster: {
+                  direction: 'out',
+                  presence: 'required',
+                },
+                onSlave: {
+                  direction: 'in',
+                  presence: 'required',
+                },
+              },
+            },
+          },
+          props: {
+            frequency: {
+              type: 'integer',
+            },
+          },
+        },
+      },
+    },
     INTERRUPT: {
       '0.1.0': {
         abstractionDefinition: {
@@ -12264,11 +11959,12 @@ exports['sifive.com'] = {
   },
 };
 
-},{}],63:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 const {name, version, vendor, library, description} = require('./primitive.js');
-const meta = require('ajv/lib/refs/json-schema-draft-06.json');
+
+const meta = require('./meta.js');
 
 const props = {
   type: 'object',
@@ -12315,10 +12011,12 @@ const port = {
     description,
     wire: {
       type: 'object',
-      required: ['onMaster', 'onSlave'],
+      // required: ['onInitiator', 'onTarget'],
       properties: {
         onMaster: onRole,
         onSlave: onRole,
+        onInitiator: onRole,
+        onTarget: onRole,
         isAddress: {
           description: 'the port contains address information',
           type: 'boolean',
@@ -12384,7 +12082,7 @@ module.exports = {
   }
 };
 
-},{"./primitive.js":74,"ajv/lib/refs/json-schema-draft-06.json":57}],64:[function(require,module,exports){
+},{"./meta.js":73,"./primitive.js":74}],63:[function(require,module,exports){
 'use strict';
 
 const {name, version, vendor, library, description} = require('./primitive.js');
@@ -12406,7 +12104,7 @@ module.exports = {
   }
 };
 
-},{"./primitive.js":74}],65:[function(require,module,exports){
+},{"./primitive.js":74}],64:[function(require,module,exports){
 'use strict';
 
 const {
@@ -12429,7 +12127,11 @@ module.exports = {
   properties: {
     name, displayName, description, // nameGroup
     interfaceMode: {
-      enum: ['master', 'slave', 'monitor', null]
+      enum: [
+        'master', 'slave', // TODO remove legacy mode
+        'initiator', 'target',
+        'monitor', null
+      ]
     },
     memoryMapRef: {type: 'string'},
     busType: {
@@ -12464,7 +12166,7 @@ module.exports = {
   }
 };
 
-},{"./primitive.js":74}],66:[function(require,module,exports){
+},{"./primitive.js":74}],65:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -12492,7 +12194,7 @@ module.exports = {
   required: ['catalog']
 };
 
-},{}],67:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 'use strict';
 
 const {
@@ -12543,6 +12245,7 @@ const ports = {
   }, {
     // Elaborate port format
     type: 'array',
+    uniqueItemProperties: ['name'],
     items: {
       type: 'object',
       required: ['name', 'wire'],
@@ -12561,6 +12264,7 @@ const component = {
     vendor, library, name, version,
     busInterfaces: {
       type: 'array',
+      uniqueItemProperties: ['name'],
       items: {$ref: 'defs#/busInterface'}
     },
     model: {
@@ -12572,6 +12276,7 @@ const component = {
     },
     addressSpaces: {
       type: 'array',
+      uniqueItemProperties: ['name'],
       items: {
         type: 'object',
         title: 'Address space',
@@ -12585,6 +12290,7 @@ const component = {
     },
     memoryMaps: {
       type: 'array',
+      uniqueItemProperties: ['name'],
       items: {$ref: 'defs#/memoryMap'}
     },
     componentGenerators: { type: 'array' },
@@ -12619,7 +12325,7 @@ expressing internal structure or hierarchy. Component document expressing follow
   }
 };
 
-},{"./primitive.js":74}],68:[function(require,module,exports){
+},{"./primitive.js":74}],67:[function(require,module,exports){
 'use strict';
 
 const component = require('./component.js');
@@ -12696,7 +12402,7 @@ module.exports = {
   bundle
 };
 
-},{"./abstractionDefinition.js":63,"./busDefinition.js":64,"./busInterface.js":65,"./catalog.js":66,"./component.js":67,"./design.js":69,"./memoryMap.js":73,"./register.js":75}],69:[function(require,module,exports){
+},{"./abstractionDefinition.js":62,"./busDefinition.js":63,"./busInterface.js":64,"./catalog.js":65,"./component.js":66,"./design.js":68,"./memoryMap.js":72,"./register.js":75}],68:[function(require,module,exports){
 'use strict';
 
 const {vendor, library, name, version, id} = require('./primitive.js');
@@ -12716,7 +12422,9 @@ const instance = {
 };
 
 const instances = {
-  type: 'array', items: instance
+  type: 'array',
+  uniqueItemProperties: ['name'],
+  items: instance
 };
 
 // -----------------------------------------------------------------------------
@@ -12798,11 +12506,11 @@ module.exports = {
   required: ['design']
 };
 
-},{"./primitive.js":74}],70:[function(require,module,exports){
+},{"./primitive.js":74}],69:[function(require,module,exports){
 'use strict';
 
 const {
-  id, int, description, displayName
+  name, int, description, displayName
 } = require('./primitive.js');
 
 const enumeratedValue = {
@@ -12810,7 +12518,7 @@ const enumeratedValue = {
   title: 'Enumerated values',
   required: ['name', 'value'],
   properties: {
-    name: id,
+    name,
     description,
     displayName,
     // usage
@@ -12820,15 +12528,16 @@ const enumeratedValue = {
 
 const enumeratedValues = {
   type: 'array',
+  uniqueItemProperties: ['name'],
   items: enumeratedValue
 };
 
 module.exports = enumeratedValues;
 
-},{"./primitive.js":74}],71:[function(require,module,exports){
+},{"./primitive.js":74}],70:[function(require,module,exports){
 'use strict';
 
-const {id, uint, int, access, expression, description} = require('./primitive.js');
+const {name, uint, int, access, expression, description} = require('./primitive.js');
 const enumeratedValues = require('./enumeratedValues.js');
 
 const modifiedWriteValue = {
@@ -12860,7 +12569,7 @@ const field = {
   title: 'Register field',
   required: ['name', 'bitOffset', 'bitWidth'],
   properties: {
-    name: id,
+    name,
     description,
     bitOffset: {oneOf: [expression, uint]}, // base % regWidth in bits
     resetValue: int, // ipxactish
@@ -12878,7 +12587,7 @@ const field = {
 
 module.exports = field;
 
-},{"./enumeratedValues.js":70,"./primitive.js":74}],72:[function(require,module,exports){
+},{"./enumeratedValues.js":69,"./primitive.js":74}],71:[function(require,module,exports){
 'use strict';
 
 const pkg = require('../package.json');
@@ -12903,7 +12612,7 @@ exports.component = component;
 exports.abstractionDefinition = abstractionDefinition;
 exports.defs = defs;
 
-},{"../package.json":77,"./abstractionDefinition.js":63,"./busDefinition.js":64,"./catalog.js":66,"./component.js":67,"./defs.js":68,"./design.js":69}],73:[function(require,module,exports){
+},{"../package.json":77,"./abstractionDefinition.js":62,"./busDefinition.js":63,"./catalog.js":65,"./component.js":66,"./defs.js":67,"./design.js":68}],72:[function(require,module,exports){
 'use strict';
 
 const {name, uint, access} = require('./primitive.js');
@@ -12921,6 +12630,7 @@ module.exports = {
     },
     addressBlocks: {
       type: 'array',
+      uniqueItemProperties: ['name'],
       items: {
         type: 'object',
         title: 'Address block',
@@ -12935,10 +12645,12 @@ module.exports = {
           access: access,
           registers: {
             type: 'array',
+            uniqueItemProperties: ['name'],
             items: {$ref: 'defs#/register'}
           },
           registerFiles: {
             type: 'array',
+            uniqueItemProperties: ['name'],
             items: registerFile
           }
         }
@@ -12947,30 +12659,61 @@ module.exports = {
   }
 };
 
-},{"./primitive.js":74,"./registerFile.js":76}],74:[function(require,module,exports){
+},{"./primitive.js":74,"./registerFile.js":76}],73:[function(require,module,exports){
 'use strict';
 
-const id = {
+let meta;
+
+const simpleTypes = {
+  enum: [
+    'array',
+    'boolean',
+    'integer',
+    'null',
+    'number',
+    'object',
+    'string'
+  ]
+};
+
+const schemaArray = {
+  type: 'array',
+  minItems: 1,
+  items: meta
+};
+
+meta = {
+  type: 'object',
+  properties: {
+    type: simpleTypes,
+    description: {type: 'string'},
+    properties: {
+      type: 'object',
+      additionalProperties: meta
+    },
+    allOf: schemaArray,
+    anyOf: schemaArray,
+    oneOf: schemaArray
+  }
+};
+
+module.exports = meta;
+
+},{}],74:[function(require,module,exports){
+'use strict';
+
+exports.name = {
   type: 'string',
   minLength: 1,
   maxLength: 256,
-  pattern: '^[a-zA-Z][:a-zA-Z0-9_-]*$'
+  pattern: '^[_:A-Za-z][-._:A-Za-z0-9]*$'
 };
 
-const expression = {
+exports.expression = {
   type: 'string',
   minLength: 1,
   maxLength: 256
   // pattern: '^[a-zA-Z][:a-zA-Z0-9_]*$' // (a + 5)
-};
-
-exports.id = id;
-
-const uri = {
-  type: 'string',
-  minLength: 3,
-  maxLength: 256,
-  pattern: '^[a-zA-Z][a-zA-Z0-9_.-]*$'
 };
 
 exports.uint = {
@@ -12993,19 +12736,32 @@ exports.access = {
   ]
 };
 
+const id = {
+  type: 'string',
+  minLength: 1,
+  maxLength: 256,
+  pattern: '^[a-zA-Z][:a-zA-Z0-9_-]*$'
+};
+
+const uri = {
+  type: 'string',
+  minLength: 3,
+  maxLength: 256,
+  pattern: '^[a-zA-Z][a-zA-Z0-9_.-]*$'
+};
+
+exports.id = id;
 exports.vendor = uri;
 exports.library = id;
-exports.name = id;
 exports.version = {type: 'string'}; // FIXME semver
 exports.description = {type: 'string'};
 exports.displayName = {type: 'string'};
-exports.expression = expression;
 
 },{}],75:[function(require,module,exports){
 'use strict';
 
 const {
-  id, uint, int, access, expression,
+  name, uint, int, access, expression,
   description, displayName
 } = require('./primitive.js');
 const field = require('./field.js');
@@ -13015,7 +12771,7 @@ const register = {
   title: 'Register',
   required: ['name', 'addressOffset', 'size'],
   properties: {
-    name: id,
+    name,
     addressOffset: {oneOf: [expression, uint]}, // in memoryMaps[?].addressUnitBits
     size: {oneOf: [expression, uint]}, // regWidth in bits
     access: access,
@@ -13023,6 +12779,7 @@ const register = {
     description,
     fields: {
       type: 'array',
+      uniqueItemProperties: ['name'],
       items: field
     },
     resetValue: int // spiritual
@@ -13031,17 +12788,17 @@ const register = {
 
 module.exports = register;
 
-},{"./field.js":71,"./primitive.js":74}],76:[function(require,module,exports){
+},{"./field.js":70,"./primitive.js":74}],76:[function(require,module,exports){
 'use strict';
 
-const {id, uint, expression} = require('./primitive.js');
+const {name, uint, expression} = require('./primitive.js');
 
 const registerFile = {
   type: 'object',
   title: 'Register file',
   required: ['name', 'addressOffset', 'range'],
   properties: {
-    name: id,
+    name,
     // accessHandles // ipxactish
     // isPresent // ipxactish
     // dim: uint
@@ -13050,6 +12807,7 @@ const registerFile = {
     range: uint,
     registers: {
       type: 'array',
+      uniqueItemProperties: ['name'],
       items: {$ref: 'defs#/register'}
     }
     // Handle recursive definitions
@@ -13064,30 +12822,29 @@ module.exports = registerFile;
 
 },{"./primitive.js":74}],77:[function(require,module,exports){
 module.exports={
-  "_from": "duh-schema@^0.9.13",
-  "_id": "duh-schema@0.9.13",
+  "_from": "duh-schema@^0.10.0",
+  "_id": "duh-schema@0.10.0",
   "_inBundle": false,
-  "_integrity": "sha512-seUwdhialVm8F6h7nKzsxm28yH6QAS0fl4d144y/Gm69MGMk0AOiWzmgQVw0lDB58l40oLR4C33z+MSutLZ+Cw==",
+  "_integrity": "sha512-cxgGwjxkexgYx9oHwXcnevvr+uVw43ysfXYgbtBTzf0T4OF8Mm7O3GFX8Sn4TfOuyDgANYOMAlW2kj9xUScpzw==",
   "_location": "/duh-schema",
   "_phantomChildren": {},
   "_requested": {
     "type": "range",
     "registry": true,
-    "raw": "duh-schema@^0.9.13",
+    "raw": "duh-schema@^0.10.0",
     "name": "duh-schema",
     "escapedName": "duh-schema",
-    "rawSpec": "^0.9.13",
+    "rawSpec": "^0.10.0",
     "saveSpec": null,
-    "fetchSpec": "^0.9.13"
+    "fetchSpec": "^0.10.0"
   },
   "_requiredBy": [
     "#DEV:/",
-    "/duh-core",
-    "/duh-ipxact"
+    "/duh-core"
   ],
-  "_resolved": "https://registry.npmjs.org/duh-schema/-/duh-schema-0.9.13.tgz",
-  "_shasum": "8ebb1af52041b7b2b9222a72990a0464597fc717",
-  "_spec": "duh-schema@^0.9.13",
+  "_resolved": "https://registry.npmjs.org/duh-schema/-/duh-schema-0.10.0.tgz",
+  "_shasum": "cf4666f6ac77ab9091391eee3450fd6c1895b879",
+  "_spec": "duh-schema@^0.10.0",
   "_where": "/home/drom/work/github/sifive/duh-datasheet",
   "author": {
     "name": "SiFive"
@@ -13100,14 +12857,14 @@ module.exports={
   "description": "DUH Schema",
   "devDependencies": {
     "@drom/eslint-config": "0.10.0",
-    "ajv": "^6.12.0",
+    "ajv": "^6.12.2",
     "browserify": "^16.2.2",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.11",
+    "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
     "fs-extra": "^8.1.0",
-    "mocha": "^7.1.0",
-    "nyc": "^15.0.1"
+    "mocha": "^7.2.0",
+    "nyc": "^15.1.0"
   },
   "engines": {
     "node": ">=8"
@@ -13133,7 +12890,7 @@ module.exports={
     "test": "eslint lib/ test/ && nyc -r=text -r=lcov mocha"
   },
   "unpkg": "dist/schema.js",
-  "version": "0.9.13"
+  "version": "0.10.0"
 }
 
 },{}],78:[function(require,module,exports){
@@ -30061,7 +29818,7 @@ module.exports = keysIn;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.15';
+  var VERSION = '4.17.19';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -33768,8 +33525,21 @@ module.exports = keysIn;
      * @returns {Array} Returns the new sorted array.
      */
     function baseOrderBy(collection, iteratees, orders) {
+      if (iteratees.length) {
+        iteratees = arrayMap(iteratees, function(iteratee) {
+          if (isArray(iteratee)) {
+            return function(value) {
+              return baseGet(value, iteratee.length === 1 ? iteratee[0] : iteratee);
+            }
+          }
+          return iteratee;
+        });
+      } else {
+        iteratees = [identity];
+      }
+
       var index = -1;
-      iteratees = arrayMap(iteratees.length ? iteratees : [identity], baseUnary(getIteratee()));
+      iteratees = arrayMap(iteratees, baseUnary(getIteratee()));
 
       var result = baseMap(collection, function(value, key, collection) {
         var criteria = arrayMap(iteratees, function(iteratee) {
@@ -34026,6 +33796,10 @@ module.exports = keysIn;
         var key = toKey(path[index]),
             newValue = value;
 
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return object;
+        }
+
         if (index != lastIndex) {
           var objValue = nested[key];
           newValue = customizer ? customizer(objValue, key, nested) : undefined;
@@ -34178,11 +33952,14 @@ module.exports = keysIn;
      *  into `array`.
      */
     function baseSortedIndexBy(array, value, iteratee, retHighest) {
-      value = iteratee(value);
-
       var low = 0,
-          high = array == null ? 0 : array.length,
-          valIsNaN = value !== value,
+          high = array == null ? 0 : array.length;
+      if (high === 0) {
+        return 0;
+      }
+
+      value = iteratee(value);
+      var valIsNaN = value !== value,
           valIsNull = value === null,
           valIsSymbol = isSymbol(value),
           valIsUndefined = value === undefined;
@@ -35667,10 +35444,11 @@ module.exports = keysIn;
       if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
         return false;
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(array);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var arrStacked = stack.get(array);
+      var othStacked = stack.get(other);
+      if (arrStacked && othStacked) {
+        return arrStacked == other && othStacked == array;
       }
       var index = -1,
           result = true,
@@ -35832,10 +35610,11 @@ module.exports = keysIn;
           return false;
         }
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(object);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var objStacked = stack.get(object);
+      var othStacked = stack.get(other);
+      if (objStacked && othStacked) {
+        return objStacked == other && othStacked == object;
       }
       var result = true;
       stack.set(object, other);
@@ -39216,6 +38995,10 @@ module.exports = keysIn;
      * // The `_.property` iteratee shorthand.
      * _.filter(users, 'active');
      * // => objects for ['barney']
+     *
+     * // Combining several predicates using `_.overEvery` or `_.overSome`.
+     * _.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
+     * // => objects for ['fred', 'barney']
      */
     function filter(collection, predicate) {
       var func = isArray(collection) ? arrayFilter : baseFilter;
@@ -39965,15 +39748,15 @@ module.exports = keysIn;
      * var users = [
      *   { 'user': 'fred',   'age': 48 },
      *   { 'user': 'barney', 'age': 36 },
-     *   { 'user': 'fred',   'age': 40 },
+     *   { 'user': 'fred',   'age': 30 },
      *   { 'user': 'barney', 'age': 34 }
      * ];
      *
      * _.sortBy(users, [function(o) { return o.user; }]);
-     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 30]]
      *
      * _.sortBy(users, ['user', 'age']);
-     * // => objects for [['barney', 34], ['barney', 36], ['fred', 40], ['fred', 48]]
+     * // => objects for [['barney', 34], ['barney', 36], ['fred', 30], ['fred', 48]]
      */
     var sortBy = baseRest(function(collection, iteratees) {
       if (collection == null) {
@@ -44848,11 +44631,11 @@ module.exports = keysIn;
 
       // Use a sourceURL for easier debugging.
       // The sourceURL gets injected into the source that's eval-ed, so be careful
-      // with lookup (in case of e.g. prototype pollution), and strip newlines if any.
-      // A newline wouldn't be a valid sourceURL anyway, and it'd enable code injection.
+      // to normalize all kinds of whitespace, so e.g. newlines (and unicode versions of it) can't sneak in
+      // and escape the comment, thus injecting code that gets evaled.
       var sourceURL = '//# sourceURL=' +
         (hasOwnProperty.call(options, 'sourceURL')
-          ? (options.sourceURL + '').replace(/[\r\n]/g, ' ')
+          ? (options.sourceURL + '').replace(/\s/g, ' ')
           : ('lodash.templateSources[' + (++templateCounter) + ']')
         ) + '\n';
 
@@ -44885,8 +44668,6 @@ module.exports = keysIn;
 
       // If `variable` is not specified wrap a with-statement around the generated
       // code to add the data object to the top of the scope chain.
-      // Like with sourceURL, we take care to not check the option's prototype,
-      // as this configuration is a code injection vector.
       var variable = hasOwnProperty.call(options, 'variable') && options.variable;
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
@@ -45593,6 +45374,9 @@ module.exports = keysIn;
      * values against any array or object value, respectively. See `_.isEqual`
      * for a list of supported value comparisons.
      *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
+     *
      * @static
      * @memberOf _
      * @since 3.0.0
@@ -45608,6 +45392,10 @@ module.exports = keysIn;
      *
      * _.filter(objects, _.matches({ 'a': 4, 'c': 6 }));
      * // => [{ 'a': 4, 'b': 5, 'c': 6 }]
+     *
+     * // Checking for several possible values
+     * _.filter(users, _.overSome([_.matches({ 'a': 1 }), _.matches({ 'a': 4 })]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matches(source) {
       return baseMatches(baseClone(source, CLONE_DEEP_FLAG));
@@ -45621,6 +45409,9 @@ module.exports = keysIn;
      * **Note:** Partial comparisons will match empty array and empty object
      * `srcValue` values against any array or object value, respectively. See
      * `_.isEqual` for a list of supported value comparisons.
+     *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
      *
      * @static
      * @memberOf _
@@ -45638,6 +45429,10 @@ module.exports = keysIn;
      *
      * _.find(objects, _.matchesProperty('a', 4));
      * // => { 'a': 4, 'b': 5, 'c': 6 }
+     *
+     * // Checking for several possible values
+     * _.filter(users, _.overSome([_.matchesProperty('a', 1), _.matchesProperty('a', 4)]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matchesProperty(path, srcValue) {
       return baseMatchesProperty(path, baseClone(srcValue, CLONE_DEEP_FLAG));
@@ -45861,6 +45656,10 @@ module.exports = keysIn;
      * Creates a function that checks if **all** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -45887,6 +45686,10 @@ module.exports = keysIn;
      * Creates a function that checks if **any** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -45906,6 +45709,9 @@ module.exports = keysIn;
      *
      * func(NaN);
      * // => false
+     *
+     * var matchesFunc = _.overSome([{ 'a': 1 }, { 'a': 2 }])
+     * var matchesPropertyFunc = _.overSome([['a', 1], ['a', 2]])
      */
     var overSome = createOver(arraySome);
 
@@ -50127,7 +49933,7 @@ request.put = function(url, data, fn) {
   return req;
 };
 
-},{"./agent-base":313,"./is-object":315,"./request-base":316,"./response-base":317,"component-emitter":61}],315:[function(require,module,exports){
+},{"./agent-base":313,"./is-object":315,"./request-base":316,"./response-base":317,"component-emitter":60}],315:[function(require,module,exports){
 'use strict';
 
 /**
@@ -52870,4 +52676,4 @@ main();
 
 /* eslint-env browser */
 
-},{"../lib/render-bus-definition.js":6,"../lib/render-catalog.js":7,"../lib/render-component.js":8,"../lib/render-design.js":9,"../lib/style.js":14,"../lib/vlnv.js":15,"ajv":16,"duh-bus":62,"duh-schema":72,"json-refs":103,"json5":105,"onml/lib/stringify.js":303}]},{},[324]);
+},{"../lib/render-bus-definition.js":6,"../lib/render-catalog.js":7,"../lib/render-component.js":8,"../lib/render-design.js":9,"../lib/style.js":14,"../lib/vlnv.js":15,"ajv":16,"duh-bus":61,"duh-schema":71,"json-refs":103,"json5":105,"onml/lib/stringify.js":303}]},{},[324]);
