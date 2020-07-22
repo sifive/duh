@@ -7294,12 +7294,12 @@ exports['amba.com'] = {
               description: 'The bus clock times all bus transfers. All signal timings are related to the rising edge of HCLK.',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7311,12 +7311,12 @@ exports['amba.com'] = {
               description: 'The bus reset signal is active LOW and resets the system and the bus. This is the only active LOW AHB-Lite signal.',
               wire: {
                 isReset: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7328,11 +7328,11 @@ exports['amba.com'] = {
               description: 'The 32-bit system address bus, but the width is variable',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -7342,12 +7342,12 @@ exports['amba.com'] = {
             HBURST: {
               description: 'The burst type indicates if the transfer is a single transfer or forms part of a burst.Fixed length bursts of 4, 8, and 16 beats are supported. The burst can be incrementing or wrapping. Incrementing bursts of undefined length are also supported.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 3,
                   direction: 'in',
@@ -7357,12 +7357,12 @@ exports['amba.com'] = {
             HMASTLOCK: {
               description: 'When HIGH, this signal indicates that the current transfer is part of a locked sequence. It has the same timing as the address and control signals.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7373,12 +7373,12 @@ exports['amba.com'] = {
             HPROT: {
               description: 'The protection control signals provide additional information about a bus access and are primarily intended for use by any module that wants to implement some level of protection.\nThe signals indicate if the transfer is an opcode fetch or data access, and if the transfer is a privileged mode access or user mode access. For masters with a memory management unit these signals also indicate whether the current access is cacheable or bufferable.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -7389,12 +7389,12 @@ exports['amba.com'] = {
             HSIZE: {
               description: 'Indicates the size of the transfer, that is typically byte, halfword, or word. The protocol allows for larger transfer sizes up to a maximum of 1024 bits.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 3,
                   direction: 'in',
@@ -7404,12 +7404,12 @@ exports['amba.com'] = {
             HTRANS: {
               description: 'Indicates the transfer type of the current transfer. This can be:\n1-IDLE\n2- BUSY\n3- NONSEQUENTIAL\n4- SEQUENTIAL',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 2,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 2,
                   direction: 'in',
@@ -7420,11 +7420,11 @@ exports['amba.com'] = {
               description: 'The write data bus transfers data from the master to the slaves during write operations. A minimum data bus width of 32 bits is recommended. However, this can be extended to enable higher bandwidth operation.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -7434,12 +7434,12 @@ exports['amba.com'] = {
             HWRITE: {
               description: 'Indicates the transfer direction. When HIGH this signal indicates a write transfer and when LOW a read transfer. It has the same timing as the address signals, however, it must remain constant throughout a burst transfer.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -7450,11 +7450,11 @@ exports['amba.com'] = {
               description: 'During read operations, the read data bus transfers data from the selected slave to the multiplexor. The multiplexor then transfers the data to the master. A minimum data bus width of 32 bits is recommended. However, this can be extended to enable higher bandwidth operation.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -7464,10 +7464,10 @@ exports['amba.com'] = {
             HREADYOUT: {
               description: 'When HIGH, the HREADYOUT signal indicates that a transfer has finished on the bus. This signal can be driven LOW to extend a transfer.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'illegal',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -7477,12 +7477,12 @@ exports['amba.com'] = {
             HRESP: {
               description: 'The transfer response, after passing through the multiplexor, provides the master with additional information on the status of a transfer.\nWhen LOW, the HRESP signal indicates that the transfer status is OKAY.\nWhen HIGH, the HRESP signal indicates that the transfer status is ERROR.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -7492,10 +7492,10 @@ exports['amba.com'] = {
             HSELx: {
               description: 'Each AHB-Lite slave has its own slave select signal HSELx and this signal indicates that the current transfer is intended for the selected slave. When the slave is initially selected, it must also monitor the status of HREADY to ensure that the previous bus transfer has completed,before it responds to the current transfer.\nThe HSELx signal is a combinatorial decode of the address bus.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'illegal',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -7505,12 +7505,12 @@ exports['amba.com'] = {
             HREADY: {
               description: 'The transfer response, after passing through the multiplexor, provides the master with additional information on the status of a transfer.\nWhen LOW, the HRESP signal indicates that the transfer status is OKAY.\nWhen HIGH, the HRESP signal indicates that the transfer status is ERROR.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -7520,12 +7520,12 @@ exports['amba.com'] = {
             HCLKEN: {
               description: 'This is an optional enable signal for HCLK domain',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7537,11 +7537,11 @@ exports['amba.com'] = {
             HRUSER: {
               description: 'This is an optional read channel user signal that is not part of the official specification. The use is user specific.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'out',
                 },
@@ -7551,11 +7551,11 @@ exports['amba.com'] = {
             HWUSER: {
               description: 'This is an optional write channel user signal that is not part of the official specification. The use is user specific.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -7565,11 +7565,11 @@ exports['amba.com'] = {
             HAUSER: {
               description: 'This is an optional user signal that is not part of the official specification. The use is user specific.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -7602,12 +7602,12 @@ exports['amba.com'] = {
               description: 'Clock - The rising edge of PCLK times all transfers on the APB',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7619,12 +7619,12 @@ exports['amba.com'] = {
               description: 'Reset - The APB reset signal is active LOW. This signal is normally connected directly to the system bus reset signal.',
               wire: {
                 isReset: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7636,11 +7636,11 @@ exports['amba.com'] = {
               description: 'Address - This is the APB address bus. It can be up to 32 bits wide and is driven by the peripheral bus bridge unit.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -7650,12 +7650,12 @@ exports['amba.com'] = {
             PSEL: {
               description: 'Select - The APB bridge unit generates this signal to each peripheral bus slave. It indicates that the slave device is selected and that a data transfer is required.There is a PSEL signal for each slave.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -7665,11 +7665,11 @@ exports['amba.com'] = {
             PENABLE: {
               description: 'Enable - This signal indicates the second and subsequent cycles of an APB transfer.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -7678,12 +7678,12 @@ exports['amba.com'] = {
             PWRITE: {
               description: 'Direction - This signal indicates an APB write access when HIGH and an APB read access when LOW.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -7694,11 +7694,11 @@ exports['amba.com'] = {
               description: 'Read Data - The selected slave drives this bus during read cycles when PWRITE is LOW. This bus can be up to 32-bits wide.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -7709,11 +7709,11 @@ exports['amba.com'] = {
               description: 'Write data - This bus is driven by the peripheral bus bridge unit during write cycles when PWRITE is HIGH. This bus can be up to 32 bits wide.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -7724,12 +7724,12 @@ exports['amba.com'] = {
               description: 'Protection type - This signal indicates the normal, privileged, or secure protection level of the transaction and whether the transaction is a data access or an instruction access.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 3,
                   direction: 'in',
@@ -7741,11 +7741,11 @@ exports['amba.com'] = {
               description: 'Write strobes - This signal indicates which byte lanes to update during a write transfer. There is one write strobe for each eight bits of the write data bus.\nTherefore, PSTRB[n] corresponds to PWDATA[(8n + 7):(8n)]. Write strobes must not be active during a read transfer.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -7755,12 +7755,12 @@ exports['amba.com'] = {
             PREADY: {
               description: 'Ready - The slave uses this signal to extend an APB transfer',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'out',
@@ -7771,12 +7771,12 @@ exports['amba.com'] = {
             PSLVERR: {
               description: 'This signal indicates a transfer failure. APB peripherals are not required to support the PSLVERR pin. This is true for both existing and new APB peripheral designs. Where a peripheral does not include this pin then the appropriate input to the APB bridge is tied LOW.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'out',
@@ -7787,12 +7787,12 @@ exports['amba.com'] = {
             PCLKEN: {
               description: 'This is an optional enable signal for PCLK domain',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7825,12 +7825,12 @@ exports['amba.com'] = {
               description: 'Global clock signal. All signals are sampled on the rising edge of the global clock',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7841,12 +7841,12 @@ exports['amba.com'] = {
             ACLKEN: {
               description: 'Clock enable signal. Used as a qualifier for the ACLK signal. This signal indicates which rising edges of ACLK should be acted upon: 1 = valid rising edge of ACLK, 0 = any rising edge of ACLK should be ignored and no bus-state altered.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7859,12 +7859,12 @@ exports['amba.com'] = {
               description: 'Global reset signal. This signal is active LOW',
               wire: {
                 isReset: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7875,11 +7875,11 @@ exports['amba.com'] = {
             AWID: {
               description: 'Write address ID. This signal is the identification tag for the write address group of signals.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -7890,11 +7890,11 @@ exports['amba.com'] = {
               description: 'Write address. The write address bus gives the address of the first transfer in a write burst transaction. The associated control signals are used to determine the addresses of the remaining transfers in the burst.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -7903,12 +7903,12 @@ exports['amba.com'] = {
             AWLEN: {
               description: 'Burst length. The burst length gives the exact number of transfers in a burst. This information determines the number of data transfers associated with the address.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 8,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 8,
                   direction: 'in',
@@ -7919,12 +7919,12 @@ exports['amba.com'] = {
             AWSIZE: {
               description: 'Burst size. This signal indicates the size of each transfer in the burst. Byte lane strobes indicate exactly which byte lanes to update.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 3,
                   direction: 'in',
@@ -7935,12 +7935,12 @@ exports['amba.com'] = {
             AWBURST: {
               description: 'Burst type. The burst type, coupled with the size information, details how the address for each transfer within the burst is calculated.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 2,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 2,
                   direction: 'in',
@@ -7951,12 +7951,12 @@ exports['amba.com'] = {
             AWLOCK: {
               description: 'Lock type. This signal provides additional information about the atomic characteristics of the transfer. The AMBA AXI4 Protocol does not support locked transfer sequences. This signal indicates an exclusive access (mapped to AxLOCK[0] from the AMBA AXI3 specification).',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -7967,12 +7967,12 @@ exports['amba.com'] = {
             AWCACHE: {
               description: 'Cache type. This signal indicates the bufferable, cacheable, write-through, write-back, and allocate attributes of the transaction.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -7983,12 +7983,12 @@ exports['amba.com'] = {
             AWPROT: {
               description: 'Protection type. This signal indicates the normal, privileged, or secure protection level of the transaction and whether the transaction is a data access or an instruction access.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 3,
                   direction: 'in',
@@ -7998,12 +7998,12 @@ exports['amba.com'] = {
             AWQOS: {
               description: 'Quality of service value. 4-bit QoS identifier sent on the write address channel for each write transaction',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -8015,12 +8015,12 @@ exports['amba.com'] = {
               description: 'Slave region identifier sent on the read address channel for each transaction',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -8031,12 +8031,12 @@ exports['amba.com'] = {
             AWVALID: {
               description: 'Write address valid. This signal indicates that valid write address and control information are available: 1 = address and control information available, 0 = address and control information not available. The address and control information remain stable until the address acknowledge signal, AWREADY, goes HIGH.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8046,12 +8046,12 @@ exports['amba.com'] = {
             AWREADY: {
               description: 'Write address ready. This signal indicates that the slave is ready to accept an address and associated control signals: 1 = slave ready, 0 = slave not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8061,12 +8061,12 @@ exports['amba.com'] = {
             WID: {
               description: 'Write ID tag. This signal is the ID tag of the write data transfer. The WID value must match the AWID value of the write transaction.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -8077,11 +8077,11 @@ exports['amba.com'] = {
               description: 'Write data. The write data bus can be 8, 16, 32, 64, 128, 256, 512, or 1024 bits wide',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -8091,11 +8091,11 @@ exports['amba.com'] = {
             WSTRB: {
               description: 'Write strobes. This signal indicates which byte lanes to update in memory. There is one write strobe for each eight bits of the write data bus. ',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -8105,12 +8105,12 @@ exports['amba.com'] = {
             WLAST: {
               description: 'Write last. This signal indicates the last transfer in a write burst',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -8120,12 +8120,12 @@ exports['amba.com'] = {
             WVALID: {
               description: 'Write valid. This signal indicates that valid write data and strobes are available: 1 = write data and strobes available, 0 = write data and strobes not available.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8135,12 +8135,12 @@ exports['amba.com'] = {
             WREADY: {
               description: 'Write ready. This signal indicates that the slave can accept the write data: 1 = slave ready, 0 = slave not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8150,11 +8150,11 @@ exports['amba.com'] = {
             BID: {
               description: 'Response ID. The identification tag of the write response. The BID value must match the AWID value of the write transaction to which the slave is responding.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'out',
                 },
@@ -8163,12 +8163,12 @@ exports['amba.com'] = {
             BRESP: {
               description: 'Write response. This signal indicates the status of the write transaction. The allowable responses are OKAY, EXOKAY, SLVERR, and DECERR.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 2,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 2,
                   direction: 'out',
@@ -8179,12 +8179,12 @@ exports['amba.com'] = {
             BVALID: {
               description: 'Write response valid. This signal indicates that a valid write response is available: 1 = write response available, 0 = write response not available.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8194,12 +8194,12 @@ exports['amba.com'] = {
             BREADY: {
               description: 'Response ready. This signal indicates that the master can accept the response information. 1 = master ready, 0 = master not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8209,11 +8209,11 @@ exports['amba.com'] = {
             ARID: {
               description: 'Read address ID. This signal is the identification tag for the read address group of signals.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -8224,11 +8224,11 @@ exports['amba.com'] = {
               description: 'Read address. The read address bus gives the initial address of a read burst transaction. Only the start address of the burst is provided and the control signals that are issued alongside the address detail how the address is calculated for the remaining transfers in the burst.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -8238,12 +8238,12 @@ exports['amba.com'] = {
             ARLEN: {
               description: 'Burst length. The burst length gives the exact number of transfers in a burst. This information determines the number of data transfers associated with the address.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 8,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 8,
                   direction: 'in',
@@ -8254,12 +8254,12 @@ exports['amba.com'] = {
             ARSIZE: {
               description: 'Burst size. This signal indicates the size of each transfer in the burst',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 3,
                   direction: 'in',
@@ -8270,12 +8270,12 @@ exports['amba.com'] = {
             ARBURST: {
               description: 'Burst type. The burst type, coupled with the size information, details how the address for each transfer within the burst is calculated.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 2,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 2,
                   direction: 'in',
@@ -8286,12 +8286,12 @@ exports['amba.com'] = {
             ARLOCK: {
               description: 'Lock type. This signal provides additional information about the atomic characteristics of the transfer. The AMBA AXI4 Protocol does not support locked transfer sequences. This signal indicates an exclusive access (mapped to AxLOCK[0] from the AMBA AXI3 specification).',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -8302,12 +8302,12 @@ exports['amba.com'] = {
             ARCACHE: {
               description: 'Cache type. This signal provides additional information about the cacheable characteristics of the transfer.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -8318,12 +8318,12 @@ exports['amba.com'] = {
             ARPROT: {
               description: 'Protection type. This signal provides protection unit information for the transaction',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 3,
                   direction: 'in',
@@ -8333,12 +8333,12 @@ exports['amba.com'] = {
             ARQOS: {
               description: 'Quality of service value. 4-bit QoS identifier sent on the write address channel for each read transaction',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -8350,12 +8350,12 @@ exports['amba.com'] = {
               description: 'Slave region identifier sent on the read address channel for each transaction',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 4,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 4,
                   direction: 'in',
@@ -8366,12 +8366,12 @@ exports['amba.com'] = {
             ARVALID: {
               description: 'Read address valid. This signal indicates, when HIGH, that the read address and control information is valid and will remain stable until the address acknowledge signal, ARREADY, is high.\n1 = address and control information valid, 0 = address and control information not valid.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8381,12 +8381,12 @@ exports['amba.com'] = {
             ARREADY: {
               description: 'Read address ready. This signal indicates that the slave is ready to accept an address and associated control signals: 1 = slave ready, 0 = slave not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8396,11 +8396,11 @@ exports['amba.com'] = {
             RID: {
               description: 'Read ID tag. This signal is the ID tag of the read data group of signals. The RID value is generated by the slave and must match the ARID value of the read transaction to which it is responding.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'out',
                 },
@@ -8410,11 +8410,11 @@ exports['amba.com'] = {
               description: 'Read data. The read data bus can be 8, 16, 32, 64, 128, 256, 512, or 1024 bits wide',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -8424,12 +8424,12 @@ exports['amba.com'] = {
             RRESP: {
               description: 'Read response. This signal indicates the status of the read transfer. The allowable responses are OKAY, EXOKAY, SLVERR, and DECERR.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 2,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 2,
                   direction: 'out',
@@ -8440,12 +8440,12 @@ exports['amba.com'] = {
             RLAST: {
               description: 'Read last. This signal indicates the last transfer in a read burst',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8455,12 +8455,12 @@ exports['amba.com'] = {
             RVALID: {
               description: 'Read valid. This signal indicates that the required read data is available and the read transfer can complete: 1 = read data available, 0 = read data not available.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8470,12 +8470,12 @@ exports['amba.com'] = {
             RREADY: {
               description: 'Read ready. This signal indicates that the master can accept the read data and response information: 1= master ready, 0 = master not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8487,11 +8487,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'AW',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -8503,11 +8503,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'W',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -8519,11 +8519,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'B',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'out',
                 },
@@ -8535,11 +8535,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'AR',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -8551,11 +8551,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'R',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'out',
                 },
@@ -8628,12 +8628,12 @@ exports['amba.com'] = {
               description: 'Global clock signal. All signals are sampled on the rising edge of the global clock',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -8644,12 +8644,12 @@ exports['amba.com'] = {
             ACLKEN: {
               description: 'Clock enable signal. Used as a qualifier for the ACLK signal. This signal indicates which rising edges of ACLK should be acted upon: 1 = valid rising edge of ACLK, 0 = any rising edge of ACLK should be ignored and no bus-state altered.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -8662,12 +8662,12 @@ exports['amba.com'] = {
               description: 'Global reset signal. This signal is active LOW',
               wire: {
                 isReset: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -8679,11 +8679,11 @@ exports['amba.com'] = {
               description: 'Write address. The write address bus gives the address of the first transfer in a write burst transaction. The associated control signals are used to determine the addresses of the remaining transfers in the burst.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -8692,12 +8692,12 @@ exports['amba.com'] = {
             AWPROT: {
               description: 'Protection type. This signal indicates the normal, privileged, or secure protection level of the transaction and whether the transaction is a data access or an instruction access.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 3,
                   direction: 'in',
@@ -8707,12 +8707,12 @@ exports['amba.com'] = {
             AWVALID: {
               description: 'Write address valid. This signal indicates that valid write address and control information are available: 1 = address and control information available, 0 = address and control information not available. The address and control information remain stable until the address acknowledge signal, AWREADY, goes HIGH.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8722,12 +8722,12 @@ exports['amba.com'] = {
             AWREADY: {
               description: 'Write address ready. This signal indicates that the slave is ready to accept an address and associated control signals: 1 = slave ready, 0 = slave not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8738,11 +8738,11 @@ exports['amba.com'] = {
               description: 'Write data. The write data bus can be 8, 16, 32, 64, 128, 256, 512, or 1024 bits wide',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -8752,11 +8752,11 @@ exports['amba.com'] = {
             WSTRB: {
               description: 'Write strobes. This signal indicates which byte lanes to update in memory. There is one write strobe for each eight bits of the write data bus. ',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -8766,12 +8766,12 @@ exports['amba.com'] = {
             WVALID: {
               description: 'Write valid. This signal indicates that valid write data and strobes are available: 1 = write data and strobes available, 0 = write data and strobes not available.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8781,12 +8781,12 @@ exports['amba.com'] = {
             WREADY: {
               description: 'Write ready. This signal indicates that the slave can accept the write data: 1 = slave ready, 0 = slave not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8796,12 +8796,12 @@ exports['amba.com'] = {
             BRESP: {
               description: 'Write response. This signal indicates the status of the write transaction. The allowable responses are OKAY, EXOKAY, SLVERR, and DECERR.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 2,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 2,
                   direction: 'out',
@@ -8812,12 +8812,12 @@ exports['amba.com'] = {
             BVALID: {
               description: 'Write response valid. This signal indicates that a valid write response is available: 1 = write response available, 0 = write response not available.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8827,12 +8827,12 @@ exports['amba.com'] = {
             BREADY: {
               description: 'Response ready. This signal indicates that the master can accept the response information. 1 = master ready, 0 = master not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8843,11 +8843,11 @@ exports['amba.com'] = {
               description: 'Read address. The read address bus gives the initial address of a read burst transaction. Only the start address of the burst is provided and the control signals that are issued alongside the address detail how the address is calculated for the remaining transfers in the burst.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -8857,12 +8857,12 @@ exports['amba.com'] = {
             ARPROT: {
               description: 'Protection type. This signal provides protection unit information for the transaction',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 3,
                   direction: 'in',
@@ -8872,12 +8872,12 @@ exports['amba.com'] = {
             ARVALID: {
               description: 'Read address valid. This signal indicates, when HIGH, that the read address and control information is valid and will remain stable until the address acknowledge signal, ARREADY, is high.\n1 = address and control information valid, 0 = address and control information not valid.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8887,12 +8887,12 @@ exports['amba.com'] = {
             ARREADY: {
               description: 'Read address ready. This signal indicates that the slave is ready to accept an address and associated control signals: 1 = slave ready, 0 = slave not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8903,11 +8903,11 @@ exports['amba.com'] = {
               description: 'Read data. The read data bus can be 8, 16, 32, 64, 128, 256, 512, or 1024 bits wide',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -8917,12 +8917,12 @@ exports['amba.com'] = {
             RRESP: {
               description: 'Read response. This signal indicates the status of the read transfer. The allowable responses are OKAY, EXOKAY, SLVERR, and DECERR.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 2,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 2,
                   direction: 'out',
@@ -8933,12 +8933,12 @@ exports['amba.com'] = {
             RVALID: {
               description: 'Read valid. This signal indicates that the required read data is available and the read transfer can complete: 1 = read data available, 0 = read data not available.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -8948,12 +8948,12 @@ exports['amba.com'] = {
             RREADY: {
               description: 'Read ready. This signal indicates that the master can accept the read data and response information: 1= master ready, 0 = master not ready.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -8965,11 +8965,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'AW',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -8981,11 +8981,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'W',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -8997,11 +8997,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'B',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'out',
                 },
@@ -9013,11 +9013,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'AR',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -9029,11 +9029,11 @@ exports['amba.com'] = {
               isUser: true,
               group: 'R',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'out',
                 },
@@ -9064,12 +9064,12 @@ exports['amba.com'] = {
               description: 'Global clock signal. All signals are sampled on the rising edge of the global clock',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -9080,12 +9080,12 @@ exports['amba.com'] = {
             ACLKEN: {
               description: 'Clock enable signal. Used as a qualifier for the ACLK signal',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -9098,12 +9098,12 @@ exports['amba.com'] = {
               description: 'Global reset signal. This signal is active LOW',
               wire: {
                 isReset: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -9114,12 +9114,12 @@ exports['amba.com'] = {
             TVALID: {
               description: 'This signal indicates that the master is driving a valid transfer. A transfer takes place when both TVALID and TREADY are asserted.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -9129,12 +9129,12 @@ exports['amba.com'] = {
             TREADY: {
               description: 'This signal indicates that the slave can accept  a transfer in the current cycle.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'out',
@@ -9146,11 +9146,11 @@ exports['amba.com'] = {
               description: 'This bus is the primary payload that is used to provide the data that is passing across the interface. The width of the data payload is an integer number of bytes.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -9160,11 +9160,11 @@ exports['amba.com'] = {
             TSTRB: {
               description: 'TSTRB is the byte qualifier that indicates whether the content of the associated byte of TDATA is processed as a data byte of position byte. \n            When TSTRB is absent and TKEEP is present, TSTRB defaults to TKEEP.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -9174,11 +9174,11 @@ exports['amba.com'] = {
             TKEEP: {
               description: 'TKEEP is the byte qualifier that indicates whether the content of the associated byte of TDATA is processed as a data stream. Associated bytes that have the TKEEP byte qualifier deasserted are null bytes and can be removed from the data stream. ',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -9188,12 +9188,12 @@ exports['amba.com'] = {
             TLAST: {
               description: 'This signal indicates the boundary of a packet.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -9204,11 +9204,11 @@ exports['amba.com'] = {
             TID: {
               description: 'This is used as data stream identifier that indicates different streams of data.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -9218,11 +9218,11 @@ exports['amba.com'] = {
             TDEST: {
               description: 'This signal provides routing information for the data stream.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -9233,11 +9233,11 @@ exports['amba.com'] = {
               description: 'TUSER is user defined sideband information that can be transmitted alongside the data stream.',
               isUser: true,
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   direction: 'in',
                 },
@@ -9273,12 +9273,12 @@ exports['fossi-foundation.org'] = {
               description: 'The clock input [CLK] coordinates all activities for the internal logic within the WISHBONE interconnect. All WISHBONE output signals are registered at the rising edge of [CLK]. All WISHBONE input signals are stable before the rising edge of [CLK].',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -9290,12 +9290,12 @@ exports['fossi-foundation.org'] = {
               description: 'The reset input [RST] forces the WISHBONE interface to restart. Furthermore, all internal self-starting state machines will be forced into an initial state. This signal only resets the WISHBONE interface. It is not required to reset other parts of an IP core (although it may be used that way).',
               wire: {
                 isReset: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'optional',
                   width: 1,
                   direction: 'in',
@@ -9307,11 +9307,11 @@ exports['fossi-foundation.org'] = {
               description: 'The address array [ADR()] is used to pass a binary address. The higher array boundary is specific to the address width of the core, and the lower array boundary is determined by the data port size. For example the array size on a 32-bit data port with BYTE granularity is [ADR(n..2)]. In some cases (such as FIFO interfaces) the array may not be present on the interface.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -9321,11 +9321,11 @@ exports['fossi-foundation.org'] = {
               description: 'The data write array [DAT_WRITE] is used to pass binary data. The array boundaries are determined by the port size, with a maximum port size of 64-bits (e.g. [DAT_WRITE(63..0)]). Also see the [DAT_READ()] and [SEL()] signal descriptions.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -9335,11 +9335,11 @@ exports['fossi-foundation.org'] = {
               description: 'The data read array [DAT_READ()] is used to pass binary data. The array boundaries are determined by the port size, with a maximum port size of 64-bits (e.g. [DAT_READ(63..0)]). Also see the [DAT_WRITE()] and [SEL()] signal descriptions.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -9348,12 +9348,12 @@ exports['fossi-foundation.org'] = {
             WE: {
               description: 'The write enable [WE] indicates whether the current local bus cycle is a READ or WRITE cycle. The signal is negated during READ cycles, and is asserted during WRITE cycles.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -9363,12 +9363,12 @@ exports['fossi-foundation.org'] = {
             SEL: {
               description: 'The select array [SEL()] indicates where valid data is expected on the [DAT_READ()] signal array during READ cycles, and where it is placed on the [DAT_WRITE()] signal array during WRITE cycles. The array boundaries are determined by the granularity of a port. For example, if 8-bit granularity is used on a 64-bit port, then there would be an array of eight select signals with boundaries of [SEL(7..0)]. Each individual select signal correlates to one of eight active bytes on the 64-bit data port. For more information about [SEL()], please refer to the data organization section in Chapter 3 of this specification. Also see the [DAT_WRITE()], [DAT_READ()] and [STB] signal descriptions.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -9378,12 +9378,12 @@ exports['fossi-foundation.org'] = {
             CYC: {
               description: 'The cycle [CYC], when asserted, indicates that a valid bus cycle is in progress. The signal is asserted for the duration of all bus cycles. For example, during a BLOCK transfer cycle there can be multiple data transfers. The [CYC_O] signal is asserted during the first data transfer, and remains asserted until the last data transfer. The [CYC] signal is useful for interfaces with multi-port interfaces (such as dual port memories). In these cases, the [CYC] signal requests use of a common bus from an arbiter.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -9393,12 +9393,12 @@ exports['fossi-foundation.org'] = {
             STB: {
               description: 'The strobe [STB] indicates a valid data transfer cycle. It is used to qualify various other signals on the interface such as [SEL()]. The SLAVE asserts either the [ACK], [ERR] or [RTY] signals in response to every assertion of the [STB] signal.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -9408,12 +9408,12 @@ exports['fossi-foundation.org'] = {
             ACK: {
               description: 'The acknowledge [ACK], when asserted, indicates the normal termination of a bus cycle. Also see the [ERR] and [RTY] signal descriptions.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -9423,11 +9423,11 @@ exports['fossi-foundation.org'] = {
             TGD_WRITE: {
               description: 'Data tag type [TGD_WRITE()] is used on MASTER and SLAVE interfaces. It contains information that is associated with the data input array [DAT_WRITE()], and is qualified by signal [STB_I]. For example, parity protection, error correction and time stamp information can be attached to the data bus. These tag bits simplify the task of defining new signals because their timing (in relation to every bus cycle) is pre-defined by this specification. The name and operation of a data tag must be defined in the WISHBONE DATASHEET.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -9436,11 +9436,11 @@ exports['fossi-foundation.org'] = {
             TGD_READ: {
               description: 'Data tag type [TGD_O()] is used on MASTER and SLAVE interfaces. It contains information that is associated with the data output array [DAT_O()], and is qualified by signal [STB_O]. For example, parity protection, error correction and time stamp information can be attached to the data bus. These tag bits simplify the task of defining new signals because their timing (in relation to every bus cycle) is pre-defined by this specification. The name and operation of a data tag must be defined in the WISHBONE DATASHEET.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -9449,11 +9449,11 @@ exports['fossi-foundation.org'] = {
             TGA: {
               description: 'Address tag type [TGA()] contains information associated with address lines [ADR()], and is qualified by signal [STB]. For example, address size (24-bit, 32-bit etc.) and memory management (protected vs. unprotected) information can be attached to an address. These tag bits simplify the task of defining new signals because their timing (in relation to every bus cycle) is defined by this specification. The name and operation of an address tag must be defined in the WISHBONE DATASHEET.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -9462,11 +9462,11 @@ exports['fossi-foundation.org'] = {
             TGC: {
               description: 'Cycle tag type [TGC()] contains information associated with bus cycles, and is qualified by signal [CYC]. For example, data transfer, interrupt acknowledge and cache control cycles can be uniquely identified with the cycle tag. They can also be used to discriminate between WISHBONE SINGLE, BLOCK and RMW cycles. These tag bits simplify the task of defining new signals because their timing (in relation to every bus cycle) is defined by this specification. The name and operation of a cycle tag must be defined in the WISHBONE DATASHEET.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -9475,11 +9475,11 @@ exports['fossi-foundation.org'] = {
             ERR: {
               description: 'The error [ERR] indicates an abnormal cycle termination. The source of the error, and the response generated by the MASTER is defined by the IP core supplier. Also see the [ACK] and [RTY] signal descriptions.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                 },
@@ -9488,12 +9488,12 @@ exports['fossi-foundation.org'] = {
             LOCK: {
               description: 'The lock [LOCK] when asserted, indicates that the current bus cycle is uninterruptible. Lock is asserted to request complete ownership of the bus. Once the transfer has started, the INTERCON does not grant the bus to any other MASTER, until the current MASTER negates [LOCK] or [CYC].',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
@@ -9503,12 +9503,12 @@ exports['fossi-foundation.org'] = {
             RTY: {
               description: 'The retry [RTY] indicates that the interface is not ready to accept or send data, and that the cycle should be retried. When and how the cycle is retried is defined by the IP core supplier. Also see the [ERR] and [RTY] signal descriptions.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   width: 1,
                   direction: 'out',
@@ -9542,11 +9542,11 @@ exports['intel.com'] = {
               description: 'Parallel interface clock',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                 },
@@ -9556,11 +9556,11 @@ exports['intel.com'] = {
             RESETN: {
               description: 'Resets the transmitter and receiver.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -9569,11 +9569,11 @@ exports['intel.com'] = {
             POWERDOWN: {
               description: 'Forces TX output to electrical idle',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 2,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 2,
                   direction: 'in',
                 },
@@ -9582,11 +9582,11 @@ exports['intel.com'] = {
             RATE: {
               description: 'Link signalling rate',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 2,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 2,
                   direction: 'in',
                 },
@@ -9595,11 +9595,11 @@ exports['intel.com'] = {
             TXMARGIN: {
               description: 'Selects transmitter voltage level',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 3,
                   direction: 'in',
                 },
@@ -9609,11 +9609,11 @@ exports['intel.com'] = {
             TXSWING: {
               description: 'Transmitter voltage swing level',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -9622,11 +9622,11 @@ exports['intel.com'] = {
             BLKALNCTRL: {
               description: 'Block align control, controls whether the PHY performs block alignment',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -9635,11 +9635,11 @@ exports['intel.com'] = {
             WIDTH: {
               description: 'Controls the PIPE datapath width',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 2,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 2,
                   direction: 'in',
                 },
@@ -9648,11 +9648,11 @@ exports['intel.com'] = {
             PCLKRATE: {
               description: 'Controls the PIPE PCLK rate',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 3,
                   direction: 'in',
                 },
@@ -9662,11 +9662,11 @@ exports['intel.com'] = {
               description: 'Parallel data input bus',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   presence: 'required',
                 },
@@ -9675,11 +9675,11 @@ exports['intel.com'] = {
             TXDATAVALID: {
               description: 'Parallel data valid signal',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -9689,11 +9689,11 @@ exports['intel.com'] = {
               description: 'Parallel data output bus',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   presence: 'required',
                 },
@@ -9702,10 +9702,10 @@ exports['intel.com'] = {
             PHYMODE: {
               description: 'PHY operating mode',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9713,10 +9713,10 @@ exports['intel.com'] = {
             SRISEN: {
               description: 'Used to tell the PHY to configure itselff to support SRIS ',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9724,11 +9724,11 @@ exports['intel.com'] = {
             TXDETRXLPBK: {
               description: 'Used to tell the PHY to begin receiver detection or loopback ',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   presence: 'required',
                 },
@@ -9737,10 +9737,10 @@ exports['intel.com'] = {
             TXELECIDLE: {
               description: 'Forces TX output to electrical idle',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9748,10 +9748,10 @@ exports['intel.com'] = {
             RXTERM: {
               description: 'Controls presence of receiver terminations',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9759,10 +9759,10 @@ exports['intel.com'] = {
             RXSTANDBY: {
               description: 'Controls whether the PHY RX is active when the PHY is in P0 or POs',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9770,10 +9770,10 @@ exports['intel.com'] = {
             RXPOLARITY: {
               description: 'Tells PHY to invert the received data polarity',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9781,10 +9781,10 @@ exports['intel.com'] = {
             RXSTANDBYST: {
               description: 'Indicateds PHY RX Standby state',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -9792,10 +9792,10 @@ exports['intel.com'] = {
             PCLKCHNGACK: {
               description: 'Asserted by the MAC when a PCLK rate change is complete and stable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9803,10 +9803,10 @@ exports['intel.com'] = {
             ASYNCPWRCHNGACK: {
               description: 'After the PHY asserts PhyStatus, the MAC responds with this',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9814,11 +9814,11 @@ exports['intel.com'] = {
             RXVALID: {
               description: 'Parallel data valid signal',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   presence: 'required',
                 },
@@ -9827,11 +9827,11 @@ exports['intel.com'] = {
             PHYSTATUS: {
               description: 'Used to communicate completion of several PHY functions',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   presence: 'required',
                 },
@@ -9840,11 +9840,11 @@ exports['intel.com'] = {
             RXELECIDLE: {
               description: 'Indicates receiver detection of the electrical idle',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   presence: 'required',
                 },
@@ -9853,11 +9853,11 @@ exports['intel.com'] = {
             RXSTATUS: {
               description: 'RX status',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -9866,10 +9866,10 @@ exports['intel.com'] = {
             PCLKCHNGOK: {
               description: 'Indicates that PHY is ready for the MACto change PCLK rate',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -9877,10 +9877,10 @@ exports['intel.com'] = {
             M2PMSGBUS: {
               description: 'MAC to PHY message bus',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9888,10 +9888,10 @@ exports['intel.com'] = {
             P2MMSGBUS: {
               description: 'PHY to MAC message bus',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -9899,11 +9899,11 @@ exports['intel.com'] = {
             TXDATAK: {
               description: 'data/control switch for the transmit symbols',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'in',
                 },
@@ -9912,10 +9912,10 @@ exports['intel.com'] = {
             TXSTARTBLCK: {
               description: 'This is a way for MAC to label a starting byte of a 128 byte block',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9923,11 +9923,11 @@ exports['intel.com'] = {
             RXDATAK: {
               description: 'data/control switch for the receive symbols',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -9936,11 +9936,11 @@ exports['intel.com'] = {
             RXDATAVALID: {
               description: 'PHY to MAC data valid',
               wire: {
-                onMaster: {
+                onInitiator: {
                   presence: 'required',
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   presence: 'required',
                   direction: 'out',
                 },
@@ -9949,10 +9949,10 @@ exports['intel.com'] = {
             RXSTARTBLCK: {
               description: 'This is a way for PHY to label a starting byte of a 128 byte block',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -9960,10 +9960,10 @@ exports['intel.com'] = {
             TXCOMP: {
               description: 'TX compliance, sets the running disparity to negative when transmitting PCI Express compliance pattern',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9971,10 +9971,10 @@ exports['intel.com'] = {
             TXSYNCHDR: {
               description: 'Provides a sync header  for PHY to use in the next 130b block',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -9982,10 +9982,10 @@ exports['intel.com'] = {
             RXSYNCHDR: {
               description: 'Provides a sync header  for MAC to use in the next 130b block',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -9993,10 +9993,10 @@ exports['intel.com'] = {
             ENCDECBYPASS: {
               description: '8b/10b bypass',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -10004,11 +10004,11 @@ exports['intel.com'] = {
             RXPRESETHINT: {
               description: 'Provides the RX preset hint to the receiver',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 3,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 3,
                   direction: 'in',
                 },
@@ -10017,11 +10017,11 @@ exports['intel.com'] = {
             LEFFM: {
               description: 'Link Equalization Feedback Figure of Merit value',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                 },
@@ -10030,11 +10030,11 @@ exports['intel.com'] = {
             LEFDC: {
               description: 'Link Equalization Feedback Direction Change',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                 },
@@ -10043,11 +10043,11 @@ exports['intel.com'] = {
             INVALIDREQ: {
               description: 'Indication that requested TX EQ setting was out of range',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10056,11 +10056,11 @@ exports['intel.com'] = {
             RXEIDETECTDISABLE: {
               description: 'Asynchronously disables the RX Electrical Idle detect logic',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10069,11 +10069,11 @@ exports['intel.com'] = {
             TXCOMMONMODEDISABLE: {
               description: 'Asynchronously disables the transmitter DC common mode logic',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10082,11 +10082,11 @@ exports['intel.com'] = {
             RXEQTRAINING: {
               description: 'RX to bypass normal operation to perform equalization training. USB only.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10095,11 +10095,11 @@ exports['intel.com'] = {
             TXONESZEROS: {
               description: 'Used to instruct the receiver to bypass normal operation to perform equalization training. USB only.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10108,11 +10108,11 @@ exports['intel.com'] = {
             TXPATTERN: {
               description: 'Controls which pattern the PHY sends. SATA only.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 2,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 2,
                   direction: 'in',
                 },
@@ -10121,11 +10121,11 @@ exports['intel.com'] = {
             ALIGNDETECT: {
               description: 'Indicates receiver detection of an Align. SATA only.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                 },
@@ -10159,11 +10159,11 @@ exports['sifive.com'] = {
               wire: {
                 isClock: true,
                 requiresDriver: true,
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10172,11 +10172,11 @@ exports['sifive.com'] = {
             RDEN: {
               description: 'Read enable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10185,11 +10185,11 @@ exports['sifive.com'] = {
             BEN: {
               description: 'Byte enable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'BEN_WIDTH',
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'BEN_WIDTH',
                   direction: 'in',
                 },
@@ -10198,12 +10198,12 @@ exports['sifive.com'] = {
             ADDR: {
               description: 'Read / Write port address',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'ADDR_WIDTH',
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'ADDR_WIDTH',
                   direction: 'in',
                   presence: 'required',
@@ -10213,12 +10213,12 @@ exports['sifive.com'] = {
             RDDATA: {
               description: 'Read port data',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'DATA_WIDTH',
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'DATA_WIDTH',
                   direction: 'out',
                   presence: 'required',
@@ -10228,10 +10228,10 @@ exports['sifive.com'] = {
             RDERR: {
               description: 'If ECC feature is present, this signals that an undorrectable error was detected on the read data',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -10259,12 +10259,12 @@ exports['sifive.com'] = {
               wire: {
                 isClock: true,
                 requiresDriver: true,
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'optional',
@@ -10274,12 +10274,12 @@ exports['sifive.com'] = {
             WREN: {
               description: 'Write enable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
@@ -10289,12 +10289,12 @@ exports['sifive.com'] = {
             RDEN: {
               description: 'Read enable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
@@ -10304,12 +10304,12 @@ exports['sifive.com'] = {
             BEN: {
               description: 'Byte enable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'BEN_WIDTH',
                   direction: 'out',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'BEN_WIDTH',
                   direction: 'in',
                   presence: 'optional',
@@ -10319,12 +10319,12 @@ exports['sifive.com'] = {
             ADDR: {
               description: 'Read / Write port address',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'ADDR_WIDTH',
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'ADDR_WIDTH',
                   direction: 'in',
                   presence: 'required',
@@ -10334,12 +10334,12 @@ exports['sifive.com'] = {
             WRDATA: {
               description: 'Write port data',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'DATA_WIDTH',
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'DATA_WIDTH',
                   direction: 'in',
                   presence: 'required',
@@ -10349,12 +10349,12 @@ exports['sifive.com'] = {
             RDDATA: {
               description: 'Read port data',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'DATA_WIDTH',
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'DATA_WIDTH',
                   direction: 'out',
                   presence: 'required',
@@ -10364,11 +10364,11 @@ exports['sifive.com'] = {
             RDERR: {
               description: 'If ECC feature is present, this signals that an undorrectable error was detected on the read data',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   presence: 'optional',
                 },
@@ -10397,12 +10397,12 @@ exports['sifive.com'] = {
               wire: {
                 isClock: true,
                 requiresDriver: true,
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'optional',
@@ -10412,12 +10412,12 @@ exports['sifive.com'] = {
             WREN: {
               description: 'Write enable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
@@ -10427,12 +10427,12 @@ exports['sifive.com'] = {
             BEN: {
               description: 'Byte enable',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'BEN_WIDTH',
                   direction: 'out',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'BEN_WIDTH',
                   direction: 'in',
                   presence: 'optional',
@@ -10442,12 +10442,12 @@ exports['sifive.com'] = {
             ADDR: {
               description: 'Read / Write port address',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'ADDR_WIDTH',
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'ADDR_WIDTH',
                   direction: 'in',
                   presence: 'required',
@@ -10457,12 +10457,12 @@ exports['sifive.com'] = {
             WRDATA: {
               description: 'Write port data',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 'DATA_WIDTH',
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 'DATA_WIDTH',
                   direction: 'in',
                   presence: 'required',
@@ -10472,11 +10472,11 @@ exports['sifive.com'] = {
             RDERR: {
               description: 'If ECC feature is present, this signals that an undorrectable error was detected on the read data',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   presence: 'optional',
                 },
@@ -10506,11 +10506,11 @@ exports['sifive.com'] = {
               description: 'clock signals',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   presence: 'required',
                 },
@@ -10519,7 +10519,8 @@ exports['sifive.com'] = {
           },
           props: {
             frequency: {
-              type: 'integer',
+              type: 'number',
+              minimum: 0,
             },
           },
         },
@@ -10542,11 +10543,11 @@ exports['sifive.com'] = {
             IRQ: {
               description: 'Interrupt request signals',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   presence: 'required',
                 },
@@ -10575,12 +10576,12 @@ exports['sifive.com'] = {
             insn: {
               description: 'instruction word',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
@@ -10590,12 +10591,12 @@ exports['sifive.com'] = {
             unpipelined: {
               description: 'unpipelined unit to be used',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
@@ -10605,12 +10606,12 @@ exports['sifive.com'] = {
             pipelined: {
               description: 'pipelined unit to be used',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
@@ -10639,12 +10640,12 @@ exports['sifive.com'] = {
               description: 'Must be used to clock a positive-edge-triggered pipeline register. The functional unit must contain exactly one stage of pipeline register. for two-cycle SCIE only.',
               isClock: true,
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'optional',
@@ -10654,12 +10655,12 @@ exports['sifive.com'] = {
             valid: {
               description: 'An active-high signal is also provided so that the unit may gate the clock of its pipeline register to save power. The signal may be safely ignored.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                   presence: 'optional',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'optional',
@@ -10669,12 +10670,12 @@ exports['sifive.com'] = {
             insn: {
               description: 'instruction word',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
@@ -10684,12 +10685,12 @@ exports['sifive.com'] = {
             rs1: {
               description: 'rs1 value',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
@@ -10699,12 +10700,12 @@ exports['sifive.com'] = {
             rs2: {
               description: 'rs2 value',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
@@ -10714,12 +10715,12 @@ exports['sifive.com'] = {
             rd: {
               description: 'rd value',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
@@ -10747,12 +10748,12 @@ exports['sifive.com'] = {
             insn: {
               description: 'instruction word',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
@@ -10762,12 +10763,12 @@ exports['sifive.com'] = {
             rs1: {
               description: 'rs1 value',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
@@ -10777,12 +10778,12 @@ exports['sifive.com'] = {
             rs2: {
               description: 'rs2 value',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
@@ -10792,12 +10793,12 @@ exports['sifive.com'] = {
             rd: {
               description: 'rd value',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 32,
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 32,
                   direction: 'out',
                   presence: 'required',
@@ -10829,12 +10830,12 @@ exports['sifive.com'] = {
               requiresDriver: true,
               isClock: true,
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
@@ -10844,12 +10845,12 @@ exports['sifive.com'] = {
             TMS: {
               description: 'Mode Select',
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
@@ -10860,12 +10861,12 @@ exports['sifive.com'] = {
               description: 'Data Input',
               isData: true,
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
@@ -10876,12 +10877,12 @@ exports['sifive.com'] = {
               description: 'Data Output',
               isData: true,
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'in',
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'out',
                   presence: 'required',
@@ -10892,11 +10893,11 @@ exports['sifive.com'] = {
               description: 'Reset',
               isReset: true,
               wire: {
-                onMaster: {
+                onInitiator: {
                   width: 1,
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   width: 1,
                   direction: 'in',
                 },
@@ -10926,11 +10927,11 @@ exports['sifive.com'] = {
               description: 'clock',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -10939,11 +10940,11 @@ exports['sifive.com'] = {
             a_code: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 3,
                 },
@@ -10952,11 +10953,11 @@ exports['sifive.com'] = {
             a_param: {
               description: 'Parameter code. Meaning depends on a_opcode; specifies a transfer of caching permissions or a sub-opcode.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 3,
                 },
@@ -10965,10 +10966,10 @@ exports['sifive.com'] = {
             a_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -10976,10 +10977,10 @@ exports['sifive.com'] = {
             a_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -10988,10 +10989,10 @@ exports['sifive.com'] = {
               description: 'Target byte address of the operation. Must be aligned to a_size.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -10999,10 +11000,10 @@ exports['sifive.com'] = {
             a_mask: {
               description: 'Byte lane select for messages with data.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11011,10 +11012,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11022,11 +11023,11 @@ exports['sifive.com'] = {
             a_corrupt: {
               description: 'The data in this beat is corrupt.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11035,12 +11036,12 @@ exports['sifive.com'] = {
             a_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
@@ -11050,11 +11051,11 @@ exports['sifive.com'] = {
             a_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11063,11 +11064,11 @@ exports['sifive.com'] = {
             b_opcode: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 3,
                 },
@@ -11076,11 +11077,11 @@ exports['sifive.com'] = {
             b_param: {
               description: 'Parameter code. Meaning depends on ; specifies a transfer of caching permissions or a sub-opcode.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 3,
                 },
@@ -11089,10 +11090,10 @@ exports['sifive.com'] = {
             b_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11100,10 +11101,10 @@ exports['sifive.com'] = {
             b_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11112,10 +11113,10 @@ exports['sifive.com'] = {
               description: 'Target byte address of the operation. Must be aligned to b_size.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11123,10 +11124,10 @@ exports['sifive.com'] = {
             b_mask: {
               description: 'Byte lane select for messages with data.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11135,10 +11136,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11146,11 +11147,11 @@ exports['sifive.com'] = {
             b_corrupt: {
               description: 'Corruption was detected in data payload.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11159,12 +11160,12 @@ exports['sifive.com'] = {
             b_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
@@ -11174,11 +11175,11 @@ exports['sifive.com'] = {
             b_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11187,11 +11188,11 @@ exports['sifive.com'] = {
             c_opcode: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 3,
                 },
@@ -11200,11 +11201,11 @@ exports['sifive.com'] = {
             c_param: {
               description: 'Parameter code. Meaning depends on ; specifies a transfer of caching permissions.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 3,
                 },
@@ -11213,10 +11214,10 @@ exports['sifive.com'] = {
             c_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11224,10 +11225,10 @@ exports['sifive.com'] = {
             c_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11236,10 +11237,10 @@ exports['sifive.com'] = {
               description: 'Target byte address of the operation. Must be aligned to c_size.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11248,10 +11249,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11259,11 +11260,11 @@ exports['sifive.com'] = {
             c_corrupt: {
               description: 'Corruption was detected in data payload.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11272,12 +11273,12 @@ exports['sifive.com'] = {
             c_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
@@ -11287,11 +11288,11 @@ exports['sifive.com'] = {
             c_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11300,11 +11301,11 @@ exports['sifive.com'] = {
             d_opcode: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 3,
                 },
@@ -11313,11 +11314,11 @@ exports['sifive.com'] = {
             d_param: {
               description: 'Parameter code. Meaning depends on d_opcode; specifies permissions to transfer or a sub-opcode.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 2,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 2,
                 },
@@ -11326,10 +11327,10 @@ exports['sifive.com'] = {
             d_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11337,10 +11338,10 @@ exports['sifive.com'] = {
             d_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11348,10 +11349,10 @@ exports['sifive.com'] = {
             d_sink: {
               description: 'Per-link slave sink identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11359,11 +11360,11 @@ exports['sifive.com'] = {
             d_denied: {
               description: 'The slave was unable to service the request.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11373,10 +11374,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11384,11 +11385,11 @@ exports['sifive.com'] = {
             d_corrupt: {
               description: 'Corruption was detected in the data payload.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11397,12 +11398,12 @@ exports['sifive.com'] = {
             d_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
@@ -11412,11 +11413,11 @@ exports['sifive.com'] = {
             d_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11425,10 +11426,10 @@ exports['sifive.com'] = {
             e_sink: {
               description: 'Per-link slave sink identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11436,12 +11437,12 @@ exports['sifive.com'] = {
             e_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
@@ -11451,11 +11452,11 @@ exports['sifive.com'] = {
             e_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11483,11 +11484,11 @@ exports['sifive.com'] = {
               description: 'clock',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11496,11 +11497,11 @@ exports['sifive.com'] = {
             a_code: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 3,
                 },
@@ -11509,11 +11510,11 @@ exports['sifive.com'] = {
             a_param: {
               description: 'Parameter code. Meaning depends on a_opcode; specifies a transfer of caching permissions or a sub-opcode.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 3,
                 },
@@ -11522,10 +11523,10 @@ exports['sifive.com'] = {
             a_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11533,10 +11534,10 @@ exports['sifive.com'] = {
             a_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11545,10 +11546,10 @@ exports['sifive.com'] = {
               description: 'Target byte address of the operation. Must be aligned to a_size.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11556,10 +11557,10 @@ exports['sifive.com'] = {
             a_mask: {
               description: 'Byte lane select for messages with data.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11568,10 +11569,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11579,11 +11580,11 @@ exports['sifive.com'] = {
             a_corrupt: {
               description: 'The data in this beat is corrupt.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11592,12 +11593,12 @@ exports['sifive.com'] = {
             a_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
@@ -11607,11 +11608,11 @@ exports['sifive.com'] = {
             a_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11620,11 +11621,11 @@ exports['sifive.com'] = {
             d_opcode: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 3,
                 },
@@ -11633,11 +11634,11 @@ exports['sifive.com'] = {
             d_param: {
               description: 'Parameter code. Meaning depends on d_opcode; specifies permissions to transfer or a sub-opcode.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 2,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 2,
                 },
@@ -11646,10 +11647,10 @@ exports['sifive.com'] = {
             d_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11657,10 +11658,10 @@ exports['sifive.com'] = {
             d_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11668,11 +11669,11 @@ exports['sifive.com'] = {
             d_denied: {
               description: 'The slave was unable to service the request.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11682,10 +11683,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11693,11 +11694,11 @@ exports['sifive.com'] = {
             d_corrupt: {
               description: 'Corruption was detected in the data payload.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11706,12 +11707,12 @@ exports['sifive.com'] = {
             d_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
@@ -11721,11 +11722,11 @@ exports['sifive.com'] = {
             d_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11753,11 +11754,11 @@ exports['sifive.com'] = {
               description: 'clock',
               wire: {
                 isClock: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11766,11 +11767,11 @@ exports['sifive.com'] = {
             a_code: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 3,
                 },
@@ -11779,10 +11780,10 @@ exports['sifive.com'] = {
             a_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11790,10 +11791,10 @@ exports['sifive.com'] = {
             a_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11802,10 +11803,10 @@ exports['sifive.com'] = {
               description: 'Target byte address of the operation. Must be aligned to a_size.',
               wire: {
                 isAddress: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11813,10 +11814,10 @@ exports['sifive.com'] = {
             a_mask: {
               description: 'Byte lane select for messages with data.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11825,10 +11826,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                 },
               },
@@ -11836,11 +11837,11 @@ exports['sifive.com'] = {
             a_corrupt: {
               description: 'The data in this beat is corrupt.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
@@ -11849,12 +11850,12 @@ exports['sifive.com'] = {
             a_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
@@ -11864,11 +11865,11 @@ exports['sifive.com'] = {
             a_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11877,11 +11878,11 @@ exports['sifive.com'] = {
             d_opcode: {
               description: 'Operation code. Identifies the type of message carried by the channel.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 3,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 3,
                 },
@@ -11890,10 +11891,10 @@ exports['sifive.com'] = {
             d_size: {
               description: 'Logarithm of the operation size: 2^n bytes.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11901,10 +11902,10 @@ exports['sifive.com'] = {
             d_source: {
               description: 'Per-link master source identifier.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11912,11 +11913,11 @@ exports['sifive.com'] = {
             d_denied: {
               description: 'The slave was unable to service the request.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11926,10 +11927,10 @@ exports['sifive.com'] = {
               description: 'Data payload for messages with data.',
               wire: {
                 isData: true,
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                 },
               },
@@ -11937,11 +11938,11 @@ exports['sifive.com'] = {
             d_corrupt: {
               description: 'Corruption was detected in the data payload.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                 },
@@ -11950,12 +11951,12 @@ exports['sifive.com'] = {
             d_valid: {
               description: 'The sender is offering progress on an operation.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'in',
                   width: 1,
                   presence: 'required',
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'out',
                   width: 1,
                   presence: 'required',
@@ -11965,11 +11966,11 @@ exports['sifive.com'] = {
             d_ready: {
               description: 'The receiver accepted the offered progress.',
               wire: {
-                onMaster: {
+                onInitiator: {
                   direction: 'out',
                   width: 1,
                 },
-                onSlave: {
+                onTarget: {
                   direction: 'in',
                   width: 1,
                 },
