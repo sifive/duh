@@ -797,7 +797,7 @@ const portMapper = (comp, ports, bi, portMaps, role) => {
   }
 
   if (isTarget(bi)) {
-    const onRole = onTarget(ports[role]).wire;
+    const onRole = onTarget(ports[role].wire);
 
     const isIncompatible = checkCompatibility(onRole, comp.model.ports, c2);
     if (isIncompatible) {
