@@ -1050,12 +1050,19 @@ const abTable = registers => {
   if (registers.length === 0) {
     return ['div'];
   }
-  const head = ['tr', ['th', 'Offset'], ['th', 'Name'], ['th', 'Description'], ['th', 'Reset']];
+  const head = ['tr',
+    ['th', 'Offset'],
+    ['th', 'Name'],
+    ['th', 'Description'],
+    ['th', 'Reset'],
+    ['th', 'Mask']
+  ];
   const rows = registers.map(reg => ['tr',
     ['td', hex(reg.addressOffset)],
     ['td', reg.name ? ['a', {href: '#' + reg.name}, reg.name] : '---'],
     ['td', reg.description || ''],
-    ['td', hex(reg.resetValue)]
+    ['td', hex(reg.resetValue)],
+    ['td', hex(reg.resetMask)]
   ]);
   return ['div', {class: 'tabler'}, ['table'].concat([head]).concat(rows)];
 };
@@ -1079,8 +1086,9 @@ const render = comp => {
           .concat((ab.registers || []).map(reg =>
             ['div',
               ['h5', {id: reg.name}, reg.name],
-              ['div', ['b', 'Offset: '], hex(reg.addressOffset)],
-              ['div', ['b', 'Reset: '], hex(reg.resetValue)],
+              ['span', ['b', 'Offset: '], hex(reg.addressOffset), ' : '],
+              ['span', ['b', 'Reset: '], hex(reg.resetValue), ' : '],
+              ['span', ['b', 'Mask: '], hex(reg.resetMask)],
               ['div', reg.description || ''],
               csrDisgram(reg),
               csrTable(reg.fields)
