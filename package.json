@@ -26,13 +26,13 @@
     "url": "https://github.com/sifive/duh/issues"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
-    "ajv": "^6.12.3",
+    "ajv": "^6.12.5",
     "concat-stream": "^2.0.0",
-    "duh-bus": "^0.9.2",
+    "duh-bus": "^0.10.0",
     "duh-core": "^0.12.0",
     "duh-scala": "^0.16.0",
     "duhportinf": "^0.4.0",
@@ -44,7 +44,7 @@
     "onml": "^1.1.0",
     "pinlist": "^0.12.5",
     "winston": "^3.3.3",
-    "yargs": "^15.4.0"
+    "yargs": "^16.0.3"
   },
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
