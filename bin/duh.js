@@ -37,7 +37,7 @@ yargs
     }
   })
   .command({
-    command: 'validate [filename]',
+    command: 'validate filename',
     aliases: ['val'],
     desc: 'validate document',
     handler: lib.validate,
