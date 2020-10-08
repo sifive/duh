@@ -4,7 +4,7 @@
   "description": "Design Unit Hardware",
   "main": "lib/index.js",
   "scripts": {
-    "test": "eslint lib bin && nyc -r=text -r=lcov mocha"
+    "test": "eslint lib test bin && nyc -r=text -r=lcov mocha"
   },
   "files": [
     "lib"
