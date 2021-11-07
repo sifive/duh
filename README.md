@@ -13,7 +13,7 @@ to output deliverables.
 
 ## Install
 
-Check that you have `Node.js` version (12 - 17) installed by running:
+Check that you have `Node.js` version (12, 14, 16) installed by running:
 
 ```
 node --version
