@@ -13,7 +13,7 @@ to output deliverables.
 
 ## Install
 
-Check that you have `Node.js` version (6 - 11) installed by running:
+Check that you have `Node.js` version (12 - 17) installed by running:
 
 ```
 node --version
@@ -25,6 +25,14 @@ Install `duh` tool suite.
 
 ```bash
 npm i duh
+```
+
+You might need to add `./node_modules/.bin/` to your PATH
+
+In Bash:
+
+```sh
+export PATH=./node_modules/.bin:$PATH
 ```
 
 And test installation with `duh --help`
