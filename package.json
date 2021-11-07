@@ -26,7 +26,7 @@
     "url": "https://github.com/sifive/duh/issues"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
@@ -37,21 +37,21 @@
     "duh-scala": "^0.16.0",
     "duhportinf": "^0.4.0",
     "fs-extra": "^10.0.0",
-    "inquirer": "^8.1.3",
+    "inquirer": "^8.2.0",
     "json-refs": "^3.0.12",
     "json5": "^2.1.3",
     "lodash.get": "^4.4.2",
     "onml": "^2.1.0",
     "pinlist": "^0.13.0",
     "winston": "^3.3.3",
-    "yargs": "^17.1.1"
+    "yargs": "^17.2.1"
   },
   "devDependencies": {
     "@drom/eslint-config": "^0.10.0",
     "chai": "^4.2.0",
     "coveralls": "^3.1.1",
-    "eslint": "^7.32.0",
-    "mocha": "^9.1.1",
+    "eslint": "^8.2.0",
+    "mocha": "^9.1.3",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^15.1.0"
   },
