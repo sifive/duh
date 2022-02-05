@@ -24,7 +24,7 @@ On [Installing Node.js via package manager](https://nodejs.org/en/download/packa
 Install `duh` tool suite.
 
 ```bash
-npm i duh
+npm i -g duh
 ```
 
 You might need to add `./node_modules/.bin/` to your PATH
