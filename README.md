@@ -67,6 +67,7 @@ Base set of DUH tools to author [duh documents](docs/):
 
 * [duh-scala](https://github.com/sifive/duh-scala) -- Scala / Chisel export
 * [duh-ipxact](https://github.com/sifive/duh-ipxact) -- IP-XACT import / export
+* [duh-systemrdl](https://github.com/sifive/duh-systemrdl) -- SystemRDL import / export
 * [duhportinf](https://github.com/sifive/duhportinf) -- Bus interfaces inference
 * [duh-bus](https://github.com/sifive/duh-bus) -- DUH Bus Definitions
 * [duh-schema](https://github.com/sifive/duh-schema) -- DUH document JSON schema
