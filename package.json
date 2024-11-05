@@ -26,32 +26,32 @@
     "url": "https://github.com/sifive/duh/issues"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
-    "ajv": "^8.6.3",
+    "ajv": "^8.17.1",
     "concat-stream": "^2.0.0",
-    "duh-bus": "^0.11.0",
-    "duh-core": "^0.16.0",
-    "duh-scala": "^0.16.0",
-    "fs-extra": "^11",
-    "inquirer": "^8.2.0",
+    "duh-bus": "0.12.1",
+    "duh-core": "0.16.0",
+    "duh-scala": "0.16.0",
+    "fs-extra": "11.2.0",
+    "inquirer": "^8.2.6",
     "json-refs": "^3.0.12",
     "json5": "^2.1.3",
     "lodash.get": "^4.4.2",
     "onml": "^2.1.0",
-    "winston": "^3.3.3",
+    "winston": "^3.16.0",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
     "@drom/eslint-config": "^0.12.0",
-    "chai": "^4.2.0",
+    "chai": "^4.5.0",
     "coveralls": "^3.1.1",
-    "eslint": "^8.2.0",
-    "mocha": "^10",
+    "eslint": "8.57.1",
+    "mocha": "10.8.2",
     "mocha-lcov-reporter": "^1.3.0",
-    "nyc": "^15.1.0"
+    "nyc": "17.1.0"
   },
   "eslintConfig": {
     "extends": "@drom/eslint-config/eslint4/node8"
