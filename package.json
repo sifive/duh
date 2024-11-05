@@ -35,7 +35,6 @@
     "duh-bus": "^0.11.0",
     "duh-core": "^0.16.0",
     "duh-scala": "^0.16.0",
-    "duhportinf": "^0.4.0",
     "fs-extra": "^11",
     "inquirer": "^8.2.0",
     "json-refs": "^3.0.12",
