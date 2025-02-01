@@ -1,0 +1,514 @@
+{
+    "component": {
+        "vendor": "Lampro-Mellon",
+        "library": "blocks",
+        "name": "pio",
+        "version": "0.1.0",
+        "busInterfaces": [
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_0-prefix_t_ctrl-slave-AXI4-Lite_rtl"},
+            {"$ref": "#/definitions/bundleDefinitions/bundle-root"}
+        ],
+        "addressSpaces": [],
+        "memoryMaps": [{
+            "name": "CSR",
+            addressBlocks: [{
+                name: 'csrAddressBlock',
+                baseAddress: 0,
+                range: 1024, width: 32,
+                usage: 'register',
+                volatile: false, access: 'read-write',
+                registers: [{
+                    name: 'ODATA',
+                    addressOffset: 0, size: 32,
+                    displayName: 'Output Data Register',
+                    fields: [{name: 'data', bitWidth: 32, bitOffset: 0}]
+                }, {
+                    name: 'OENABLE', addressOffset: 4, size: 32,
+                    displayName: 'Data direction',
+                    description: 'determines whether the pin is an input or an output. If the data direction bit is a 1, then the pin is an input',
+                    fields: [{name: 'data', bitWidth: 32, bitOffset: 0}]
+                }, {
+                    name: 'IDATA', addressOffset: 8, size: 32,
+                    displayName: 'Input data',
+                    description: 'read the port pins',
+                    fields: [{name: 'data', bitWidth: 32, bitOffset: 0}]
+                }]
+            }]
+        }],
+        "model": {
+            "views": [],
+            "ports": {
+                "$ref": "#/definitions/ports"
+            }
+        },
+        "fileSets": {},
+        "pSchema": {
+            "type": "object",
+            "properties": {
+                "addrWidth": {
+                    "title": "Address bus width",
+                    "type": "integer",
+                    "minimum": 6,
+                    "maximum": 32,
+                    "default": 12
+                },
+                "dataWidth": {
+                    "title": "Data bus width",
+                    "type": "integer",
+                    "minimum": 32,
+                    "maximum": 64,
+                    "default": 32
+                },
+                "pioWidth": {
+                    "title": "Number of IO pads",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 32,
+                    "default": 32
+                },
+                "writeStrobeWidth": {
+                    "title": "Write strobe width",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 4,
+                    "default": 4
+                }
+            }
+        },
+        "busInterfaceAlts": [
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_1-prefix_t_ctrl-master-AXI4-Lite_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_2-prefix_t_ctrl-master-AXI4_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_3-prefix_t_ctrl-slave-UL_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_4-prefix_t_ctrl-slave-UH_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_5-prefix_t_ctrl-master-JTAG_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_6-prefix_t_ctrl-slave-JTAG_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_7-prefix_t_ctrl-slave-pipelined_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_8-prefix_t_ctrl-slave-unpipelined_rtl"}
+        ]
+    },
+    "definitions": {
+        "ports": {
+            "t_ctrl_awvalid": 1,
+            "t_ctrl_awready": -1,
+            "t_ctrl_awaddr": 32,
+            "t_ctrl_awprot": 3,
+            "t_ctrl_wvalid": 1,
+            "t_ctrl_wready": -1,
+            "t_ctrl_wdata": 32,
+            "t_ctrl_wstrb": 4,
+            "t_ctrl_bvalid": -1,
+            "t_ctrl_bready": 1,
+            "t_ctrl_bresp": -2,
+            "t_ctrl_arvalid": 1,
+            "t_ctrl_arready": -1,
+            "t_ctrl_araddr": 32,
+            "t_ctrl_arprot": 3,
+            "t_ctrl_rvalid": -1,
+            "t_ctrl_rready": 1,
+            "t_ctrl_rdata": -32,
+            "t_ctrl_rresp": -2,
+            "irq0": -1,
+            "irq1": -1,
+            "odata": -10,
+            "oenable": -10,
+            "idata": 10,
+            "clk": 1,
+            "reset_n": 1
+        },
+        "pg_cnt": 1,
+        "busDefinitions": {
+            "busint-portgroup_0-mapping_0-prefix_t_ctrl-slave-AXI4-Lite_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4-Lite",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "AWADDR": "t_ctrl_awaddr",
+                            "BREADY": "t_ctrl_bready",
+                            "ARVALID": "t_ctrl_arvalid",
+                            "ARREADY": "t_ctrl_arready",
+                            "RDATA": "t_ctrl_rdata",
+                            "BRESP": "t_ctrl_bresp",
+                            "RREADY": "t_ctrl_rready",
+                            "AWVALID": "t_ctrl_awvalid",
+                            "AWREADY": "t_ctrl_awready",
+                            "WVALID": "t_ctrl_wvalid",
+                            "WSTRB": "t_ctrl_wstrb",
+                            "ARPROT": "t_ctrl_arprot",
+                            "BVALID": "t_ctrl_bvalid",
+                            "RVALID": "t_ctrl_rvalid",
+                            "AWPROT": "t_ctrl_awprot",
+                            "RRESP": "t_ctrl_rresp",
+                            "ARADDR": "t_ctrl_araddr",
+                            "WREADY": "t_ctrl_wready",
+							"__UMAP__": [
+                                "t_ctrl_wdata"
+                            ],
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_1-prefix_t_ctrl-master-AXI4-Lite_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4-Lite",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "RVALID": "t_ctrl_arvalid",
+                            "ARVALID": "t_ctrl_rvalid",
+                            "RREADY": "t_ctrl_arready",
+                            "ARREADY": "t_ctrl_rready",
+                            "WREADY": "t_ctrl_bready",
+                            "BVALID": "t_ctrl_wvalid",
+                            "WVALID": "t_ctrl_bvalid",
+                            "BREADY": "t_ctrl_wready",
+                            "WDATA": "t_ctrl_rdata",
+                            "RDATA": "t_ctrl_wdata",
+                            "AWUSER": [
+                                "t_ctrl_awready"
+                            ],
+                            "__UMAP__": [
+                                "t_ctrl_awaddr",
+                                "t_ctrl_bresp",
+                                "t_ctrl_awvalid",
+                                "t_ctrl_wstrb",
+                                "t_ctrl_arprot",
+                                "t_ctrl_awprot",
+                                "t_ctrl_rresp",
+                                "t_ctrl_araddr"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_2-prefix_t_ctrl-master-AXI4_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "RVALID": "t_ctrl_arvalid",
+                            "ARVALID": "t_ctrl_rvalid",
+                            "RREADY": "t_ctrl_arready",
+                            "ARREADY": "t_ctrl_rready",
+                            "WREADY": "t_ctrl_bready",
+                            "BVALID": "t_ctrl_wvalid",
+                            "WVALID": "t_ctrl_bvalid",
+                            "BREADY": "t_ctrl_wready",
+                            "WDATA": "t_ctrl_rdata",
+                            "RDATA": "t_ctrl_wdata",
+                            "RID": "t_ctrl_araddr",
+                            "AWUSER": [
+                                "t_ctrl_awready"
+                            ],
+                            "__UMAP__": [
+                                "t_ctrl_awaddr",
+                                "t_ctrl_bresp",
+                                "t_ctrl_awvalid",
+                                "t_ctrl_wstrb",
+                                "t_ctrl_arprot",
+                                "t_ctrl_awprot",
+                                "t_ctrl_rresp"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_3-prefix_t_ctrl-slave-UL_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TL",
+                    "name": "UL",
+                    "version": "1.0.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "d_ready": "t_ctrl_rready",
+                            "a_valid": "t_ctrl_wvalid",
+                            "a_ready": "t_ctrl_wready",
+                            "d_valid": "t_ctrl_bvalid",
+                            "a_data": "t_ctrl_wdata",
+                            "d_data": "t_ctrl_rdata",
+                            "a_address": "t_ctrl_araddr",
+                            "d_size": "t_ctrl_rresp",
+                            "a_code": "t_ctrl_awprot",
+                            "a_size": "t_ctrl_bready",
+                            "a_mask": "t_ctrl_wstrb",
+                            "clk": "t_ctrl_awvalid",
+                            "__UMAP__": [
+                                "t_ctrl_awaddr",
+                                "t_ctrl_arvalid",
+                                "t_ctrl_arready",
+                                "t_ctrl_bresp",
+                                "t_ctrl_rvalid",
+                                "t_ctrl_arprot",
+                                "t_ctrl_awready"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_4-prefix_t_ctrl-slave-UH_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TL",
+                    "name": "UH",
+                    "version": "1.0.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "d_ready": "t_ctrl_rready",
+                            "a_valid": "t_ctrl_wvalid",
+                            "d_valid": "t_ctrl_rvalid",
+                            "a_ready": "t_ctrl_wready",
+                            "d_data": "t_ctrl_rdata",
+                            "a_data": "t_ctrl_wdata",
+                            "a_address": "t_ctrl_araddr",
+                            "a_param": "t_ctrl_arprot",
+                            "a_size": "t_ctrl_bready",
+                            "d_size": "t_ctrl_bvalid",
+                            "a_code": "t_ctrl_awprot",
+                            "a_mask": "t_ctrl_awaddr",
+                            "clk": "t_ctrl_awvalid",
+                            "__UMAP__": [
+                                "t_ctrl_arready",
+                                "t_ctrl_arvalid",
+                                "t_ctrl_bresp",
+                                "t_ctrl_wstrb",
+                                "t_ctrl_awready",
+                                "t_ctrl_rresp"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_5-prefix_t_ctrl-master-JTAG_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TEST",
+                    "name": "JTAG",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "TDI": "t_ctrl_bvalid",
+                            "TDO": "t_ctrl_rready",
+                            "TRST": "t_ctrl_rvalid",
+                            "TCK": "t_ctrl_arready",
+                            "TMS": "t_ctrl_awready",
+                            "__UMAP__": [
+                                "t_ctrl_awaddr",
+                                "t_ctrl_bready",
+                                "t_ctrl_arvalid",
+                                "t_ctrl_rdata",
+                                "t_ctrl_bresp",
+                                "t_ctrl_awvalid",
+                                "t_ctrl_arprot",
+                                "t_ctrl_wvalid",
+                                "t_ctrl_wstrb",
+                                "t_ctrl_awprot",
+                                "t_ctrl_rresp",
+                                "t_ctrl_araddr",
+                                "t_ctrl_wready",
+                                "t_ctrl_wdata"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_6-prefix_t_ctrl-slave-JTAG_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TEST",
+                    "name": "JTAG",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "TDI": "t_ctrl_wvalid",
+                            "TDO": "t_ctrl_bvalid",
+                            "TRST": "t_ctrl_rready",
+                            "TCK": "t_ctrl_awvalid",
+                            "TMS": "t_ctrl_bready",
+                            "__UMAP__": [
+                                "t_ctrl_awaddr",
+                                "t_ctrl_arready",
+                                "t_ctrl_arvalid",
+                                "t_ctrl_rdata",
+                                "t_ctrl_bresp",
+                                "t_ctrl_wstrb",
+                                "t_ctrl_rvalid",
+                                "t_ctrl_arprot",
+                                "t_ctrl_awready",
+                                "t_ctrl_awprot",
+                                "t_ctrl_rresp",
+                                "t_ctrl_araddr",
+                                "t_ctrl_wready",
+                                "t_ctrl_wdata"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_7-prefix_t_ctrl-slave-pipelined_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "SCIE",
+                    "name": "pipelined",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "valid": "t_ctrl_wvalid",
+                            "rd": "t_ctrl_rdata",
+                            "rs2": "t_ctrl_araddr",
+                            "rs1": "t_ctrl_awaddr",
+                            "__UMAP__": [
+                                "t_ctrl_bready",
+                                "t_ctrl_arready",
+                                "t_ctrl_arvalid",
+                                "t_ctrl_bresp",
+                                "t_ctrl_rready",
+                                "t_ctrl_awvalid",
+                                "t_ctrl_wstrb",
+                                "t_ctrl_rvalid",
+                                "t_ctrl_arprot",
+                                "t_ctrl_awready",
+                                "t_ctrl_bvalid",
+                                "t_ctrl_awprot",
+                                "t_ctrl_rresp",
+                                "t_ctrl_wready",
+                                "t_ctrl_wdata"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_8-prefix_t_ctrl-slave-unpipelined_rtl": {
+                "name": "t_ctrl",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "SCIE",
+                    "name": "unpipelined",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "rd": "t_ctrl_rdata",
+                            "rs2": "t_ctrl_araddr",
+                            "rs1": "t_ctrl_awaddr",
+                            "__UMAP__": [
+                                "t_ctrl_bready",
+                                "t_ctrl_arready",
+                                "t_ctrl_bresp",
+                                "t_ctrl_rvalid",
+                                "t_ctrl_arprot",
+                                "t_ctrl_awprot",
+                                "t_ctrl_rresp",
+                                "t_ctrl_wready",
+                                "t_ctrl_arvalid",
+                                "t_ctrl_rready",
+                                "t_ctrl_awvalid",
+                                "t_ctrl_awready",
+                                "t_ctrl_wvalid",
+                                "t_ctrl_wstrb",
+                                "t_ctrl_bvalid",
+                                "t_ctrl_wdata"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "busMappedPortGroups": [
+            [
+                "portgroup_0",
+                [
+                    [
+                        "num_ports",
+                        19
+                    ],
+                    [
+                        "prefix",
+                        "t_ctrl_"
+                    ],
+                    [
+                        "num-direction-mismatch",
+                        0
+                    ],
+                    [
+                        "num-width-mismatch",
+                        0
+                    ]
+                ]
+            ]
+        ],
+        "bundleDefinitions": {
+            "bundle-root": {
+                "name": "root",
+                "interfaceMode": null,
+                "busType": "bundle",
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "irq": [
+                                "irq0",
+                                "irq1"
+                            ],
+                            "odata": "odata",
+                            "oenable": "oenable",
+                            "idata": "idata",
+                            "clk": "clk",
+                            "reset_n": "reset_n"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

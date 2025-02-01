@@ -1,0 +1,730 @@
+{
+    "component": {
+        "vendor": "Lampro-Mellon",
+        "library": "blocks",
+        "name": "pio",
+        "version": "0.1.0",
+        "busInterfaces": [
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_0-prefix_LM_lm-slave-AXI4-Lite_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_1-mapping_0-prefix_bil_P-slave-APB4_rtl"},
+            {"$ref": "#/definitions/bundleDefinitions/bundle-root"}
+        ],
+        "addressSpaces": [],
+        "memoryMaps": [{
+            "name": "CSR",
+            addressBlocks: [{
+                name: 'csrAddressBlock',
+                baseAddress: 0,
+                range: 1024, width: 32,
+                usage: 'register',
+                volatile: false, access: 'read-write',
+                registers: [{
+                    name: 'ODATA',
+                    addressOffset: 0, size: 32,
+                    displayName: 'Output Data Register',
+                    fields: [{name: 'data', bitWidth: 32, bitOffset: 0}]
+                }, {
+                    name: 'OENABLE', addressOffset: 4, size: 32,
+                    displayName: 'Data direction',
+                    description: 'determines whether the pin is an input or an output. If the data direction bit is a 1, then the pin is an input',
+                    fields: [{name: 'data', bitWidth: 32, bitOffset: 0}]
+                }, {
+                    name: 'IDATA', addressOffset: 8, size: 32,
+                    displayName: 'Input data',
+                    description: 'read the port pins',
+                    fields: [{name: 'data', bitWidth: 32, bitOffset: 0}]
+                }]
+            }]
+        }],
+        "model": {
+            "views": [],
+            "ports": {
+                "$ref": "#/definitions/ports"
+            }
+        },
+        "fileSets": {},
+        "pSchema": {
+            "type": "object",
+            "properties": {
+                "addrWidth": {
+                    "title": "Address bus width",
+                    "type": "integer",
+                    "minimum": 6,
+                    "maximum": 32,
+                    "default": 12
+                },
+                "dataWidth": {
+                    "title": "Data bus width",
+                    "type": "integer",
+                    "minimum": 32,
+                    "maximum": 64,
+                    "default": 32
+                },
+                "pioWidth": {
+                    "title": "Number of IO pads",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 32,
+                    "default": 32
+                },
+                "writeStrobeWidth": {
+                    "title": "Write strobe width",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 4,
+                    "default": 4
+                }
+            }
+        },
+        "busInterfaceAlts": [
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_1-prefix_LM_lm-master-AXI4-Lite_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_2-prefix_LM_lm-slave-UH_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_3-prefix_LM_lm-slave-WO_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_4-prefix_LM_lm-slave-UL_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_5-prefix_LM_lm-master-AXI4_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_6-prefix_LM_lm-slave-JTAG_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_0-mapping_7-prefix_LM_lm-master-JTAG_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_1-mapping_1-prefix_bil_P-slave-SPRAM_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_1-mapping_2-prefix_bil_P-master-AXI4Stream_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_1-mapping_3-prefix_bil_P-slave-AXI4Stream_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_1-mapping_4-prefix_bil_P-master-APB4_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_1-mapping_5-prefix_bil_P-master-CLOCK_rtl"},
+            {"$ref": "#/definitions/busDefinitions/busint-portgroup_1-mapping_6-prefix_bil_P-slave-AHBLite_rtl"}
+        ]
+    },
+    "definitions": {
+        "ports": {
+            "bil_PCLK": 1,
+            "bil_PRESETn": 1,
+            "bil_PSELx": 1,
+            "bil_PENABLE": 1,
+            "bil_PWRITE": 1,
+            "bil_PWDATA": "addrWidth",
+            "bil_PADDR": "addrWidth",
+            "readdata": "addrWidth",
+            "error": 1,
+            "ready": 1,
+            "bil_PRDATA": "-(addrWidth)",
+            "bil_PREADY": -1,
+            "bil_PSLVERR": -1,
+            "TX_detect": -1,
+            "RX_detect": -1,
+            "write_detect": -1,
+            "readdetect": -1,
+            "config_address": "-(addrWidth)",
+            "LM_lmawvalid": 1,
+            "LM_lmawready": -1,
+            "LM_lmawaddr": "addrWidth",
+            "LM_lmawprot": 3,
+            "LM_lmwvalid": 1,
+            "LM_lmwready": -1,
+            "LM_lmwdata": "dataWidth",
+            "LM_lmwstrb": "writeStrobeWidth",
+            "LM_lmbvalid": -1,
+            "LM_lmbready": 1,
+            "LM_lmbresp": -2,
+            "LM_lmarvalid": 1,
+            "LM_lmarready": -1,
+            "LM_lmaraddr": "addrWidth",
+            "LM_lmarprot": 3,
+            "LM_lmrvalid": -1,
+            "LM_lmrready": 1,
+            "LM_lmrdata": "-(dataWidth)",
+            "LM_lmrresp": -2,
+            "irq0": -1,
+            "irq1": -1,
+            "odata": "-(pioWidth)",
+            "oenable": "-(pioWidth)",
+            "idata": "pioWidth",
+            "clk": 1,
+            "reset_n": 1
+        },
+        "pg_cnt": 2,
+        "busDefinitions": {
+            "busint-portgroup_0-mapping_0-prefix_LM_lm-slave-AXI4-Lite_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4-Lite",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "ARVALID": "LM_lmarvalid",
+                            "AWVALID": "LM_lmawvalid",
+                            "RVALID": "LM_lmrvalid",
+                            "BVALID": "LM_lmbvalid",
+                            "WVALID": "LM_lmwvalid",
+                            "AWREADY": "LM_lmawready",
+                            "ARREADY": "LM_lmarready",
+                            "WREADY": "LM_lmwready",
+                            "AWPROT": "LM_lmawprot",
+                            "BREADY": "LM_lmbready",
+                            "RREADY": "LM_lmrready",
+                            "ARPROT": "LM_lmarprot",
+                            "AWADDR": "LM_lmawaddr",
+                            "BRESP": "LM_lmbresp",
+                            "WSTRB": "LM_lmwstrb",
+                            "ARADDR": "LM_lmaraddr",
+                            "WDATA": "LM_lmwdata",
+                            "RDATA": "LM_lmrdata",
+                            "RRESP": "LM_lmrresp"
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_1-prefix_LM_lm-master-AXI4-Lite_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4-Lite",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "RVALID": "LM_lmarvalid",
+                            "ARVALID": "LM_lmrvalid",
+                            "RREADY": "LM_lmarready",
+                            "ARREADY": "LM_lmrready",
+                            "WVALID": "LM_lmbvalid",
+                            "BVALID": "LM_lmwvalid",
+                            "BREADY": "LM_lmwready",
+                            "WREADY": "LM_lmbready",
+                            "WDATA": "LM_lmrdata",
+                            "AWADDR": "LM_lmawready",
+                            "RDATA": "LM_lmarprot",
+                            "ACLK": "LM_lmwdata",
+                            "__UMAP__": [
+                                "LM_lmawvalid",
+                                "LM_lmbresp",
+                                "LM_lmawaddr",
+                                "LM_lmwstrb",
+                                "LM_lmawprot",
+                                "LM_lmrresp",
+                                "LM_lmaraddr"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_2-prefix_LM_lm-slave-UH_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TL",
+                    "name": "UH",
+                    "version": "1.0.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "d_valid": "LM_lmrvalid",
+                            "a_valid": "LM_lmwvalid",
+                            "d_ready": "LM_lmrready",
+                            "a_ready": "LM_lmwready",
+                            "a_data": "LM_lmwdata",
+                            "d_data": "LM_lmrdata",
+                            "a_address": "LM_lmawaddr",
+                            "a_param": "LM_lmaraddr",
+                            "d_param": "LM_lmrresp",
+                            "a_mask": "LM_lmarprot",
+                            "d_size": "LM_lmbvalid",
+                            "a_code": "LM_lmawprot",
+                            "a_size": "LM_lmawvalid",
+                            "clk": "LM_lmwstrb",
+                            "__UMAP__": [
+                                "LM_lmarvalid",
+                                "LM_lmbresp",
+                                "LM_lmarready",
+                                "LM_lmbready",
+                                "LM_lmawready"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_3-prefix_LM_lm-slave-WO_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "MEM",
+                    "name": "WO",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "ADDR": "LM_lmaraddr",
+                            "WRDATA": "LM_lmwdata",
+                            "RDERR": "LM_lmarready",
+                            "WREN": "LM_lmrready",
+                            "BEN": "LM_lmbready",
+                            "CLK": "LM_lmwstrb",
+                            "__UMAP__": [
+                                "LM_lmarvalid",
+                                "LM_lmrvalid",
+                                "LM_lmawvalid",
+                                "LM_lmbresp",
+                                "LM_lmawaddr",
+                                "LM_lmwready",
+                                "LM_lmbvalid",
+                                "LM_lmwvalid",
+                                "LM_lmawprot",
+                                "LM_lmrdata",
+                                "LM_lmrresp",
+                                "LM_lmarprot",
+                                "LM_lmawready"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_4-prefix_LM_lm-slave-UL_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TL",
+                    "name": "UL",
+                    "version": "1.0.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "a_valid": "LM_lmwvalid",
+                            "d_valid": "LM_lmrvalid",
+                            "a_ready": "LM_lmwready",
+                            "d_ready": "LM_lmbready",
+                            "a_data": "LM_lmwdata",
+                            "a_address": "LM_lmaraddr",
+                            "a_mask": "LM_lmawaddr",
+                            "d_size": "LM_lmbresp",
+                            "d_data": "LM_lmbvalid",
+                            "a_code": "LM_lmawprot",
+                            "a_size": "LM_lmarvalid",
+                            "clk": "LM_lmwstrb",
+                            "__UMAP__": [
+                                "LM_lmawvalid",
+                                "LM_lmarready",
+                                "LM_lmrdata",
+                                "LM_lmrresp",
+                                "LM_lmrready",
+                                "LM_lmarprot",
+                                "LM_lmawready"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_5-prefix_LM_lm-master-AXI4_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "RVALID": "LM_lmarvalid",
+                            "ARVALID": "LM_lmrvalid",
+                            "RREADY": "LM_lmarready",
+                            "ARREADY": "LM_lmrready",
+                            "WVALID": "LM_lmbvalid",
+                            "BVALID": "LM_lmwvalid",
+                            "BREADY": "LM_lmwready",
+                            "WREADY": "LM_lmbready",
+                            "RDATA": "LM_lmwdata",
+                            "WDATA": "LM_lmrdata",
+                            "AWUSER": [
+                                "LM_lmawready"
+                            ],
+                            "__UMAP__": [
+                                "LM_lmawvalid",
+                                "LM_lmbresp",
+                                "LM_lmawaddr",
+                                "LM_lmwstrb",
+                                "LM_lmawprot",
+                                "LM_lmrresp",
+                                "LM_lmarprot",
+                                "LM_lmaraddr"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_6-prefix_LM_lm-slave-JTAG_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TEST",
+                    "name": "JTAG",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "TRST": "LM_lmwstrb",
+                            "TMS": "LM_lmwdata",
+                            "TDO": "LM_lmrdata",
+                            "TDI": "LM_lmwvalid",
+                            "__UMAP__": [
+                                "LM_lmarvalid",
+                                "LM_lmrvalid",
+                                "LM_lmawvalid",
+                                "LM_lmbresp",
+                                "LM_lmawaddr",
+                                "LM_lmarready",
+                                "LM_lmwready",
+                                "LM_lmbvalid",
+                                "LM_lmawprot",
+                                "LM_lmrresp",
+                                "LM_lmrready",
+                                "LM_lmarprot",
+                                "LM_lmbready",
+                                "LM_lmawready",
+                                "LM_lmaraddr"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_0-mapping_7-prefix_LM_lm-master-JTAG_rtl": {
+                "name": "LM_lm",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "TEST",
+                    "name": "JTAG",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "TMS": "LM_lmrdata",
+                            "TDO": "LM_lmwdata",
+                            "TDI": "LM_lmbvalid",
+                            "__UMAP__": [
+                                "LM_lmarvalid",
+                                "LM_lmrvalid",
+                                "LM_lmawaddr",
+                                "LM_lmwvalid",
+                                "LM_lmawprot",
+                                "LM_lmbready",
+                                "LM_lmawready",
+                                "LM_lmawvalid",
+                                "LM_lmbresp",
+                                "LM_lmarready",
+                                "LM_lmwready",
+                                "LM_lmwstrb",
+                                "LM_lmrresp",
+                                "LM_lmrready",
+                                "LM_lmarprot",
+                                "LM_lmaraddr"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_1-mapping_0-prefix_bil_P-slave-APB4_rtl": {
+                "name": "bil_P",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "APB4",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "PRDATA": "bil_PRDATA",
+                            "PSLVERR": "bil_PSLVERR",
+                            "PADDR": "bil_PADDR",
+                            "PWDATA": "bil_PWDATA",
+                            "PWRITE": "bil_PWRITE",
+                            "PREADY": "bil_PREADY",
+                            "PCLK": "bil_PCLK",
+                            "PENABLE": "bil_PENABLE",
+                            "PRESETn": "bil_PRESETn",
+                            "PSEL": "bil_PSELx"
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_1-mapping_1-prefix_bil_P-slave-SPRAM_rtl": {
+                "name": "bil_P",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "MEM",
+                    "name": "SPRAM",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "ADDR": "bil_PADDR",
+                            "CLK": "bil_PCLK",
+                            "RDDATA": "bil_PRDATA",
+                            "WRDATA": "bil_PWDATA",
+                            "RDERR": "bil_PSLVERR",
+                            "BEN": "bil_PENABLE",
+                            "WREN": "bil_PWRITE",
+                            "__UMAP__": [
+                                "bil_PREADY",
+                                "bil_PRESETn",
+                                "bil_PSELx"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_1-mapping_2-prefix_bil_P-master-AXI4Stream_rtl": {
+                "name": "bil_P",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4Stream",
+                    "version": "r0p0_1"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "ARESETn": "bil_PRESETn",
+                            "ACLK": "bil_PCLK",
+                            "TDEST": "bil_PREADY",
+                            "TSTRB": "bil_PSLVERR",
+                            "TDATA": "bil_PWDATA",
+                            "TKEEP": "bil_PWRITE",
+                            "TLAST": "bil_PSELx",
+                            "TUSER": [
+                                "bil_PRDATA"
+                            ],
+                            "__UMAP__": [
+                                "bil_PENABLE",
+                                "bil_PADDR"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_1-mapping_3-prefix_bil_P-slave-AXI4Stream_rtl": {
+                "name": "bil_P",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "AXI4Stream",
+                    "version": "r0p0_1"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "ARESETn": "bil_PRESETn",
+                            "TREADY": "bil_PREADY",
+                            "TDATA": "bil_PWDATA",
+                            "ACLK": "bil_PCLK",
+                            "TID": "bil_PRDATA",
+                            "TUSER": [
+                                "bil_PADDR",
+                                "bil_PSELx",
+                                "bil_PWRITE",
+                                "bil_PENABLE"
+                            ],
+                            "__UMAP__": [
+                                "bil_PSLVERR"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_1-mapping_4-prefix_bil_P-master-APB4_rtl": {
+                "name": "bil_P",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA4",
+                    "name": "APB4",
+                    "version": "r0p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "PCLK": "bil_PCLK",
+                            "PRESETn": "bil_PRESETn",
+                            "PWDATA": "bil_PRDATA",
+                            "PRDATA": "bil_PWDATA",
+                            "PSEL": "bil_PSLVERR",
+                            "PADDR": "bil_PREADY",
+                            "PWRITE": "bil_PWRITE",
+                            "__UMAP__": [
+                                "bil_PSELx",
+                                "bil_PENABLE",
+                                "bil_PADDR"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_1-mapping_5-prefix_bil_P-master-CLOCK_rtl": {
+                "name": "bil_P",
+                "interfaceMode": "master",
+                "busType": {
+                    "vendor": "sifive.com",
+                    "library": "PRCI",
+                    "name": "CLOCK",
+                    "version": "0.1.0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "CLOCK": "bil_PSLVERR",
+                            "__UMAP__": [
+                                "bil_PRDATA",
+                                "bil_PADDR",
+                                "bil_PWDATA",
+                                "bil_PSELx",
+                                "bil_PWRITE",
+                                "bil_PREADY",
+                                "bil_PCLK",
+                                "bil_PENABLE",
+                                "bil_PRESETn"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "busint-portgroup_1-mapping_6-prefix_bil_P-slave-AHBLite_rtl": {
+                "name": "bil_P",
+                "interfaceMode": "slave",
+                "busType": {
+                    "vendor": "amba.com",
+                    "library": "AMBA3",
+                    "name": "AHBLite",
+                    "version": "r2p0_0"
+                },
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "HRESETn": "bil_PRESETn",
+                            "HWRITE": "bil_PWRITE",
+                            "HRDATA": "bil_PRDATA",
+                            "HWDATA": "bil_PWDATA",
+                            "HSELx": "bil_PSELx",
+                            "HADDR": "bil_PADDR",
+                            "HCLK": "bil_PCLK",
+                            "__UMAP__": [
+                                "bil_PREADY",
+                                "bil_PENABLE",
+                                "bil_PSLVERR"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "busMappedPortGroups": [
+            [
+                "portgroup_0",
+                [
+                    [
+                        "num_ports",
+                        19
+                    ],
+                    [
+                        "prefix",
+                        "LM_lm"
+                    ],
+                    [
+                        "num-direction-mismatch",
+                        0
+                    ],
+                    [
+                        "num-width-mismatch",
+                        0
+                    ]
+                ]
+            ],
+            [
+                "portgroup_1",
+                [
+                    [
+                        "num_ports",
+                        10
+                    ],
+                    [
+                        "prefix",
+                        "bil_P"
+                    ],
+                    [
+                        "num-direction-mismatch",
+                        0
+                    ],
+                    [
+                        "num-width-mismatch",
+                        0
+                    ]
+                ]
+            ]
+        ],
+        "bundleDefinitions": {
+            "bundle-root": {
+                "name": "root",
+                "interfaceMode": null,
+                "busType": "bundle",
+                "abstractionTypes": [
+                    {
+                        "viewRef": "RTLview",
+                        "portMaps": {
+                            "readdata": "readdata",
+                            "error": "error",
+                            "ready": "ready",
+                            "readdetect": "readdetect",
+                            "irq": [
+                                "irq0",
+                                "irq1"
+                            ],
+                            "odata": "odata",
+                            "oenable": "oenable",
+                            "idata": "idata",
+                            "clk": "clk",
+                            "reset_n": "reset_n",
+                            "config_address": "config_address",
+                            "write_detect": "write_detect",
+                            "rx_detect": "RX_detect",
+                            "tx_detect": "TX_detect"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
