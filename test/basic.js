@@ -6,7 +6,7 @@ const lib = require('../lib/index.js');
 const expect = chai.expect;
 
 describe('availability', () => {
-  'header verilogBBX validate scafolder get'.split(' ').map(name => {
+  'header verilogBBX validate scafolder get importVerilog inferChannels'.split(' ').map(name => {
     it(name + ' is function', done => {
       expect(lib[name]).to.be.a('function');
       done();
@@ -69,5 +69,3 @@ describe('header', () => {
   });
 
 });
-
-/* eslint-env mocha */
