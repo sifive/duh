@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/sifive/duh#readme",
   "dependencies": {
-    "concat-stream": "^2.0.0",
     "duh-bus": "1.0.0",
     "duh-core": "1.0.0",
     "json-refs": "^3.0.12",
