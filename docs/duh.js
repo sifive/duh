@@ -423,7 +423,29 @@ const utf8Decoder = new TextDecoder('utf-8');
 module.exports = async root => {
   for (const instance of (root.componentInstances || [])) {
     const t0 = Date.now();
-    const response = await fetch(instance.componentRef);
+    let refUrl;
+    try {
+      refUrl = new URL(instance.componentRef, typeof location !== 'undefined' ? location.href : undefined);
+    } catch (e) {
+      throw new Error('Invalid componentRef URL: ' + instance.componentRef);
+    }
+    if (refUrl.protocol !== 'http:' && refUrl.protocol !== 'https:') {
+      throw new Error('Unsupported componentRef protocol: ' + refUrl.protocol);
+    }
+    const hostname = refUrl.hostname.toLowerCase();
+    const isBlockedHost = hostname === 'localhost'
+      || hostname === '0.0.0.0'
+      || hostname === '::1'
+      || hostname === '169.254.169.254'
+      || /^127\./.test(hostname)
+      || /^10\./.test(hostname)
+      || /^192\.168\./.test(hostname)
+      || /^169\.254\./.test(hostname)
+      || /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
+    if (isBlockedHost) {
+      throw new Error('Unsupported componentRef host: ' + hostname);
+    }
+    const response = await fetch(refUrl.href);
     const t1 = Date.now();
     console.log('fetch', t1 - t0);
     if (response.status === 200) {
