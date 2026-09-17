@@ -423,7 +423,16 @@ const utf8Decoder = new TextDecoder('utf-8');
 module.exports = async root => {
   for (const instance of (root.componentInstances || [])) {
     const t0 = Date.now();
-    const response = await fetch(instance.componentRef);
+    let refUrl;
+    try {
+      refUrl = new URL(instance.componentRef, typeof location !== 'undefined' ? location.href : undefined);
+    } catch (e) {
+      throw new Error('Invalid componentRef URL: ' + instance.componentRef);
+    }
+    if (refUrl.protocol !== 'http:' && refUrl.protocol !== 'https:') {
+      throw new Error('Unsupported componentRef protocol: ' + refUrl.protocol);
+    }
+    const response = await fetch(refUrl.href);
     const t1 = Date.now();
     console.log('fetch', t1 - t0);
     if (response.status === 200) {
