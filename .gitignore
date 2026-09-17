@@ -1,4 +1,4 @@
-.nyc_output
+.c8_output
 coverage
 node_modules
 package-lock.json

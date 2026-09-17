@@ -2,12 +2,11 @@
 
 [![NPM version](https://img.shields.io/npm/v/duh.svg)](https://www.npmjs.org/package/duh)
 [![Actions Status](https://github.com/sifive/duh/workflows/Tests/badge.svg)](https://github.com/sifive/duh/actions)
-[![Coverage Status](https://coveralls.io/repos/github/sifive/duh/badge.svg?branch=master)](https://coveralls.io/github/sifive/duh?branch=master)
 
 # Design ∪ Hardware
 
-DUH ("Spirit" in most slavic languages. pronounced [**/dûx/**](https://upload.wikimedia.org/wikipedia/commons/0/08/Ru-%D0%B4%D1%83%D1%85.ogg), with the final consonant of *loch* or *Bach*) is a suite of tools for packaging reusable hardware components and
-designs. DUH enables the generation of JSON5 ([duh documents](docs/)) for
+DUH ("Spirit" in most Slavic languages, pronounced [**/dûx/**](https://upload.wikimedia.org/wikipedia/commons/0/08/Ru-%D0%B4%D1%83%D1%85.ogg), with the final consonant of *loch* or *Bach*) is a suite of tools for packaging reusable hardware components and
+designs. DUH enables the generation of JSON5 ([duh documents](docs/readme.md)) for
 describing these components, and also enables export from these documents
 to output deliverables.
 
@@ -39,7 +38,7 @@ Test the installation with `duh --help`.
 
 ## Quick start
 
-Base set of DUH tools to author [duh documents](docs/):
+Base set of DUH tools to author [duh documents](docs/readme.md):
 
 * Create
   - Run `duh init` to interactively scaffold a base document.
@@ -67,7 +66,7 @@ Base set of DUH tools to author [duh documents](docs/):
 
 ## Commands
 
-As of `2.0`, all functionality lives under a single `duh` command:
+All functionality lives under a single `duh` command:
 
 ```
 duh init [filename]                        # scaffold a new document (interactive)
@@ -93,7 +92,7 @@ in place).
 
 The standalone bins were merged into `duh` subcommands:
 
-| 1.x                                | 2.0                          |
+| 1.x                                | `duh` subcommand             |
 | ---------------------------------- | ---------------------------- |
 | `duh-import-verilog-ports`         | `duh import verilog`         |
 | `duh-import-verilog-ports-simple`  | `duh import verilog-simple`  |
@@ -115,5 +114,5 @@ The standalone bins were merged into `duh` subcommands:
 
 * [block-ark](https://github.com/sifive/block-ark) for a walk-through
   example using the DUH suite on a standalone module to produce a valid
-  [duh-document](docs/) that fully describes the mapping of ports to known
+  [duh-document](docs/readme.md) that fully describes the mapping of ports to known
   bus definitions.
