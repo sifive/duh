@@ -40,6 +40,13 @@ describe('validate', () => {
     expect(res).to.be.a('undefined');
   });
 
+  it('component with verbose (array) ports', async () => {
+    const res = await lib.validate({
+      filename: 'test/comp2.json5'
+    });
+    expect(res).to.be.a('undefined');
+  });
+
 });
 
 describe('verilogBBX', () => {
